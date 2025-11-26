@@ -19,7 +19,7 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="grid"></i>
-                                    <span data-key="t-apps">Apps</span>
+                                    <span data-key="t-apps">Post</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li>
@@ -79,7 +79,7 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="users"></i>
-                                    <span data-key="t-authentication">Authentication</span>
+                                    <span data-key="t-authentication">Organizations</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="auth-login.html" data-key="t-login">Login</a></li>
@@ -96,7 +96,7 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="file-text"></i>
-                                    <span data-key="t-pages">Pages</span>
+                                    <span data-key="t-pages">Proposals</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
@@ -112,12 +112,12 @@
 
                             <li>
                                 <a href="layouts-horizontal.html">
-                                    <i data-feather="layout"></i>
-                                    <span data-key="t-horizontal">Horizontal</span>
+                                    <i data-feather="calendar"></i>
+                                    <span data-key="t-horizontal">Schedules</span>
                                 </a>
                             </li>
 
-                            <li class="menu-title mt-2" data-key="t-components">Elements</li>
+                            {{-- <li class="menu-title mt-2" data-key="t-components">Elements</li>
 
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
@@ -263,4 +263,4 @@
                     <!-- Sidebar -->
                 </div>
             </div>
-            <!-- Left Sidebar End -->
+            <!-- Left Sidebar End --> --}}
