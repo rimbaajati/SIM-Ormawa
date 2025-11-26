@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -36,6 +37,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes'
     ];
 
     /**
