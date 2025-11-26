@@ -47,10 +47,10 @@
 
                             <a href="index.html" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src={{ asset('assets/images/Logo UMPKU.png') }} alt="" height="24">
+                                    <img src="{{ asset('assets/images/Logo UMPKU.png') }}" alt="" height="24">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Minia</span>
+                                    <img src="{{'assets/images/Logo UMPKU.png'}}" alt="" height="24"> <span class="logo-txt">Minia</span>
                                 </span>
                             </a>
                         </div>
@@ -70,6 +70,7 @@
 
                     <div class="d-flex">
 
+                        <!--SearchBAR-->
                         <div class="dropdown d-inline-block d-lg-none ms-2">
                             <button type="button" class="btn header-item" id="page-header-search-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,7 +90,9 @@
                                 </form>
                             </div>
                         </div>
+                        <!--End SearchBAR-->
 
+                        <!-- Language Switcher -->
                         <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -99,37 +102,41 @@
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
-                                    <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
+                                    <img src="{{asset('assets/images/flags/us.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
                                 </a>
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
-                                    <img src="assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                    <img src="{{asset('assets/images/flags/spain.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
                                 </a>
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
-                                    <img src="assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                    <img src="{{asset('assets/images/flags/germany.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
                                 </a>
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
-                                    <img src="assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                    <img src="{{('assets/images/flags/italy.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
                                 </a>
 
                                 <!-- item-->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
-                                    <img src="assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                    <img src="{{('assets/images/flags/russia.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
                                 </a>
                             </div>
                         </div>
+                        <!-- End Language Switcher -->
 
+                        <!-- Dark/Light Mode -->
                         <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item" id="mode-setting-btn">
                                 <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
                                 <i data-feather="sun" class="icon-lg layout-mode-light"></i>
                             </button>
                         </div>
+                        <!-- End Dark/Light Mode -->
 
+                        <!-- Other Apps -->
                         <div class="dropdown d-none d-lg-inline-block ms-1">
                             <button type="button" class="btn header-item"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -140,19 +147,19 @@
                                     <div class="row g-0">
                                         <div class="col">
                                             <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/github.png" alt="Github">
+                                                <img src="{{('assets/images/brands/github.png')}}" alt="Github">
                                                 <span>GitHub</span>
                                             </a>
                                         </div>
                                         <div class="col">
                                             <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/bitbucket.png" alt="bitbucket">
+                                                <img src="{{('assets/images/brands/bitbucket.png')}}" alt="bitbucket">
                                                 <span>Bitbucket</span>
                                             </a>
                                         </div>
                                         <div class="col">
                                             <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/dribbble.png" alt="dribbble">
+                                                <img src="{{('assets/images/brands/dribbble.png')}}" alt="dribbble">
                                                 <span>Dribbble</span>
                                             </a>
                                         </div>
@@ -161,19 +168,19 @@
                                     <div class="row g-0">
                                         <div class="col">
                                             <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/dropbox.png" alt="dropbox">
+                                                <img src="{{('assets/images/brands/dropbox.png')}}" alt="dropbox">
                                                 <span>Dropbox</span>
                                             </a>
                                         </div>
                                         <div class="col">
                                             <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/mail_chimp.png" alt="mail_chimp">
+                                                <img src="{{('assets/images/brands/mail_chimp.png')}}" alt="mail_chimp">
                                                 <span>Mail Chimp</span>
                                             </a>
                                         </div>
                                         <div class="col">
                                             <a class="dropdown-icon-item" href="#">
-                                                <img src="assets/images/brands/slack.png" alt="slack">
+                                                <img src="{{('assets/images/brands/slack.png')}}" alt="slack">
                                                 <span>Slack</span>
                                             </a>
                                         </div>
@@ -181,7 +188,9 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- End Other Apps -->
+                        
+                        <!-- Notification -->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -270,19 +279,23 @@
                                 </div>
                             </div>
                         </div>
+                        <!--End Notification-->
 
+                        <!--Settings-->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item right-bar-toggle me-2">
                                 <i data-feather="settings" class="icon-lg"></i>
                             </button>
                         </div>
+                        <!-- End Settings -->
 
+                        <!-- User Profile Dropdown -->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="{{asset('assets/images/users/avatar-1.jpg')}}"
+                                <img class="rounded-circle header-profile-user" src="{{asset('assets\images\yourSafno.jpeg')}}"
                                     alt="Header Avatar">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium">Shawn L.</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">PaK CiK.</span>
                 
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
@@ -294,6 +307,7 @@
                                 <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                             </div>
                         </div>
+                        <!-- End User Profile Dropdown -->
 
                     </div>
                 </div>
@@ -311,7 +325,7 @@
                             <li class="menu-title" data-key="t-menu">Menu</li>
 
                             <li>
-                                <a href="index.html">
+                                <a href="{{route('dashboard')}}">
                                     <i data-feather="home"></i>
                                     <span data-key="t-dashboard">Dashboard</span>
                                 </a>
@@ -565,8 +579,6 @@
                 </div>
             </div>
             <!-- Left Sidebar End -->
-
-            
 
             <!-- ============================================================== -->
             <!-- Start right Content here -->
@@ -2121,11 +2133,11 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Minia.
+                                <script>document.write(new Date().getFullYear())</script> © UMPKU.
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">
-                                    Design & Develop by <a href="#!" class="text-decoration-underline">Themesbrand</a>
+                                    Design & Develop by <a href="#!" class="text-decoration-underline">UMPKU Internship</a>
                                 </div>
                             </div>
                         </div>
