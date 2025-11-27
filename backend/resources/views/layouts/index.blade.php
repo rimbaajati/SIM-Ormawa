@@ -4,22 +4,25 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>Dashboard | SIM Ormawa UMPKu</title>
+        <title>Ormawa UMPKU - Dashboard</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Dashboard SIM Ormawa" name="description" />
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ 'assets/images/Logo UMPKU.png' }}">
+        <link rel="shortcut icon" href="{{asset('assets\images\Logo UMPKU.png')}}">
+
         <!-- plugin css -->
-        <link rel="stylesheet" href="{{asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css')}}">
+        <link href="{{asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css')}}" rel="stylesheet" type="text/css" />
+
         <!-- preloader css -->
-        <link rel="stylesheet" href="{{asset('assets/css/preloader.min.css')}}">
+        <link rel="stylesheet" href="{{asset('assets/css/preloader.min.css')}}" type="text/css" />
+
         <!-- Bootstrap Css -->
-        <link rel="stylesheet" href="{{ 'assets/css/bootstrap.min.css' }}" />
+        <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <!-- Icons Css -->
-        <link rel="stylesheet" href="{{ 'assets/css/icons.min.css' }}" />
+        <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
-        <link rel="stylesheet" href="{{ 'assets/css/app.min.css' }}" />
+        <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
 
     </head>
 
@@ -30,7 +33,7 @@
         <!-- Begin page -->
         <div id="layout-wrapper">
 
-            
+        <!--- ========== Header Start ========== -->
             <header id="page-topbar">
                 <div class="navbar-header">
                     <div class="d-flex">
@@ -38,19 +41,19 @@
                         <div class="navbar-brand-box">
                             <a href="index.html" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{{ asset('assets/images/Logo UMPKU.png') }}" height="24" >
+                                    <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{ asset('assets/images/Logo UMPKU.png') }}" alt="Logo UMPKU" height="24"><span class="logo-txt">Ormawa UMPKU</span>
+                                    <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24"> <span class="logo-txt">Ormawa UMPKU</span>
                                 </span>
                             </a>
 
                             <a href="index.html" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src={{ asset('assets/images/Logo UMPKU.png') }} alt="" height="24">
+                                    <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Minia</span>
+                                    <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24"> <span class="logo-txt">Ormawa UMPKU</span>
                                 </span>
                             </a>
                         </div>
@@ -90,7 +93,8 @@
                             </div>
                         </div>
 
-                        <div class="dropdown d-none d-sm-inline-block">
+                    <!----========== Language Switcher Start ========== -->
+                        {{-- <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img id="header-lang-img" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
@@ -121,16 +125,20 @@
                                     <img src="assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
+                    <!-- ========== Language Switcher End ========== -->
 
+                    <!-- ========== Dark Mode Start ========== -->
                         <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item" id="mode-setting-btn">
                                 <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
                                 <i data-feather="sun" class="icon-lg layout-mode-light"></i>
                             </button>
                         </div>
-
-                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                    <!-- ========== Dark Mode Start ========== -->
+                    
+                    <!--- ========== Other Apps Start ========== -->
+                        {{-- <div class="dropdown d-none d-lg-inline-block ms-1">
                             <button type="button" class="btn header-item"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i data-feather="grid" class="icon-lg"></i>
@@ -180,8 +188,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
+                    <!--- ========== Other Apps End ========== -->
 
+                    <!-- ========== Notification Start ========== -->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -270,20 +280,23 @@
                                 </div>
                             </div>
                         </div>
-
+                    <!-- ========== Notification End ========== -->
+                    
+                    <!-- ========== Settings Start ========== -->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item right-bar-toggle me-2">
                                 <i data-feather="settings" class="icon-lg"></i>
                             </button>
                         </div>
+                    <!-- ========== Settings Start ========== -->
 
+                    <!-- ========== Profile User Start ========== -->
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="{{asset('assets/images/users/avatar-1.jpg')}}"
+                                <img class="rounded-circle header-profile-user" src="{{asset('assets/images/users/yoursafno.jpeg') }}"
                                     alt="Header Avatar">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium">Shawn L.</span>
-                
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">Pak CiK</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -294,18 +307,21 @@
                                 <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                             </div>
                         </div>
+                    <!-- ========== Profile User Start ========== -->
 
                     </div>
                 </div>
             </header>
+        <!--- ========== Header End ========== -->
 
-            <!-- ========== Left Sidebar Start ========== -->
+        <!-- ========== Left Sidebar Start ========== -->
             <div class="vertical-menu">
 
                 <div data-simplebar class="h-100">
 
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
+
                         <!-- Left Menu Start -->
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title" data-key="t-menu">Menu</li>
@@ -320,7 +336,7 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="grid"></i>
-                                    <span data-key="t-apps">Apps</span>
+                                    <span data-key="t-apps">Proposals</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li>
@@ -380,7 +396,7 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="users"></i>
-                                    <span data-key="t-authentication">Authentication</span>
+                                    <span data-key="t-authentication">Organizations</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="auth-login.html" data-key="t-login">Login</a></li>
@@ -397,7 +413,7 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="file-text"></i>
-                                    <span data-key="t-pages">Pages</span>
+                                    <span data-key="t-pages">User</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
@@ -411,14 +427,42 @@
                                 </ul>
                             </li>
 
-                            <li>
-                                <a href="layouts-horizontal.html">
-                                    <i data-feather="layout"></i>
-                                    <span data-key="t-horizontal">Horizontal</span>
+                             <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">Schedules</span>
                                 </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
+                                    <li><a href="pages-maintenance.html" data-key="t-maintenance">Maintenance</a></li>
+                                    <li><a href="pages-comingsoon.html" data-key="t-coming-soon">Coming Soon</a></li>
+                                    <li><a href="pages-timeline.html" data-key="t-timeline">Timeline</a></li>
+                                    <li><a href="pages-faqs.html" data-key="t-faqs">FAQs</a></li>
+                                    <li><a href="pages-pricing.html" data-key="t-pricing">Pricing</a></li>
+                                    <li><a href="pages-404.html" data-key="t-error-404">Error 404</a></li>
+                                    <li><a href="pages-500.html" data-key="t-error-500">Error 500</a></li>
+                                </ul>
                             </li>
 
-                            <li class="menu-title mt-2" data-key="t-components">Elements</li>
+                             <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">Report</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
+                                    <li><a href="pages-maintenance.html" data-key="t-maintenance">Maintenance</a></li>
+                                    <li><a href="pages-comingsoon.html" data-key="t-coming-soon">Coming Soon</a></li>
+                                    <li><a href="pages-timeline.html" data-key="t-timeline">Timeline</a></li>
+                                    <li><a href="pages-faqs.html" data-key="t-faqs">FAQs</a></li>
+                                    <li><a href="pages-pricing.html" data-key="t-pricing">Pricing</a></li>
+                                    <li><a href="pages-404.html" data-key="t-error-404">Error 404</a></li>
+                                    <li><a href="pages-500.html" data-key="t-error-500">Error 500</a></li>
+                                </ul>
+                            </li>
+
+                        <!--- ========= Elements Start ========== -->
+                            {{-- <li class="menu-title mt-2" data-key="t-components">Elements</li>
 
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
@@ -546,27 +590,16 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </li>
-
+                            </li> --}}
+                        <!--- ========= Elements End ========== -->
                         </ul>
 
-                        <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5">
-                            <div class="card-body">
-                                <img src="assets/images/giftbox.png" alt="">
-                                <div class="mt-4">
-                                    <h5 class="alertcard-title font-size-16">Unlimited Access</h5>
-                                    <p class="font-size-13">Upgrade your plan from a Free trial, to select ‘Business Plan’.</p>
-                                    <a href="#!" class="btn btn-primary mt-2">Upgrade Now</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- Sidebar -->
                 </div>
             </div>
-            <!-- Left Sidebar End -->
+        <!-- ========== Left Sidebar End ========== -->
 
-            
 
             <!-- ============================================================== -->
             <!-- Start right Content here -->
@@ -2116,7 +2149,7 @@
                 </div>
                 <!-- End Page-content -->
 
-
+            <!-- ========== Footer Start ========== -->
                 <footer class="footer">
                     <div class="container-fluid">
                         <div class="row">
@@ -2131,6 +2164,8 @@
                         </div>
                     </div>
                 </footer>
+            <!-- ========== Footer Start ========== -->
+
             </div>
             <!-- end main content-->
 
