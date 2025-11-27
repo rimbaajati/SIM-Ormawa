@@ -3,9 +3,15 @@ import { fileURLToPath } from "node:url";
 export default defineNuxtConfig({
   compatibilityDate: "2025-11-26",
 
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:8000/api',
+    }
+  },
+
   plugins: ["~/plugins/axios.js"],
 
-  css: ["@/assets/css/main.css"],
+  css: ["@/assets/css/tailwind.css"],
 
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
 

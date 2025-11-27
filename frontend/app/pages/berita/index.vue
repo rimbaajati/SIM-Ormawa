@@ -20,13 +20,19 @@
       <div class="mt-12 w-full">
         <!-- ⚠️ Penanganan Status Loading -->
         <div v-if="loading" class="text-center py-12">
-          <p class="text-xl text-[#FFD700]">Memuat data berita... ⏳</p>
+          <p class="text-xl text-[#FFD700] flex items-center justify-center space-x-3">
+            <svg class="animate-spin h-5 w-5 text-[#FFD700]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Memuat data berita...</span>
+          </p>
         </div>
 
         <!-- ❌ Penanganan Status Error -->
-        <div v-else-if="error" class="text-center py-12 border border-red-600 bg-red-900/50 p-6 rounded-lg">
+        <div v-else-if="fetchError" class="text-center py-12 border border-red-600 bg-red-900/50 p-6 rounded-lg">
           <p class="text-red-400 font-semibold">Gagal Memuat Data</p>
-          <p class="text-sm text-red-500 mt-2">{{ error.message }}</p>
+          <p class="text-sm text-red-500 mt-2">{{ fetchError.message }}</p>
           <button @click="refresh()" class="mt-4 text-sm text-[#FFA500] hover:underline transition">Coba Muat Ulang</button>
         </div>
 
@@ -49,63 +55,160 @@
               <!-- Tautan Detail -->
               <NuxtLink :to="`/berita/${item.id}`" class="text-[#FFA500] hover:text-[#FFD700] transition">Detail</NuxtLink>
               <!-- Tautan Edit -->
-              <NuxtLink :to="`/berita/edit/${item.id}`" class="text-green-500 hover:text-green-400 transition">Edit</NuxtLink>
+              <!-- Catatan: Diperbaiki rute edit agar sesuai dengan praktik umum Nuxt -->
+              <NuxtLink :to="`/berita/tambah?id=${item.id}`" class="text-green-500 hover:text-green-400 transition">Edit</NuxtLink> 
               <!-- Tombol Hapus -->
-              <button @click="hapus(item.id)" class="text-red-500 hover:text-red-400 transition">Hapus</button>
+              <button 
+                @click="openDeleteModal(item.id, item.judul)" 
+                class="text-red-500 hover:text-red-400 transition disabled:opacity-50"
+                :disabled="isDeleting"
+              >
+                {{ isDeleting ? 'Menghapus...' : 'Hapus' }}
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- --- Modal Konfirmasi Hapus --- -->
+    <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 transition-opacity duration-300">
+      <div class="bg-[#1a2130] p-6 rounded-xl shadow-2xl max-w-sm w-full border border-red-500/50 transform transition-transform duration-300 scale-100">
+        <h3 class="text-xl font-bold text-white mb-4">Konfirmasi Penghapusan</h3>
+        <p class="text-white/80 mb-6">
+          Anda yakin ingin menghapus berita berjudul: 
+          <span class="font-semibold text-[#FFA500] block mt-1">"{{ itemToDelete.judul }}"</span>?
+          Aksi ini tidak dapat dibatalkan.
+        </p>
+
+        <div class="flex justify-end gap-3">
+          <button 
+            @click="showDeleteModal = false"
+            class="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition"
+            :disabled="isDeleting"
+          >
+            Batal
+          </button>
+          <button 
+            @click="hapus"
+            class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition disabled:bg-red-800"
+            :disabled="isDeleting"
+          >
+            {{ isDeleting ? 'Menghapus...' : 'Ya, Hapus Permanen' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- --- Toast Pemberitahuan (Pengganti Alert) --- -->
+    <div v-if="toast.message" class="fixed bottom-5 right-5 z-50 p-4 rounded-lg shadow-lg text-white font-medium transition-all duration-300"
+      :class="{
+        'bg-green-600': toast.type === 'success',
+        'bg-red-600': toast.type === 'error'
+      }"
+    >
+      {{ toast.message }}
+    </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 // Mengambil instance $api dari plugin Nuxt
 const { $api } = useNuxtApp();
 
+// State untuk Modal Hapus
+const showDeleteModal = ref(false);
+const itemToDelete = ref({ id: null, judul: '' });
+const isDeleting = ref(false);
+
+// State untuk Pemberitahuan (Toast)
+const toast = ref({
+  message: '',
+  type: '', // 'success' atau 'error'
+  timeoutId: null,
+});
+
+// Fungsi untuk menampilkan Toast
+function showToast(message, type = 'success', duration = 3000) {
+  clearTimeout(toast.value.timeoutId);
+  toast.value.message = message;
+  toast.value.type = type;
+  toast.value.timeoutId = setTimeout(() => {
+    toast.value.message = '';
+  }, duration);
+}
+
+// Fungsi yang dipanggil saat tombol hapus diklik
+function openDeleteModal(id, judul) {
+  itemToDelete.value = { id, judul };
+  showDeleteModal.value = true;
+}
+
+
 // --- 1. PENGAMBILAN DATA (useAsyncData) ---
 const { 
-  data: berita,      // Variabel reaktif berisi array berita 
-  pending: loading,  // Variabel reaktif (boolean)
-  error,             // Variabel reaktif (object) 
-  refresh            // Fungsi untuk memuat ulang data secara manual
+  data: apiResponse,    // Variabel reaktif berisi respons API mentah
+  pending: loading,  // Variabel reaktif (boolean)
+  error: fetchError,  // Variabel reaktif (object) 
+  refresh            // Fungsi untuk memuat ulang data secara manual
 } = await useAsyncData(
   'berita-list', // Kunci unik untuk caching
   async () => {
     try {
       const res = await $api.get("/berita"); 
-      return res.data; 
+      // Asumsi respons Laravel menggunakan Resource atau Pagination, jadi kita ambil data dari properti 'data'
+      return res.data.data || res.data; 
     } catch (e) {
+      console.error('Error fetching berita:', e);
       throw createError({ 
-          statusCode: 500, 
-          message: 'Terjadi masalah saat berkomunikasi dengan API berita.'
+          statusCode: e.response?.status || 500, 
+          message: e.response?.data?.message || 'Terjadi masalah saat berkomunikasi dengan API berita.'
       });
     }
   },
   { default: () => [] } 
 );
 
-// --- 2. FUNGSI HAPUS ---
-async function hapus(id) {
-  // Menggunakan confirm bawaan
-  if (!confirm("Apakah Anda yakin ingin menghapus berita ini secara permanen?")) {
-    return;
-  }
+// Computed property untuk memetakan data berita (jika struktur API berubah, ini tetap bersih)
+const berita = computed(() => {
+    // Memastikan kita mengembalikan array, bahkan jika data mentah adalah objek (misalnya respons Laravel tanpa pagination)
+    if (Array.isArray(apiResponse.value)) {
+        return apiResponse.value;
+    }
+    // Jika responsnya adalah objek yang memiliki properti 'data' yang berupa array
+    if (apiResponse.value && Array.isArray(apiResponse.value.data)) {
+        return apiResponse.value.data;
+    }
+    return [];
+});
 
+
+// --- 2. FUNGSI HAPUS (Dijalankan dari Modal) ---
+async function hapus() {
+  const id = itemToDelete.value.id;
+  if (!id) return;
+
+  isDeleting.value = true;
+  
   try {
     // Panggil endpoint DELETE API
     await $api.delete(`/berita/${id}`);
     
     // Memberi tahu pengguna
-    alert("Berita berhasil dihapus!"); 
+    showToast(`Berita "${itemToDelete.value.judul}" berhasil dihapus!`, 'success'); 
 
     // Muat ulang data daftar berita 
-    refresh(); 
+    await refresh(); 
     
   } catch (e) {
     console.error("Gagal menghapus berita:", e);
-    alert("Gagal menghapus berita. Silakan coba lagi.");
+    showToast("Gagal menghapus berita. Pastikan Anda memiliki izin.", 'error');
+  } finally {
+    // Tutup modal dan reset state
+    showDeleteModal.value = false;
+    isDeleting.value = false;
+    itemToDelete.value = { id: null, judul: '' };
   }
 }
 </script>
