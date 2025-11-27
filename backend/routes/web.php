@@ -7,6 +7,9 @@ Route::get('/', function () { return view('layouts.index'); })->name('dashboard'
 
 //Manager Routes
 Route::get('/manager/dashboard', function () { return view('pages.manager.manager_dashboard'); })->name('manager_dashboard');
+Route::get('/manager/allproposals',function(){ return view('pages.manager.manager_allproposal');})->name('manager.proposals.all');
+Route::get('/manager/allorganizations', function() { return view('pages.manager.manager_allorganization');})->name('manager.organization.all');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

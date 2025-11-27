@@ -24,7 +24,7 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li>
-                                        <a href="apps-calendar.html">
+                                        <a href="{{ route('manager.proposals.all') }}">
                                             <span data-key="t-calendar">All Proposal</span>
                                         </a>
                                     </li>
@@ -61,7 +61,7 @@
                                     <span data-key="t-authentication">Organizations</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="auth-login.html" data-key="t-login">All Organizations</a></li>
+                                    <li><a href="{{ route('manager.organization.all') }}">All Organizations</a></li>
                                     <li><a href="auth-register.html" data-key="t-register">Active Ormawa</a></li>
                                     <li><a href="auth-recoverpw.html" data-key="t-recover-password">Inactive Ormawa</a></li>
                                     <li><a href="auth-lock-screen.html" data-key="t-lock-screen">Activity History</a></li>
