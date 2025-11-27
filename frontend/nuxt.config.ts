@@ -1,23 +1,25 @@
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath } from "node:url";
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-11-26',
+  compatibilityDate: "2025-11-26",
 
-  css: [
-    '@/assets/css/main.css'
-  ],
+  plugins: ["~/plugins/axios.js"],
 
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt'
-  ],
+  css: ["@/assets/css/main.css"],
+
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+
+  alias: {
+    "@": fileURLToPath(new URL("./", import.meta.url)),
+    "~": fileURLToPath(new URL("./", import.meta.url)),
+  },
 
   vite: {
     resolve: {
       alias: {
-        '~': fileURLToPath(new URL('./', import.meta.url)),
-        '@': fileURLToPath(new URL('./', import.meta.url))
-      }
-    }
-  }
-})
+        "@": fileURLToPath(new URL("./", import.meta.url)),
+        "~": fileURLToPath(new URL("./", import.meta.url)),
+      },
+    },
+  },
+});

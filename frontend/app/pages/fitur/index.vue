@@ -31,7 +31,7 @@ const features = [
   { slug: "formdetail", icon: "📋", title: "Form Detail Lengkap", desc: "Isi data kegiatan dengan mudah & terstruktur." },
   { slug: "uploaddokumen", icon: "📤", title: "Upload Dokumen", desc: "Proposal, RAB, TOR, semuanya tersimpan aman." },
   { slug: "notifikasi", icon: "🔔", title: "Notifikasi Revisi", desc: "Dapatkan pemberitahuan otomatis." },
-  { slug: "tracking", icon: "📊", title: "Tracking Real-time", desc: "Pantau progres tanpa menunggu." },
+  { slug: "tracking/[id]", icon: "📊", title: "Tracking Real-time", desc: "Pantau progres tanpa menunggu." },
   { slug: "download", icon: "⬇️", title: "Download Izin", desc: "Unduh dokumen legal kegiatan." }
 ];
 </script>
