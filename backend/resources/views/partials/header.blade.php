@@ -9,7 +9,7 @@
                                     <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24"> <span class="logo-txt">UMPKU</span>
+                                    <img src="{{asset('assets\images\Logo UMPKU.png')}}" alt="" height="24"> <span class="logo-txt">Ormawa UMPKU</span>
                                 </span>
                             </a>
 
