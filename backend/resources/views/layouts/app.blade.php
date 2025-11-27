@@ -24,7 +24,7 @@
 <body>
 
   @include('partials.header')
-  @include('partials.sidebar')
+  @include('partials.manager_sidebar')
 
   <div class="main-content">
     <div class="page-content">
