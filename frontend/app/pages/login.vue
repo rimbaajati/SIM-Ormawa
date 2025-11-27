@@ -9,10 +9,16 @@
 
       <!-- Form -->
       <form @submit.prevent="submitLogin" class="space-y-5">
+        <!-- Notifikasi Error -->
+        <div v-if="error" class="bg-red-500/10 border border-red-500 text-red-400 p-3 rounded-lg text-sm">
+          {{ error }}
+        </div>
+
         <!-- Email -->
         <div>
-          <label class="text-white/80 text-sm">Email</label>
+          <label for="email" class="text-white/80 text-sm">Email</label>
           <input
+            id="email"
             v-model="email"
             type="email"
             required
@@ -23,8 +29,9 @@
 
         <!-- Password -->
         <div>
-          <label class="text-white/80 text-sm">Password</label>
+          <label for="password" class="text-white/80 text-sm">Password</label>
           <input
+            id="password"
             v-model="password"
             type="password"
             required
@@ -36,16 +43,18 @@
         <!-- Button -->
         <button
           type="submit"
-          class="w-full py-3 bg-[#3b82f6] hover:bg-[#2563eb] transition rounded-lg font-semibold text-white shadow-lg"
+          :disabled="loading"
+          class="w-full py-3 bg-[#3b82f6] hover:bg-[#2563eb] transition rounded-lg font-semibold text-white shadow-lg disabled:opacity-60"
         >
-          Masuk
+          <span v-if="loading">Memproses...</span>
+          <span v-else>Masuk</span>
         </button>
       </form>
 
       <!-- Register -->
       <p class="text-center mt-5 text-white/50 text-sm">
         Belum punya akun?
-        <NuxtLink to="/register" class="text-[#3b82f6] hover:underline">
+        <NuxtLink to="/register" class="text-[#00ffc8] hover:underline font-semibold">
           Daftar di sini
         </NuxtLink>
       </p>
@@ -58,11 +67,38 @@ import { ref } from "vue";
 
 const email = ref("");
 const password = ref("");
+const loading = ref(false);
+const error = ref(null);
 
-const submitLogin = () => {
-  console.log("Login data:", { email: email.value, password: password.value });
+// Asumsi Anda menggunakan plugin Nuxt bernama '$api' (atau sesuaikan dengan nama plugin API/Axios Anda)
+const { $api } = useNuxtApp();
+const router = useRouter();
 
-  // TODO: Tambahkan API login di sini
-  alert("Login berhasil (dummy). Tambahkan API nanti.");
+const submitLogin = async () => {
+  error.value = null;
+  loading.value = true;
+
+  try {
+    const payload = {
+      email: email.value,
+      password: password.value,
+    };
+    
+    // Asumsi endpoint login adalah /login dan mengembalikan token/user data
+    const res = await $api.post("/login", payload);
+
+    // TODO: Simpan token atau informasi user ke state/storage (misalnya Pinia/LocalStorage)
+    // localStorage.setItem('token', res.data.token); 
+    
+    // Navigasi ke dashboard setelah login berhasil
+    router.push('/dashboard'); 
+
+  } catch (err) {
+    console.error("Login Error:", err);
+    // Menampilkan pesan error dari backend
+    error.value = err.response?.data?.message || "Login gagal. Periksa kembali email dan password Anda.";
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
