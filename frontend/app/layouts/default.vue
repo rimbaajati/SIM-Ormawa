@@ -1,20 +1,20 @@
 <template>
   <div>
     <header class="nav fixed w-full z-50">
-  <div class="container nav-inner">
-    <div class="brand">ORMAWA UMPKU</div>
-    <nav class="links">
-      <NuxtLink to="/berita">Berita</NuxtLink>
-      <NuxtLink to="/fitur">Fitur</NuxtLink>
-      <NuxtLink to="#kontak">Kontak</NuxtLink>
-    </nav>
+      <div class="container nav-inner"> 
+        <NuxtLink to="/" class="brand">ORMAWA UMPKU</NuxtLink>
+        <nav class="links">
+          <NuxtLink to="/berita">Berita</NuxtLink>
+          <NuxtLink to="/fitur">Fitur</NuxtLink>
+          <NuxtLink to="#kontak">Kontak</NuxtLink>
+        </nav>
 
-    <div class="flex items-center gap-3">
-      <NuxtLink to="/register" class="cta">Daftar</NuxtLink>
-      <NuxtLink to="/login" class="cta">Masuk</NuxtLink>
-    </div>
-  </div>
-</header>
+        <div class="flex items-center gap-3">
+          <NuxtLink to="/register" class="cta">Daftar</NuxtLink>
+          <NuxtLink to="/login" class="cta">Masuk</NuxtLink>
+        </div>
+      </div>
+    </header>
 
     <main class="site-body">
       <slot />
