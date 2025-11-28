@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.page {
+    @apply min-h-screen bg-[#0B1220] text-white py-16 px-5; 
+}

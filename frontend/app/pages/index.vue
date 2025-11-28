@@ -9,11 +9,10 @@
         Mewujudkan pengelolaan organisasi yang efisien dan transparan
         melalui integrasi digital menyeluruh.
       </p>
-
+      
       <NuxtLink
         to="/login"
-        class="cta-primary hover:scale-[1.05] transition-transform animate-fade-in delay-400"
-      >
+        class="cta-primary hover:scale-[1.05] transition-transform animate-fade-in delay-400">
         Masuk ke Sistem Sekarang &rarr;
       </NuxtLink>
     </section>
