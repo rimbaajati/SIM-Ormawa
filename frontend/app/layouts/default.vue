@@ -1,258 +1,343 @@
 <template>
   <div>
     <header class="nav fixed w-full z-50">
-      <div class="container nav-inner">
-        <NuxtLink to="/" class="brand">ORMAWA UMPKU</NuxtLink>
+      <div class="nav-left">
+        <button class="menu-btn" @click="menuOpen = true">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
 
-        <nav class="links">
-          <NuxtLink to="/berita">Berita</NuxtLink>
-          <NuxtLink to="/fitur">Fitur</NuxtLink>
-          <NuxtLink to="#kontak">Kontak</NuxtLink>
-        </nav>
+      <NuxtLink to="/" class="nav-center nav-center-link">
+        <span class="nav-subtitle">SISTEM INFORMASI ORMAWA</span>
+        <span class="nav-title">UMPKU SURAKARTA</span>
+      </NuxtLink>
 
-        <div class="flex items-center gap-3">
-          <NuxtLink to="/register" class="cta">Daftar</NuxtLink>
-          <NuxtLink to="/login" class="cta">Masuk</NuxtLink>
-        </div>
+      <div class="nav-right">
+        <NuxtLink to="/search" class="search-btn search-link"> 🔍︎ </NuxtLink>
+
+        <NuxtLink to="/" class="logo-link">
+          <img src="/logo.png" alt="Logo" class="nav-logo" />
+        </NuxtLink>
       </div>
     </header>
+
+    <div v-if="menuOpen" class="menu-overlay">
+      <button class="close-btn" @click="menuOpen = false">✕ Close</button>
+
+      <nav class="menu-list">
+        <NuxtLink to="/berita" class="menu-item" @click="menuOpen = false">
+          BERITA ➜
+        </NuxtLink>
+
+        <NuxtLink to="/fitur" class="menu-item" @click="menuOpen = false">
+          FITUR ➜
+        </NuxtLink>
+
+        <NuxtLink to="/kontak" class="menu-item" @click="menuOpen = false">
+          KONTAK ➜
+        </NuxtLink>
+      </nav>
+
+      <div class="menu-logo-big"></div>
+    </div>
 
     <main class="site-body">
       <slot />
     </main>
 
-    <footer class="footer">
-      <div class="container footer-grid">
-        <div class="footer-col">
-          <img src="/logo.png" alt="Logo" class="h-10" />
-          <h3 class="footer-title">SIM ORMAWA UMPKU</h3>
+    <footer class="footer-center">
+      <img src="/logo-atas.png" alt="Logo" class="fc-logo-top" />
 
-          <p class="footer-text">
-            Jl. Raya Sindang, Kuningan, Jawa Barat 45562<br />
-            Email: ormawa@umpku.ac.id<br />
-            Telp: (0232) 123456
-          </p>
-        </div>
+      <nav class="fc-menu">
+        <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
+        <NuxtLink to="/terms">Terms of Service</NuxtLink>
+        <NuxtLink to="/about">About Us</NuxtLink>
+        <NuxtLink to="/contact">Contact Us</NuxtLink>
+        <NuxtLink to="/help">Help Center</NuxtLink>
+      </nav>
 
-        <div class="footer-col">
-          <h3 class="footer-title">Peta Lokasi</h3>
+      <p class="fc-disclaimer">
+        Seluruh merek dagang dan logo merupakan milik masing-masing
+        pemiliknya.<br />
+        Konten pada sistem ini dilindungi oleh undang-undang.
+      </p>
 
-          <iframe
-            class="map-box"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.4641908759367!2d108.43577547501066!3d-6.837373893158098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f1f49615a9757%3A0x6b9d62d2907409c9!2sUniversitas%20Muhammadiyah%20Kuningan!5e0!3m2!1sid!2sid!4v1700994000000!5m2!1sid!2sid"
-            allowfullscreen=""
-            loading="lazy"
-          >
-          </iframe>
-        </div>
-
-        <div class="footer-col">
-          <h3 class="footer-title">Layanan Sistem</h3>
-          <ul class="footer-list">
-            <li><NuxtLink to="/layanan/pengajuan">Pengajuan Kegiatan</NuxtLink></li>
-            <li><NuxtLink to="/layanan/laporan">SPJ & LPJ</NuxtLink></li>
-            <li><NuxtLink to="/layanan/presensi">Presensi Anggota</NuxtLink></li>
-            <li><NuxtLink to="/layanan/database">Database Ormawa</NuxtLink></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h3 class="footer-title">Portal Informasi</h3>
-          <ul class="footer-list">
-            <li><NuxtLink to="/berita">Berita</NuxtLink></li> 
-            <li><NuxtLink to="/agenda">Agenda</NuxtLink></li>
-            <li><NuxtLink to="/beasiswa">Beasiswa</NuxtLink></li>
-            <li><NuxtLink to="/kemahasiswaan">Kemahasiswaan</NuxtLink></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="social-area">
-        <div class="social-icons">
-          <i class="fab fa-facebook"></i>
-          <i class="fab fa-x-twitter"></i>
-          <i class="fab fa-youtube"></i>
-          <i class="fab fa-linkedin"></i>
-          <i class="fab fa-tiktok"></i>
-          <i class="fab fa-instagram"></i>
-        </div>
-      </div>
-
-      <div class="copyright">
-        Copyright © {{ new Date().getFullYear() }} SIM ORMAWA UMPKU
-      </div>
-    </footer>
+      <p class="fc-copy">
+        Copyright © {{ new Date().getFullYear() }} SIM ORMAWA UMPKU. All Rights
+        Reserved.
+      </p>
+      
+      </footer>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+const menuOpen = ref(false);
+</script>
 
 <style scoped>
-/* --------------------------- */
-/* CSS Variable untuk Neon Color */
-/* --------------------------- */
-/* Tambahkan ini untuk mendefinisikan --neon agar styling .cta dan :hover berfungsi */
 :root {
-  --neon: #00e0ff; /* Contoh warna neon */
+  --neon: #00e0ff;
 }
 
-/* --------------------------- */
-/* CONTAINER GLOBAL */
-/* --------------------------- */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* --------------------------- */
-/* NAVBAR */
-/* --------------------------- */
+/* ================= NAVBAR ================= */
 .nav {
-  background: rgba(6, 10, 20, 0.65);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-}
-.nav-inner {
+  background: #0b1230;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
-}
-.brand {
-  color: white;
-  font-weight: 800;
-  letter-spacing: 1px;
-  font-size: 20px;
-}
-.links a {
-  color: rgba(255, 255, 255, 0.78);
-  margin-left: 18px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.2s;
-}
-.links a:hover {
-  color: var(--neon);
-}
-.cta {
-  /* Menggunakan --neon dari CSS Variable */
-  background: linear-gradient(90deg, var(--neon) 0%, #2ac0ff 100%); 
-  color: #08101a;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 700;
-}
-.site-body {
-  padding-top: 92px;
+  padding: 0 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* --------------------------- */
-/* FOOTER */
-/* --------------------------- */
-.footer {
-  background: #0d0f13;
-  padding: 50px 0 25px;
-  color: white;
-  margin-top: 60px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* GRID 4 KOLOM */
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 0.8fr 0.8fr;
-  gap: 40px;
-}
-
-.footer-col {
-  line-height: 1.6;
-}
-
-.footer-logo {
+.nav-left {
   width: 80px;
-  opacity: 0.9;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
-.footer-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 15px;
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.footer-text {
-  font-size: 14px;
-  opacity: 0.8;
+.menu-btn .bar {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: white;
+  border-radius: 4px;
+  transition: 0.3s;
 }
 
-/* LIST */
-.footer-list {
-  list-style: none;
-  padding: 0;
+.menu-btn:hover .bar {
+  background: var(--neon);
 }
 
-.footer-list li {
-  margin-bottom: 8px;
+/* ========== TULISAN TENGAH (DIKEMBALIKAN SEPERTI SEMULA) ========== */
+.nav-center {
+  flex: 1;
+  text-align: center;
+  color: white;
+  line-height: 1.2; /* kembali default */
+  /* letter-spacing dihapus */
 }
 
-.footer-list a {
-  color: rgba(255, 255, 255, 0.78);
+.nav-center-link {
   text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
-.footer-list a:hover {
+.nav-center-link:hover .nav-title,
+.nav-center-link:hover .nav-subtitle {
+  color: var(--neon);
+  transition: 0.3s;
+}
+
+.nav-subtitle {
+  font-size: 13px;
+  opacity: 1 !important;
+  display: block;
+  color: #ffffff !important;
+}
+
+.nav-title {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: "Times New Roman", serif;
+  color: #ffffff !important;
+}
+
+/* ====================== KANAN (SEARCH + LOGO) ====================== */
+.nav-right {
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.search-link {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  margin-right: 14px;
+}
+
+.search-link:hover {
   color: var(--neon);
 }
 
-/* MAP */
-.map-box {
-  width: 100%;
-  height: 180px;
-  border: none;
-  border-radius: 8px;
+.logo-link {
+  display: flex;
+  align-items: center;
 }
 
-/* SOSIAL MEDIA */
-.social-area {
+.nav-logo {
+  height: 32px;
+  opacity: 0.9;
+}
+
+/* ================= MENU OVERLAY ================= */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0b1230;
+  z-index: 99999;
+  padding: 40px;
+  color: white;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 40px;
+}
+.close-btn:hover {
+  color: var(--neon);
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.menu-item {
+  font-size: 28px;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+.menu-item:hover {
+  color: var(--neon);
+  transform: translateX(10px);
+}
+
+/* Big faded logo like WhiteHouse */
+.menu-logo-big {
+  position: absolute;
+  right: 80px;
+  top: 120px;
+  width: 430px;
+  height: 430px;
+  opacity: 0.05;
+  background-image: url("/logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ================= BODY ================= */
+.site-body {
+  padding-top: 90px;
+  min-height: 100vh;
+}
+
+/* ====================== FOOTER GENSHIN STYLE ====================== */
+
+.footer-center {
+  background: #000;
   text-align: center;
-  margin-top: 50px;
+  padding: 60px 20px;
+  color: #ccc;
+  font-family: "Segoe UI", sans-serif;
 }
-.social-area h3 {
-  margin-bottom: 12px;
-  font-size: 18px;
+
+/* LOGO ATAS */
+.fc-logo-top {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 180px;
+  margin-bottom: 25px;
+  opacity: 0.9;
 }
-.social-icons {
+
+/* MENU */
+.fc-menu {
   display: flex;
   justify-content: center;
-  gap: 18px;
-  font-size: 22px;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
 }
-.social-icons i {
-  cursor: pointer;
+
+.fc-menu a {
+  color: #ddd;
+  font-size: 15px;
+  text-decoration: none;
   transition: 0.2s;
 }
-.social-icons i:hover {
-  color: var(--neon);
-  transform: translateY(-3px);
+
+.fc-menu a:hover {
+  color: white;
+}
+
+/* DISCLAIMER */
+.fc-disclaimer {
+  max-width: 800px;
+  margin: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #aaa;
+  margin-bottom: 40px;
 }
 
 /* COPYRIGHT */
+.fc-copy {
+  font-size: 14px;
+  color: #888;
+}
+
 .copyright {
   text-align: center;
-  margin-top: 25px;
   padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 14px;
   opacity: 0.7;
 }
 
-/* RESPONSIVE */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .menu-logo-big {
+    display: none;
+  }
 }
+
 @media (max-width: 600px) {
   .footer-grid {
     grid-template-columns: 1fr;

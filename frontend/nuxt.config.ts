@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 
   css: ["@/assets/css/tailwind.css"],
 
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: ['@nuxtjs/tailwindcss', "@pinia/nuxt"],
 
   alias: {
     "@": fileURLToPath(new URL("./", import.meta.url)),
