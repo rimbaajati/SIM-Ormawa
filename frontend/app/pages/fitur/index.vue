@@ -38,7 +38,8 @@ const features = [
 
 <style scoped>
 .container { max-width:1100px; margin:0 auto; padding: 0 20px; }
-.section-title { text-align:center; font-size:28px; margin:18px 0 28px; color:var(--muted); }
+/* SECTION TITLE DIUBAH KE HITAM */
+.section-title { text-align:center; font-size:28px; margin:18px 0 28px; color: #000; } 
 
 .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:20px; }
 
@@ -46,21 +47,26 @@ const features = [
 .card {
   padding:28px;
   border-radius:12px;
-  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-  border:1px solid rgba(255,255,255,.04);
+  /* Hapus atau ganti background jika background sebelumnya gelap, 
+     namun saya pertahankan agar Anda bisa menyesuaikan */
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.95)); 
+  border:1px solid rgba(0,0,0,.1);
   text-align:center;
   transition: .25s ease;
   cursor: pointer;
   text-decoration: none;
-  color: white;
+  /* WARNA TEKS CARD DIUBAH KE HITAM */
+  color: #000; 
 }
 .card:hover {
   transform: translateY(-6px);
-  border-color: var(--neon);
-  box-shadow: 0 0 20px rgba(0, 255, 200, 0.25);
+  /* Ubah warna hover border dan shadow agar kontras dengan teks hitam */
+  border-color: #333; 
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); 
 }
 
 .card .icon { font-size:34px; margin-bottom:12px; }
 
-.muted { color: rgba(255,255,255,.6); max-width:760px; margin:0 auto; text-align:center; }
+/* TEKS MUTED DIUBAH KE HITAM */
+.muted { color: #333; max-width:760px; margin:0 auto; text-align:center; } 
 </style>
