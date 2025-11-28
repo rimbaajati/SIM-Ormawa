@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.manager_app')
 
 @section('title', 'All Proposals')
 
