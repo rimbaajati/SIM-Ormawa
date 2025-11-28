@@ -8,15 +8,15 @@
       <!-- Wrapper untuk Header dan Tombol Tambah, agar bisa di-center bersama -->
       <div class="flex flex-col items-center text-center">
         <h1 class="text-4xl font-extrabold mb-6 text-white/90">Manajemen Berita</h1>
-
+    
         <!-- Tombol Tambah -->
         <NuxtLink to="/berita/tambah" 
           class="bg-[#FFA500] text-[#08101a] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#FF8C00] transition duration-200 text-base"
         >
           + Tambah Berita Baru
         </NuxtLink>
-      </div>
-
+    </div>
+    
       <div class="mt-12 w-full">
         <!-- ⚠️ Penanganan Status Loading -->
         <div v-if="loading" class="text-center py-12">
@@ -27,8 +27,8 @@
             </svg>
             <span>Memuat data berita...</span>
           </p>
-        </div>
-
+    </div>
+    
         <!-- ❌ Penanganan Status Error -->
         <div v-else-if="fetchError" class="text-center py-12 border border-red-600 bg-red-900/50 p-6 rounded-lg">
           <p class="text-red-400 font-semibold">Gagal Memuat Data</p>
@@ -43,11 +43,11 @@
 
         <!-- ✅ Menampilkan Daftar Berita -->
         <div v-else class="space-y-4">
-          <div
-            v-for="item in berita"
-            :key="item.id"
+      <div 
+        v-for="item in berita" 
+        :key="item.id"
             class="p-5 rounded-xl shadow-xl bg-[#1a2130] border border-white/10 hover:border-[#FFA500]/50 transition duration-200"
-          >
+        >
             <h2 class="text-xl font-semibold text-white">{{ item.judul }}</h2>
             <p class="text-white/70 mt-1 mb-3 text-sm line-clamp-2">{{ item.ringkasan || 'Tidak ada ringkasan.' }}</p>
 
