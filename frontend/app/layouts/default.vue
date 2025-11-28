@@ -1,234 +1,343 @@
 <template>
   <div>
     <header class="nav fixed w-full z-50">
-      <div class="container nav-inner">
-        <NuxtLink to="/" class="brand">
-          <img
-            src="/logo.png" 
-            alt="Logo ORMAWA UMPKU"
-            class="logo-header"
-          />
-          ORMAWA UMPKU
+      <div class="nav-left">
+        <button class="menu-btn" @click="menuOpen = true">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+
+      <NuxtLink to="/" class="nav-center nav-center-link">
+        <span class="nav-subtitle">SISTEM INFORMASI ORMAWA</span>
+        <span class="nav-title">UMPKU SURAKARTA</span>
+      </NuxtLink>
+
+      <div class="nav-right">
+        <NuxtLink to="/search" class="search-btn search-link"> 🔍︎ </NuxtLink>
+
+        <NuxtLink to="/" class="logo-link">
+          <img src="/logo.png" alt="Logo" class="nav-logo" />
         </NuxtLink>
-
-        <nav class="links">
-          <NuxtLink to="/berita">Berita</NuxtLink>
-          <NuxtLink to="/fitur">Fitur</NuxtLink>
-          <NuxtLink to="/kontak">Kontak</NuxtLink>
-        </nav>
-
-        <div class="flex items-center gap-3">
-          <NuxtLink to="/register" class="cta">Daftar</NuxtLink>
-          <NuxtLink to="/login" class="cta">Masuk</NuxtLink>
-        </div>
       </div>
     </header>
+
+    <div v-if="menuOpen" class="menu-overlay">
+      <button class="close-btn" @click="menuOpen = false">✕ Close</button>
+
+      <nav class="menu-list">
+        <NuxtLink to="/berita" class="menu-item" @click="menuOpen = false">
+          BERITA ➜
+        </NuxtLink>
+
+        <NuxtLink to="/fitur" class="menu-item" @click="menuOpen = false">
+          FITUR ➜
+        </NuxtLink>
+
+        <NuxtLink to="/kontak" class="menu-item" @click="menuOpen = false">
+          KONTAK ➜
+        </NuxtLink>
+      </nav>
+
+      <div class="menu-logo-big"></div>
+    </div>
 
     <main class="site-body">
       <slot />
     </main>
 
-    <footer class="footer">
-      <div class="container footer-grid">
-        <div class="footer-col">
-          <img src="/logo.png" alt="Logo" class="footer-logo-img" /> 
-          
-          <h3 class="footer-title">SISTEM INFORMASI ORMAWA UMPKU SURAKARTA</h3>
+    <footer class="footer-center">
+      <img src="/logo-atas.png" alt="Logo" class="fc-logo-top" />
 
-          <p class="footer-text">
-            Jl. Tulang Bawang Sel. No.26, Kadipiro, Kec. Banjarsari, Kota
-            Surakarta, Jawa Tengah 57136<br />
-            Email: info@umpku.ac.id<br />
-            Telp: (0271) 734955
-          </p>
-        </div>
+      <nav class="fc-menu">
+        <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
+        <NuxtLink to="/terms">Terms of Service</NuxtLink>
+        <NuxtLink to="/about">About Us</NuxtLink>
+        <NuxtLink to="/contact">Contact Us</NuxtLink>
+        <NuxtLink to="/help">Help Center</NuxtLink>
+      </nav>
 
-        <div class="footer-col">
-          <h3 class="footer-title">Peta Lokasi</h3>
-          <iframe
-            class="map-box"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.3790819601186!2d110.8140317247632!3d-7.533568292479624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a1700245141fd%3A0x28f4257bb5c0e67f!2sUniversitas%20Muhammadiyah%20PKU%20Surakarta!5e0!3m2!1sid!2sid!4v1764230206659!5m2!1sid!2sid"
-            allowfullscreen=""
-            loading="lazy"
-          >
-          </iframe>
-        </div>
+      <p class="fc-disclaimer">
+        Seluruh merek dagang dan logo merupakan milik masing-masing
+        pemiliknya.<br />
+        Konten pada sistem ini dilindungi oleh undang-undang.
+      </p>
 
-        <div class="footer-col">
-          <h3 class="footer-title">Layanan Sistem</h3>
-          <ul class="footer-list">
-            <li>
-              <NuxtLink to="/layanan/pengajuan">Pengajuan Kegiatan</NuxtLink>
-            </li>
-            <li><NuxtLink to="/layanan/laporan">SPJ & LPJ</NuxtLink></li>
-            <li>
-              <NuxtLink to="/layanan/presensi">Presensi Anggota</NuxtLink>
-            </li>
-            <li><NuxtLink to="/layanan/database">Database Ormawa</NuxtLink></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h3 class="footer-title">Portal Informasi</h3>
-          <ul class="footer-list">
-            <li><NuxtLink to="/berita">Berita</NuxtLink></li>
-            <li><NuxtLink to="/agenda">Agenda</NuxtLink></li>
-            <li><NuxtLink to="/beasiswa">Beasiswa</NuxtLink></li>
-            <li><NuxtLink to="/kemahasiswaan">Kemahasiswaan</NuxtLink></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="copyright">
-        Copyright © {{ new Date().getFullYear() }} SIM ORMAWA UMPKU
-      </div>
-    </footer>
+      <p class="fc-copy">
+        Copyright © {{ new Date().getFullYear() }} SIM ORMAWA UMPKU. All Rights
+        Reserved.
+      </p>
+      
+      </footer>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+const menuOpen = ref(false);
+</script>
 
 <style scoped>
-/* (Kode CSS Anda tetap sama dan sudah benar) */
-
 :root {
   --neon: #00e0ff;
 }
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
+/* ================= NAVBAR ================= */
 .nav {
-  background: rgba(87, 87, 87, 0.685);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.158);
-  backdrop-filter: blur(10px);
-}
-.nav-inner {
+  background: #0b1230;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  padding: 0 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
-.brand {
+
+.nav-left {
+  width: 80px;
   display: flex;
-  align-items: center; 
+  align-items: center;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-btn .bar {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: white;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.menu-btn:hover .bar {
+  background: var(--neon);
+}
+
+/* ========== TULISAN TENGAH (DIKEMBALIKAN SEPERTI SEMULA) ========== */
+.nav-center {
+  flex: 1;
+  text-align: center;
   color: white;
-  font-weight: 800;
-  letter-spacing: 1px;
-  font-size: 20px;
-  text-decoration: none; 
+  line-height: 1.2; /* kembali default */
+  /* letter-spacing dihapus */
 }
 
-.logo-header {
-  height: 32px; 
-  width: auto; 
-  margin-right: 8px; 
-}
-
-.links a {
-  color: rgba(255, 255, 255, 0.78);
-  margin-left: 18px;
+.nav-center-link {
   text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.nav-center-link:hover .nav-title,
+.nav-center-link:hover .nav-subtitle {
+  color: var(--neon);
+  transition: 0.3s;
+}
+
+.nav-subtitle {
+  font-size: 13px;
+  opacity: 1 !important;
+  display: block;
+  color: #ffffff !important;
+}
+
+.nav-title {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: "Times New Roman", serif;
+  color: #ffffff !important;
+}
+
+/* ====================== KANAN (SEARCH + LOGO) ====================== */
+.nav-right {
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.search-link {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  margin-right: 14px;
+}
+
+.search-link:hover {
+  color: var(--neon);
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  height: 32px;
+  opacity: 0.9;
+}
+
+/* ================= MENU OVERLAY ================= */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0b1230;
+  z-index: 99999;
+  padding: 40px;
+  color: white;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 40px;
+}
+.close-btn:hover {
+  color: var(--neon);
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.menu-item {
+  font-size: 28px;
   font-weight: 600;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+.menu-item:hover {
+  color: var(--neon);
+  transform: translateX(10px);
+}
+
+/* Big faded logo like WhiteHouse */
+.menu-logo-big {
+  position: absolute;
+  right: 80px;
+  top: 120px;
+  width: 430px;
+  height: 430px;
+  opacity: 0.05;
+  background-image: url("/logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ================= BODY ================= */
+.site-body {
+  padding-top: 90px;
+  min-height: 100vh;
+}
+
+/* ====================== FOOTER GENSHIN STYLE ====================== */
+
+.footer-center {
+  background: #000;
+  text-align: center;
+  padding: 60px 20px;
+  color: #ccc;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* LOGO ATAS */
+.fc-logo-top {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 180px;
+  margin-bottom: 25px;
+  opacity: 0.9;
+}
+
+/* MENU */
+.fc-menu {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
+}
+
+.fc-menu a {
+  color: #ddd;
+  font-size: 15px;
+  text-decoration: none;
   transition: 0.2s;
 }
-.links a:hover {
-  color: var(--neon);
-}
-.cta {
-  background: linear-gradient(90deg, var(--neon) 100%, #000000 100%);
-  color: #08101a;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 700;
-}
-.site-body {
-  padding-top: 92px;
-}
 
-.footer {
-  background: #0d0f13;
-  padding: 50px 0 25px;
+.fc-menu a:hover {
   color: white;
-  margin-top: 60px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* GRID 4 KOLOM */
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 0.8fr 0.8fr;
-  gap: 40px;
-}
-
-.footer-col {
-  line-height: 1.6;
-}
-
-.footer-logo-img { 
-  height: 40px; 
-  width: auto;
-  opacity: 0.9;
-  margin-bottom: 10px;
-}
-
-.footer-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 15px;
-}
-
-.footer-text {
+/* DISCLAIMER */
+.fc-disclaimer {
+  max-width: 800px;
+  margin: auto;
   font-size: 14px;
-  opacity: 0.8;
-}
-
-/* LIST */
-.footer-list {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-list li {
-  margin-bottom: 8px;
-}
-
-.footer-list a {
-  color: rgba(255, 255, 255, 0.78);
-  text-decoration: none;
-}
-
-.footer-list a:hover {
-  color: var(--neon);
-}
-
-/* MAP */
-.map-box {
-  width: 100%;
-  height: 180px;
-  border: none;
-  border-radius: 8px;
+  line-height: 1.6;
+  color: #aaa;
+  margin-bottom: 40px;
 }
 
 /* COPYRIGHT */
+.fc-copy {
+  font-size: 14px;
+  color: #888;
+}
+
 .copyright {
   text-align: center;
-  margin-top: 25px;
   padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 14px;
   opacity: 0.7;
 }
 
-/* RESPONSIVE */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .menu-logo-big {
+    display: none;
+  }
 }
+
 @media (max-width: 600px) {
   .footer-grid {
     grid-template-columns: 1fr;
