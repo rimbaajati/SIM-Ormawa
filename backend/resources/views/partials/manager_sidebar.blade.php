@@ -11,7 +11,7 @@
                             <li class="menu-title" data-key="t-menu">Menu</li>
 
                             <li>
-                                <a href="{{ route('dashboard') }}">
+                                <a href="{{ route('manager.dashboard') }}">
                                     <i data-feather="home"></i>
                                     <span data-key="t-dashboard">Dashboard</span>
                                 </a>
@@ -91,7 +91,7 @@
                                     <span data-key="t-pages">Schedules</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="pages-starter.html" data-key="t-starter-page">All Schedules</a></li>
+                                    <li><a href="{{ route('manager.schedules.all') }}" data-key="t-starter-page">All Schedules</a></li>
                                     <li><a href="pages-maintenance.html" data-key="t-maintenance">Today Activities</a></li>
                                     <li><a href="pages-comingsoon.html" data-key="t-coming-soon">Coming Soon</a></li>
                                 </ul>

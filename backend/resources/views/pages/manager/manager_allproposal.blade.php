@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.manager_app')
 
 @section('title', 'All Proposals')
 
@@ -63,8 +63,8 @@
                     @forelse ($proposals ?? [] as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->nama_kegiatan }}</td>
-                        <td>{{ $item->organization->name ?? '-' }}</td>
+                        <td>{{ $item->judul }}</td>
+                        <td>{{ $item->user->name ?? '-' }}</td>
                         <td>{{ $item->created_at->format('d-m-Y') }}</td>
                         <td>Rp {{ number_format($item->anggaran, 0, ',', '.') }}</td>
                         <td>

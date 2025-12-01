@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            
+            // --- TAMBAHAN KHUSUS SIM ORMAWA ---
+            // 1. Kolom Role (Admin / Ormawa) - Default jadi 'ormawa'
+            $table->string('role')->default('ormawa'); 
+            
+            // 2. ID Organisasi (Bisa kosong/null karena Admin tidak punya organisasi)
+            // Kita pakai unsignedBigInteger dulu agar aman jika tabel organisasi belum dibuat
+            $table->unsignedBigInteger('id_org')->nullable(); 
+
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
