@@ -12,15 +12,30 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        // Tambahkan baris impor font ini:
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Audiowide&display=swap'
+        },
+        { 
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap'
+        },
+        { 
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'
+        },
+        { 
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap'
+        },
+        { 
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap'
         }
       ]
     }
   },
-
+  
   plugins: ["~/plugins/axios.js"],
 
   css: ["@/assets/css/tailwind.css"],

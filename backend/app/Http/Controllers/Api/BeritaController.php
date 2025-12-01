@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\BeritaResource;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use validator;
+use Illuminate\Validation\ValidationException;
 use App\Models\Berita; // Pastikan Model Berita sudah dibuat (php artisan make:model Berita)
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\JsonResponse;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
 {
     $berita = Berita::latest()->get();
     // Bungkus dengan collection
