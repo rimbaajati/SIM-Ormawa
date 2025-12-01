@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div v-if="isLoading" :class="['loading-overlay', { 'fade-out': !isLoading }]">
+      <div class="loading-content">
+        <img src="/logo-load.png" alt="Loading Logo" class="loading-logo" />
+      </div>
+    </div>
+
     <header class="nav fixed w-full z-50">
       <div class="nav-left">
         <button class="menu-btn" @click="menuOpen = true">
@@ -15,10 +21,8 @@
       </NuxtLink>
 
       <div class="nav-right">
-        <NuxtLink to="/search" class="search-btn search-link"> 🔍︎ </NuxtLink>
-
         <NuxtLink to="/" class="logo-link">
-          <img src="/logo.png" alt="Logo" class="nav-logo" />
+          <img src="/logo-atas.png" alt="Logo" class="nav-logo" />
         </NuxtLink>
       </div>
     </header>
@@ -48,40 +52,85 @@
     </main>
 
     <footer class="footer-center">
-      <img src="/logo-atas.png" alt="Logo" class="fc-logo-top" />
+      <img src="/logo.png" alt="Logo" class="fc-logo-top" />
 
       <nav class="fc-menu">
-        <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
-        <NuxtLink to="/terms">Terms of Service</NuxtLink>
-        <NuxtLink to="/about">About Us</NuxtLink>
-        <NuxtLink to="/contact">Contact Us</NuxtLink>
-        <NuxtLink to="/help">Help Center</NuxtLink>
+        <NuxtLink to="https://pmb.umpku.ac.id/" target="_blank">PMB UMPKU</NuxtLink>
+        <NuxtLink to="https://mylms.umpku.ac.id/" target="_blank">LMS UMPKU</NuxtLink>
+        <NuxtLink to="https://myakademik.itspku.ac.id/site/login" target="_blank">My Akademik</NuxtLink>
+        <NuxtLink to="https://umpku.ac.id/" target="_blank">UMPKU Surakarta</NuxtLink>
       </nav>
 
       <p class="fc-disclaimer">
-        Seluruh merek dagang dan logo merupakan milik masing-masing
-        pemiliknya.<br />
-        Konten pada sistem ini dilindungi oleh undang-undang.
+        Email: <a href="mailto:info@umpku.ac.id">info@umpku.ac.id</a><br />
+        Telp: 0271 734955
       </p>
 
       <p class="fc-copy">
         Copyright © {{ new Date().getFullYear() }} SIM ORMAWA UMPKU. All Rights
         Reserved.
       </p>
-      
-      </footer>
+    </footer>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const menuOpen = ref(false);
+const isLoading = ref(true);
+
+onMounted(() => {
+  // Atur waktu tunggu total (misalnya 2 detik) sebelum fade-out dimulai
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 2000); 
+});
 </script>
 
 <style scoped>
 :root {
   --neon: #00e0ff;
+}
+
+/* ================= LOADING PAGE ================= */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  /* LATAR BELAKANG DIUBAH MENJADI PUTIH */
+  background: #ffffff; 
+  z-index: 100000; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 1; 
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden; 
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Hapus color: white, karena background overlay putih */
+  /* color: white; */
+  animation: logoFadeIn 1.5s ease-out forwards; 
+}
+
+.loading-logo {
+  width: 200px; 
+  height: auto;
+}
+
+@keyframes logoFadeIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 /* ================= NAVBAR ================= */
@@ -115,7 +164,7 @@ const menuOpen = ref(false);
   display: block;
   width: 22px;
   height: 3px;
-  background: white;
+  background: #ffffff;
   border-radius: 4px;
   transition: 0.3s;
 }
@@ -124,25 +173,11 @@ const menuOpen = ref(false);
   background: var(--neon);
 }
 
-/* ========== TULISAN TENGAH (DIKEMBALIKAN SEPERTI SEMULA) ========== */
 .nav-center {
   flex: 1;
   text-align: center;
   color: white;
-  line-height: 1.2; /* kembali default */
-  /* letter-spacing dihapus */
-}
-
-.nav-center-link {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-.nav-center-link:hover .nav-title,
-.nav-center-link:hover .nav-subtitle {
-  color: var(--neon);
-  transition: 0.3s;
+  line-height: 1.2;
 }
 
 .nav-subtitle {
@@ -150,6 +185,9 @@ const menuOpen = ref(false);
   opacity: 1 !important;
   display: block;
   color: #ffffff !important;
+  font-family: 'Audiowide', cursive;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .nav-title {
@@ -159,7 +197,6 @@ const menuOpen = ref(false);
   color: #ffffff !important;
 }
 
-/* ====================== KANAN (SEARCH + LOGO) ====================== */
 .nav-right {
   width: 90px;
   display: flex;
@@ -189,8 +226,11 @@ const menuOpen = ref(false);
 }
 
 .nav-logo {
-  height: 32px;
+  height: 45px;
   opacity: 0.9;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* ================= MENU OVERLAY ================= */
@@ -259,9 +299,18 @@ const menuOpen = ref(false);
 }
 
 /* ================= BODY ================= */
+body {
+  background: #301d0b !important;
+}
+
 .site-body {
-  padding-top: 90px;
+  padding-top: 70px !important;
   min-height: 100vh;
+}
+
+.site-body > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* ====================== FOOTER GENSHIN STYLE ====================== */
@@ -276,6 +325,7 @@ const menuOpen = ref(false);
 
 /* LOGO ATAS */
 .fc-logo-top {
+  /* CATATAN: Path logo di footer Anda adalah '/logo.png', bukan '/logo-atas.png' */
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -310,8 +360,18 @@ const menuOpen = ref(false);
   margin: auto;
   font-size: 14px;
   line-height: 1.6;
+  /* Warna teks footer disclaimer, defaultnya adalah #aaa */
   color: #aaa;
   margin-bottom: 40px;
+}
+
+/* Tambahan styling untuk link email di footer */
+.fc-disclaimer a {
+    color: var(--neon); /* Memberi warna neon pada link email */
+    text-decoration: none;
+}
+.fc-disclaimer a:hover {
+    text-decoration: underline;
 }
 
 /* COPYRIGHT */

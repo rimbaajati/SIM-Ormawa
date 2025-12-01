@@ -9,6 +9,18 @@ export default defineNuxtConfig({
     }
   },
 
+  app: {
+    head: {
+      link: [
+        // Tambahkan baris impor font ini:
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Audiowide&display=swap'
+        }
+      ]
+    }
+  },
+
   plugins: ["~/plugins/axios.js"],
 
   css: ["@/assets/css/tailwind.css"],
