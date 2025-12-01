@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="isLoading" :class="['loading-overlay', { 'fade-out': !isLoading }]">
+    <div
+      v-if="isLoading"
+      :class="['loading-overlay', { 'fade-out': !isLoading }]"
+    >
       <div class="loading-content">
         <img src="/logo-load.png" alt="Loading Logo" class="loading-logo" />
       </div>
@@ -27,24 +30,42 @@
       </div>
     </header>
 
-    <div v-if="menuOpen" class="menu-overlay">
-      <button class="close-btn" @click="menuOpen = false">✕ Close</button>
+    <div v-if="menuOpen" class="menu-overlay" @click.self="menuOpen = false">
+      <div class="menu-sidebar">
+        <button class="close-btn" @click="menuOpen = false">✕</button>
 
-      <nav class="menu-list">
-        <NuxtLink to="/berita" class="menu-item" @click="menuOpen = false">
-          BERITA ➜
-        </NuxtLink>
+        <nav class="menu-list">
+          <NuxtLink to="/berita" class="menu-item" @click="menuOpen = false">
+            BERITA
+          </NuxtLink>
 
-        <NuxtLink to="/fitur" class="menu-item" @click="menuOpen = false">
-          FITUR ➜
-        </NuxtLink>
+          <NuxtLink to="/fitur" class="menu-item" @click="menuOpen = false">
+            FITUR
+          </NuxtLink>
 
-        <NuxtLink to="/kontak" class="menu-item" @click="menuOpen = false">
-          KONTAK ➜
-        </NuxtLink>
-      </nav>
+          <NuxtLink to="/kontak" class="menu-item" @click="menuOpen = false">
+            KONTAK
+          </NuxtLink>
 
-      <div class="menu-logo-big"></div>
+
+          <div class="menu-auth-group">
+            <NuxtLink
+              to="/login"
+              class="menu-item menu-login-btn"
+              @click="menuOpen = false"
+            >
+              LOGIN
+            </NuxtLink>
+            <NuxtLink
+              to="/register"
+              class="menu-item menu-register-label"
+              @click="menuOpen = false"
+            >
+              REGISTER
+            </NuxtLink>
+          </div>
+        </nav>
+      </div>
     </div>
 
     <main class="site-body">
@@ -55,10 +76,20 @@
       <img src="/logo.png" alt="Logo" class="fc-logo-top" />
 
       <nav class="fc-menu">
-        <NuxtLink to="https://pmb.umpku.ac.id/" target="_blank">PMB UMPKU</NuxtLink>
-        <NuxtLink to="https://mylms.umpku.ac.id/" target="_blank">LMS UMPKU</NuxtLink>
-        <NuxtLink to="https://myakademik.itspku.ac.id/site/login" target="_blank">My Akademik</NuxtLink>
-        <NuxtLink to="https://umpku.ac.id/" target="_blank">UMPKU Surakarta</NuxtLink>
+        <NuxtLink to="https://pmb.umpku.ac.id/" target="_blank"
+          >PMB UMPKU</NuxtLink
+        >
+        <NuxtLink to="https://mylms.umpku.ac.id/" target="_blank"
+          >LMS UMPKU</NuxtLink
+        >
+        <NuxtLink
+          to="https://myakademik.itspku.ac.id/site/login"
+          target="_blank"
+          >My Akademik</NuxtLink
+        >
+        <NuxtLink to="https://umpku.ac.id/" target="_blank"
+          >UMPKU Surakarta</NuxtLink
+        >
       </nav>
 
       <p class="fc-disclaimer">
@@ -84,7 +115,7 @@ onMounted(() => {
   // Atur waktu tunggu total (misalnya 2 detik) sebelum fade-out dimulai
   setTimeout(() => {
     isLoading.value = false;
-  }, 2000); 
+  }, 2000);
 });
 </script>
 
@@ -93,47 +124,53 @@ onMounted(() => {
   --neon: #00e0ff;
 }
 
-/* ================= LOADING PAGE ================= */
+/* ================= LOADING PAGE (TETAP) ================= */
 .loading-overlay {
   position: fixed;
   inset: 0;
-  /* LATAR BELAKANG DIUBAH MENJADI PUTIH */
-  background: #ffffff; 
-  z-index: 100000; 
+  background: #ffffff;
+  z-index: 100000;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  opacity: 1; 
+  opacity: 1;
   transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
 }
 
 .loading-overlay.fade-out {
   opacity: 0;
-  visibility: hidden; 
+  visibility: hidden;
 }
 
 .loading-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Hapus color: white, karena background overlay putih */
-  /* color: white; */
-  animation: logoFadeIn 1.5s ease-out forwards; 
+  animation: logoFadeIn 1.5s ease-out forwards;
 }
 
 .loading-logo {
-  width: 200px; 
+  width: 200px;
   height: auto;
 }
 
 @keyframes logoFadeIn {
-  0% { opacity: 0; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* ================= NAVBAR ================= */
+/* ================= NAVBAR (TETAP) ================= */
 .nav {
   background: #0b1230;
   height: 70px;
@@ -185,7 +222,7 @@ onMounted(() => {
   opacity: 1 !important;
   display: block;
   color: #ffffff !important;
-  font-family: 'Audiowide', cursive;
+  font-family: "Audiowide", cursive;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -205,21 +242,6 @@ onMounted(() => {
   gap: 14px;
 }
 
-.search-link {
-  color: white;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  text-decoration: none;
-  margin-right: 14px;
-}
-
-.search-link:hover {
-  color: var(--neon);
-}
-
 .logo-link {
   display: flex;
   align-items: center;
@@ -233,72 +255,150 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-/* ================= MENU OVERLAY ================= */
+/* 🚀 ================= MENU OVERLAY (PERUBAHAN DISINI) ================= 🚀 */
 .menu-overlay {
   position: fixed;
   inset: 0;
-  background: #0b1230;
+  /* Warna latar belakang transparan agar konten di belakangnya terlihat */
+  background: rgba(0, 0, 0, 0.5);
   z-index: 99999;
-  padding: 40px;
+  padding: 0;
   color: white;
   animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Kontainer Sidebar Sebenarnya */
+.menu-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  /* Lebar Sidebar */
+  width: 320px;
+  max-width: 90vw; /* Responsif */
+  background: #161c30; /* Warna gelap baru untuk sidebar */
+  padding: 25px 30px;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3);
+  transform: translateX(0); /* Pastikan muncul dari kiri */
+  transition: transform 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Jika Anda ingin animasi slide-in (optional, menuOpen v-if sudah cukup) */
+.menu-overlay:not(.fade-out) .menu-sidebar {
+  transform: translateX(0);
+}
+
+/* Tombol Close */
 .close-btn {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 18px; /* Lebih kecil */
   color: white;
   cursor: pointer;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
+  text-align: left;
+  padding: 0;
 }
 .close-btn:hover {
   color: var(--neon);
 }
 
+/* Daftar Menu */
 .menu-list {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  margin-top: 30px;
+  justify-content: space-between;
+  height: 100%;
+  padding-bottom: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.menu-list > a:not(.menu-auth-group *) {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  padding-bottom: 5px;
 }
 
 .menu-item {
-  font-size: 28px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
   text-decoration: none;
   color: white;
   transition: 0.3s;
+  display: block;
 }
 .menu-item:hover {
   color: var(--neon);
-  transform: translateX(10px);
+  transform: translateX(5px); /* Geser sedikit saat hover */
 }
 
-/* Big faded logo like WhiteHouse */
-.menu-logo-big {
-  position: absolute;
-  right: 80px;
-  top: 120px;
-  width: 430px;
-  height: 430px;
-  opacity: 0.05;
-  background-image: url("/logo.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+/* Grup Login/Register di bagian bawah */
+.menu-auth-group {
+  margin-top: auto; /* Mendorong ke bawah */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ================= BODY ================= */
+/* Item menu duplikat FITUR & KONTAK yang terpisah dari group auth */
+.menu-duplicate {
+  opacity: 0.5; /* Dibuat lebih pudar seperti di gambar */
+}
+
+/* Style untuk link REGISTER di dalam group auth */
+.menu-auth-group .menu-item:first-child {
+  font-weight: 600;
+  font-size: 13px;
+  padding-bottom: 10px;
+}
+
+/* === LIQUID GLASS LOGIN BUTTON (SMALL VERSION) === */
+.menu-login-btn {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  text-align: center;
+  padding: 8px 0;           /* lebih kecil */
+  margin-bottom: 10px;
+  border-radius: 8px;       /* sama seperti register */
+  font-weight: 600;
+  font-size: 13px;          /* diperkecil */
+  color: white;
+  box-shadow: 0 3px 15px rgba(255, 255, 255, 0.06);
+  transition: 0.25s;
+}
+
+.menu-login-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+/* === LIQUID GLASS REGISTER LABEL === */
+.menu-register-label {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #e2e2e2;
+  transition: 0.3s;
+}
+
+.menu-register-label:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ================= BODY (TETAP) ================= */
 body {
   background: #301d0b !important;
 }
@@ -313,7 +413,7 @@ body {
   padding-top: 0 !important;
 }
 
-/* ====================== FOOTER GENSHIN STYLE ====================== */
+/* ====================== FOOTER (TETAP) ====================== */
 
 .footer-center {
   background: #000;
@@ -323,9 +423,7 @@ body {
   font-family: "Segoe UI", sans-serif;
 }
 
-/* LOGO ATAS */
 .fc-logo-top {
-  /* CATATAN: Path logo di footer Anda adalah '/logo.png', bukan '/logo-atas.png' */
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -334,7 +432,6 @@ body {
   opacity: 0.9;
 }
 
-/* MENU */
 .fc-menu {
   display: flex;
   justify-content: center;
@@ -354,27 +451,23 @@ body {
   color: white;
 }
 
-/* DISCLAIMER */
 .fc-disclaimer {
   max-width: 800px;
   margin: auto;
   font-size: 14px;
   line-height: 1.6;
-  /* Warna teks footer disclaimer, defaultnya adalah #aaa */
   color: #aaa;
   margin-bottom: 40px;
 }
 
-/* Tambahan styling untuk link email di footer */
 .fc-disclaimer a {
-    color: var(--neon); /* Memberi warna neon pada link email */
-    text-decoration: none;
+  color: var(--neon);
+  text-decoration: none;
 }
 .fc-disclaimer a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* COPYRIGHT */
 .fc-copy {
   font-size: 14px;
   color: #888;
@@ -387,7 +480,7 @@ body {
   opacity: 0.7;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= RESPONSIVE (UPDATE) ================= */
 @media (max-width: 900px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
@@ -401,6 +494,10 @@ body {
 @media (max-width: 600px) {
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+  /* Jika di mobile, menu-sidebar bisa dibuat 100% lebar layar */
+  .menu-sidebar {
+    width: 100%;
   }
 }
 </style>
