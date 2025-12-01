@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
+use validator;
 
 class AuthController extends Controller
 {
     // --- 1. REGISTER (Daftar Akun Baru) ---
-    public function register(Request $req)
+    public function register(Request $request): JsonResponse
     {
         // Validasi input dari frontend
-        $req->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:6',
@@ -22,9 +25,9 @@ class AuthController extends Controller
 
         // Buat user baru di database
         $user = User::create([
-            'name' => $req->name,
-            'email' => $req->email,
-            'password' => Hash::make($req->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
             // Default role, jika tabel user Anda punya kolom 'role'
             // 'role' => 'ormawa' 
         ]);
@@ -38,21 +41,42 @@ class AuthController extends Controller
             'token' => $token
         ], 201);
     }
+    // public function register(Request $request): JsonResponse
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required',
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //         'c_password' => 'required|same:password',
+    //     ]);
+   
+    //     if($validator->fails()){
+    //         return $this->sendError('Validation Error.', $validator->errors());       
+    //     }
+   
+    //     $input = $request->all();
+    //     $input['password'] = bcrypt($input['password']);
+    //     $user = User::create($input);
+    //     $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+    //     $success['name'] =  $user->name;
+   
+    //     return $this->sendResponse($success, 'User register successfully.');
+    // }
 
     // --- 2. LOGIN (Masuk) ---
-    public function login(Request $req)
+    public function login(Request $request): JsonResponse
     {
         // Validasi input
-        $req->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
         // Cari user berdasarkan email
-        $user = User::where('email', $req->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         // Cek apakah user ada DAN password cocok
-        if (!$user || !Hash::check($req->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             // Jika salah, kirim error validasi
             throw ValidationException::withMessages([
                'email' => ['Email atau password yang Anda masukkan salah.']

@@ -128,14 +128,14 @@ onMounted(() => {
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: #ffffff;
+  background: #000000;
   z-index: 100000;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   opacity: 1;
-  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  transition: opacity 0.5s ease-out, visibility 1s ease-out;
 }
 
 .loading-overlay.fade-out {

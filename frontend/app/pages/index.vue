@@ -51,6 +51,7 @@
         <img src="/mitra/logo2.png" alt="Mitra 2" loading="lazy" />
         <img src="/mitra/logo3.jpeg" alt="Mitra 3" loading="lazy" />
         <img src="/logo.png" alt="Mitra 4" loading="lazy" />
+        
       </div>
     </section>
   </div>
