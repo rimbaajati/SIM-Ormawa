@@ -2,74 +2,50 @@
 
 namespace App\Http\Controllers\Api;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Validation\Rules\Password;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Validation\Rules\Password;
 
 class ApiController extends Controller
 {
     public function register(Request $request)
     {
-       $validated = $request->validate([
-           'name' => 'required|string|max:255',
-           'email' => 'required|string|email|max:255|unique:users',
-           'password' => ['required', 'confirmed', Password::min(6)
-               ->mixedCase()
-               ->letters()
-               ->numbers()
-               ->symbols()
-               ->uncompromised()],
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => ['required', 'confirmed', Password::min(6)->letters()->mixedCase()->numbers()],
             'role' => 'required|string|in:manager,admin,user',
-       ]);
-        $user = User::create([
-           'name' => $validated['name'],
-           'email' => $validated['email'],
-           'password' => Hash::make($validated['password']),
         ]);
 
-        //PIlih Role Jon!!!
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
         $user->assignRole($validated['role']);
 
-        return response()->json([
-          'status' => true,
-          'message' => 'User registered successfully',
-          'user'=>$user
-        ], 201);
+        return response()->json(['message' => 'Register success', 'user' => $user]);
     }
 
     public function login(Request $request)
     {
-       $credentials = $request->only('email', 'password');
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
 
-       if (!Auth::attempt($credentials)) {
-           return response()->json([
-               'status' => false,
-               'message' => 'Invalid credentials'
-           ], 401);
-       }
         $user = Auth::user();
-        $token = JWTAuth::fromUser($user);
+        $token = $user->createToken('api')->plainTextToken;
 
-        return response()->json([
-           'status' => true,
-           'message' => 'Login successful',
-           'token' => $token,
-           'user' => $user
-        ], 200);
+        return response()->json(['message' => 'Login success', 'user' => $user, 'token' => $token]);
     }
 
     public function logout(Request $request)
     {
-       $request->user()->currentAccessToken()->delete();
-        return response()->json([
-            'status' => true,
-            'message' => 'Logged out successfully'
-        ], 200);
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logout success']);
     }
 }

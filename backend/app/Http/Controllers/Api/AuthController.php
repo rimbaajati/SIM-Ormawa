@@ -4,88 +4,57 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    // --- 1. REGISTER (Daftar Akun Baru) ---
-    public function register(Request $req)
+    // Register (optional, bisa di-skip dulu)
+    public function register(Request $request)
     {
-        // Validasi input dari frontend
-        $req->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:user,admin,manager',
         ]);
 
-        // Buat user baru di database
         $user = User::create([
-            'name' => $req->name,
-            'email' => $req->email,
-            'password' => Hash::make($req->password),
-            // Default role, jika tabel user Anda punya kolom 'role'
-            // 'role' => 'ormawa' 
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
-        // Buat token agar user langsung login setelah daftar
-        $token = $user->createToken('api-token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'User berhasil didaftarkan',
-            'user' => $user,
-            'token' => $token
-        ], 201);
+        return response()->json(['message' => 'User registered', 'user' => $user], 201);
     }
 
-    // --- 2. LOGIN (Masuk) ---
-    public function login(Request $req)
+    // Login
+    public function login(Request $request)
     {
-        // Validasi input
-        $req->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|string'
         ]);
 
-        // Cari user berdasarkan email
-        $user = User::where('email', $req->email)->first();
-
-        // Cek apakah user ada DAN password cocok
-        if (!$user || !Hash::check($req->password, $user->password)) {
-            // Jika salah, kirim error validasi
-            throw ValidationException::withMessages([
-               'email' => ['Email atau password yang Anda masukkan salah.']
-            ]);
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Jika benar, buat token baru
+        $user = Auth::user();
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Login berhasil',
-            'token' => $token, // Token ini disimpan di Frontend (localStorage/Cookie)
-            'user' => $user
+            'user' => $user,
+            'token' => $token
         ]);
     }
 
-    // --- 3. LOGOUT (Keluar) ---
-    public function logout(Request $req)
+    // Logout
+    public function logout(Request $request)
     {
-        // Hapus token yang sedang digunakan user saat ini
-        // (Token lain di perangkat lain tetap aman)
-        $req->user()->currentAccessToken()->delete();
-
-        return response()->json([
-            'message' => 'Berhasil logout'
-        ]);
-    }
-
-    // --- 4. USER (Cek Data Diri) ---
-    public function user(Request $req)
-    {
-        // Mengembalikan data user yang sedang login
-        // Laravel otomatis tahu user siapa berdasarkan token
-        return response()->json($req->user());
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out']);
     }
 }
