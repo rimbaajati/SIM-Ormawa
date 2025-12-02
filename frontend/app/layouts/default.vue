@@ -89,6 +89,9 @@
         <NuxtLink to="https://umpku.ac.id/" target="_blank"
           >UMPKU Surakarta</NuxtLink
         >
+        <NuxtLink to="https://pdsi.umpku.ac.id/" target="_blank"
+          >PDSI UMPKU</NuxtLink
+        >
       </nav>
 
       <p class="fc-disclaimer">
