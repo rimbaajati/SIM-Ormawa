@@ -120,18 +120,10 @@
       </div>
 
       <div class="menu-auth-group">
-        <NuxtLink
-          to="/login"
-          class="menu-item menu-login-btn"
-          @click="menuOpen = false"
-        >
+        <NuxtLink to="/login" class="menu-item menu-login-btn">
           LOGIN
         </NuxtLink>
-        <NuxtLink
-          to="/register"
-          class="menu-item menu-register-label"
-          @click="menuOpen = false"
-        >
+        <NuxtLink to="/register" class="menu-item menu-register-label">
           REGISTER
         </NuxtLink>
       </div>
