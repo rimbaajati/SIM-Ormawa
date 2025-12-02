@@ -7,6 +7,7 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
+<<<<<<< HEAD
 /*
 |--------------------------------------------------------------------------
 | Protected Routes (Auth Required)
@@ -14,6 +15,12 @@ Route::get('/', function () {
 */
 
 Route::middleware(['auth'])->group(function () {
+=======
+//LOGIN AS MANAGER
+Route::get('/manager/dashboard', function () {
+    return view('pages.manager.manager_dashboard');
+})->name('manager.dashboard')->middleware('auth');
+>>>>>>> 5003ed636fdefcf3c7afa9ac035efc3825cc1597
 
     // --- Dashboard umum (Laravel Breeze default) ---
     Route::get('/dashboard', function () {
