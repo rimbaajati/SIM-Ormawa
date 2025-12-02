@@ -5,7 +5,6 @@
       <div class="hero-bg-container">
         <div class="hero-video-overlay"></div>
 
-        <!-- Pastikan file video ada di folder public -->
         <video
           autoplay
           muted
@@ -32,7 +31,7 @@
         </p>
 
         <NuxtLink
-          to="/login"
+          to="/register"
           class="cta-primary hover:scale-[1.05] transition-transform animate-fade-in delay-400"
         >
           Masuk ke Sistem Sekarang
@@ -41,7 +40,6 @@
     </section>
 
     <!-- ================= FITUR SECTION ================= -->
-    <!-- Komponen ini diasumsikan sudah ada di proyek Anda -->
     <FiturSection />
 
     <!-- ================= MITRA SECTION (RUNNING LOGO) ================= -->
@@ -50,24 +48,58 @@
         <h2 class="section-title">MITRA KAMI</h2>
       </div>
 
-      <!-- Container untuk Marquee (Running Text style) -->
       <div class="marquee-wrapper">
         <div class="marquee-track">
           
-          <!-- GROUP 1: Logo Asli -->
+          <!-- GROUP 1 -->
           <div class="marquee-group">
             <div v-for="(logo, index) in mitraLogos" :key="'a-'+index" class="logo-item">
               <img :src="logo" alt="Mitra Kampus" loading="lazy" />
             </div>
           </div>
 
-          <!-- GROUP 2: Logo Duplikat (Agar looping seamless/tidak putus) -->
+          <!-- GROUP 2 (Clone) -->
           <div aria-hidden="true" class="marquee-group">
             <div v-for="(logo, index) in mitraLogos" :key="'b-'+index" class="logo-item">
               <img :src="logo" alt="Mitra Kampus" loading="lazy" />
             </div>
           </div>
 
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BERITA SECTION ================= -->
+    <section class="berita-section">
+      <div class="container">
+        <h2 class="section-title">BERITA TERBARU</h2>
+        
+        <div class="news-grid">
+          <div v-for="(news, index) in newsItems" :key="index" class="news-card">
+            <div class="news-image-wrapper">
+              <img :src="news.image" :alt="news.title" loading="lazy" />
+              <div class="news-date">
+                <span class="date-day">{{ news.dateDay }}</span>
+                <span class="date-month">{{ news.dateMonth }}</span>
+              </div>
+            </div>
+            <div class="news-content">
+              <span class="news-category">{{ news.category }}</span>
+              <h3 class="news-title">
+                <NuxtLink :to="`/berita/${news.id}`">{{ news.title }}</NuxtLink>
+              </h3>
+              <p class="news-excerpt">{{ news.excerpt }}</p>
+              <NuxtLink :to="`/berita/${news.id}`" class="read-more">
+                Baca Selengkapnya &rarr;
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-12">
+          <NuxtLink to="/berita" class="btn-secondary">
+            Lihat Semua Berita
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -104,6 +136,37 @@ const mitraLogos = [
   '/logo ormawa/9.png',
   '/logo ormawa/10.png'
 ];
+
+// Data Dummy Berita
+const newsItems = [
+  {
+    id: 1,
+    title: "Pelantikan Pengurus Baru Ormawa Periode 2024/2025",
+    category: "Kegiatan Kampus",
+    dateDay: "12",
+    dateMonth: "Okt",
+    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    excerpt: "Universitas resmi melantik seluruh pengurus organisasi mahasiswa baru dengan semangat kolaborasi dan inovasi digital."
+  },
+  {
+    id: 2,
+    title: "Workshop Digitalisasi Administrasi Organisasi",
+    category: "Pelatihan",
+    dateDay: "05",
+    dateMonth: "Okt",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    excerpt: "Pelatihan penggunaan sistem informasi manajemen baru untuk sekretaris dan bendahara ormawa."
+  },
+  {
+    id: 3,
+    title: "Prestasi Mahasiswa di Pekan Ilmiah Nasional",
+    category: "Prestasi",
+    dateDay: "28",
+    dateMonth: "Sep",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    excerpt: "Delegasi UMPKU berhasil membawa pulang medali emas dalam kategori inovasi teknologi tepat guna."
+  }
+];
 </script>
 
 <style scoped>
@@ -111,6 +174,8 @@ const mitraLogos = [
 :root {
   --neon: #00ffc8;
   --blue-accent: #2ac0ff;
+  --text-dark: #1a1a1a;
+  --text-gray: #666;
 }
 
 /* =================== HERO SECTION =================== */
@@ -219,9 +284,12 @@ const mitraLogos = [
 /* =================== MITRA SECTION (MARQUEE) =================== */
 .mitra-section {
   margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   text-align: center;
-  overflow: hidden; /* Penting agar tidak scroll horizontal browser */
+  overflow: hidden; 
+  background: #fff; 
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .mitra-section .section-title {
@@ -230,92 +298,253 @@ const mitraLogos = [
   font-weight: 800;
   color: rgb(0, 0, 0);
   margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 /* Container Pembungkus */
 .marquee-wrapper {
   position: relative;
-  width: 200%;
+  width: 100%;
   display: flex;
   overflow: hidden;
   user-select: none;
-  /* Masking gradient kiri kanan agar terlihat halus saat muncul/hilang */
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
   -webkit-mask-image: linear-gradient(
     to right,
-    transparent,
+    transparent 0%,
     black 10%,
     black 90%,
-    transparent
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
   );
 }
 
 /* Track yang bergerak */
 .marquee-track {
   display: flex;
-  gap: 3rem; /* Jarak antar grup logo */
-  width: max-content; /* Lebar menyesuaikan isi */
-  animation: scroll-left 40s linear infinite; /* Kecepatan animasi (makin besar makin pelan) */
+  flex-direction: row;
+  width: max-content;
+  animation: scroll-left 50s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Grup Logo */
 .marquee-group {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: 3rem; /* Jarak antar logo individual */
+  gap: 4rem; 
+  padding-right: 4rem; 
   min-width: 100%;
+  flex-shrink: 0;
 }
 
-/* Styling Item Logo individual */
+/* Styling Item Logo */
 .logo-item img {
-  height: 150px; /* Tinggi logo seragam */
+  height: 80px; 
   width: auto;
   object-fit: contain;
-  opacity: 0.7;
+  opacity: 0.6;
   filter: grayscale(100%);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
 }
 
 .logo-item img:hover {
   opacity: 1;
   filter: grayscale(0%);
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
-/* Keyframes untuk pergerakan */
 @keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%); /* Geser setengah karena kita punya 2 grup duplikat */
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-/* Optional: Pause saat hover */
 .marquee-wrapper:hover .marquee-track {
   animation-play-state: paused;
 }
 
+/* =================== BERITA SECTION =================== */
+.berita-section {
+  padding: 80px 0;
+  background-color: rgba(14, 13, 13, 1); /* Gray-50 */
+}
+
+.berita-section .section-title {
+  font-size: 28px;
+  font-family: "oswald", serif;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 0 15px;
+}
+
+.news-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.news-image-wrapper {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.news-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.news-card:hover .news-image-wrapper img {
+  transform: scale(1.05);
+}
+
+.news-date {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-family: 'Oswald', sans-serif;
+}
+
+.date-day {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.date-month {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #666;
+  font-weight: 500;
+}
+
+.news-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.news-category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2ac0ff; /* Sesuai warna aksen di root */
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.news-title {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+}
+
+.news-title a {
+  color: #1a1a1a;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.news-title a:hover {
+  color: #007bff;
+}
+
+.news-excerpt {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  font-family: 'Roboto', sans-serif;
+}
+
+.read-more {
+  color: #1a1a1a;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  transition: gap 0.2s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.read-more:hover {
+  gap: 5px;
+  color: #007bff;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 12px 30px;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-secondary:hover {
+  background: #1a1a1a;
+  color: white;
+}
+
+.mt-12 { margin-top: 3rem; }
+.text-center { text-align: center; }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .marquee-track {
-    gap: 1.5rem;
-    animation-duration: 25s; /* Lebih cepat sedikit di mobile */
-  }
-  .marquee-group {
-    gap: 1.5rem;
-  }
-  .logo-item img {
-    height: 60px; /* Logo lebih kecil di mobile */
-  }
+  .marquee-track { animation-duration: 30s; }
+  .marquee-group { gap: 2rem; padding-right: 2rem; }
+  .logo-item img { height: 60px; }
+  .mitra-section .section-title, .berita-section .section-title { font-size: 24px; margin-bottom: 25px; }
+  .news-grid { gap: 20px; }
 }
 </style>
