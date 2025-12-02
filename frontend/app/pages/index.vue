@@ -31,7 +31,7 @@
         </p>
 
         <NuxtLink
-          to="/login"
+          to="/register"
           class="cta-primary hover:scale-[1.05] transition-transform animate-fade-in delay-400"
         >
           Masuk ke Sistem Sekarang

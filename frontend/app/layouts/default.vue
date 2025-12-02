@@ -30,42 +30,104 @@
       </div>
     </header>
 
-    <div v-if="menuOpen" class="menu-overlay" @click.self="menuOpen = false">
-      <div class="menu-sidebar">
-        <button class="close-btn" @click="menuOpen = false">✕</button>
+    <nav class="menu-list" :class="{ 'menu-open': menuOpen }">
+      <div class="menu-close-btn" @click="menuOpen = false">X</div>
 
-        <nav class="menu-list">
-          <NuxtLink to="/berita" class="menu-item" @click="menuOpen = false">
-            BERITA
+      <div class="menu-section">
+        <div class="menu-title" @click="toggleSection('berita')">BERITA</div>
+
+        <div class="submenu" v-if="openSection === 'berita'">
+          <NuxtLink to="/berita" class="submenu-item" @click="menuOpen = false">
+            SEMUA BERITA
           </NuxtLink>
-
-          <NuxtLink to="/fitur" class="menu-item" @click="menuOpen = false">
-            FITUR
+          <NuxtLink
+            to="/berita-terbaru"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            BERITA TERBARU
           </NuxtLink>
-
-          <NuxtLink to="/kontak" class="menu-item" @click="menuOpen = false">
-            KONTAK
+          <NuxtLink
+            to="/upload-berita"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            UPLOAD BERITA
           </NuxtLink>
-
-          <div class="menu-auth-group">
-            <NuxtLink
-              to="/login"
-              class="menu-item menu-login-btn"
-              @click="menuOpen = false"
-            >
-              LOGIN
-            </NuxtLink>
-            <NuxtLink
-              to="/register"
-              class="menu-item menu-register-label"
-              @click="menuOpen = false"
-            >
-              REGISTER
-            </NuxtLink>
-          </div>
-        </nav>
+        </div>
       </div>
-    </div>
+
+      <div class="menu-section">
+        <div class="menu-title" @click="toggleSection('fitur')">FITUR</div>
+
+        <div class="submenu" v-if="openSection === 'fitur'">
+          <NuxtLink to="/fitur" class="submenu-item" @click="menuOpen = false">
+            SEMUA FITUR
+          </NuxtLink>
+          <NuxtLink
+            to="/fitur/pengajuan"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            FITUR PENGAJUAN
+          </NuxtLink>
+          <NuxtLink
+            to="/fitur/formdetail"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            FITUR FORM DETAIL
+          </NuxtLink>
+          <NuxtLink
+            to="/fitur/uploaddokumen"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            FITUR UPLOAD DOKUMEN
+          </NuxtLink>
+          <NuxtLink
+            to="/fitur/notifikasi"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            FITUR NOTIFIKASI REVISI
+          </NuxtLink>
+          <NuxtLink
+            to="/fitur/tracking"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            FITUR TRACKING REAL TIME
+          </NuxtLink>
+          <NuxtLink
+            to="/fitur/download"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
+            FITUR DOWNLOAD
+          </NuxtLink>
+        </div>
+      </div>
+
+      <div class="menu-section">
+        <div class="menu-title" @click="toggleSection('kontak')">KONTAK</div>
+
+        <div class="submenu" v-if="openSection === 'kontak'">
+          <NuxtLink to="/kontak" class="submenu-item" @click="menuOpen = false">
+            HUBUNGI KAMI
+          </NuxtLink>
+        </div>
+      </div>
+
+      <div class="menu-auth-group">
+        <NuxtLink to="/login" class="menu-item menu-login-btn">
+          LOGIN
+        </NuxtLink>
+        <NuxtLink to="/register" class="menu-item menu-register-label">
+          REGISTER
+        </NuxtLink>
+      </div>
+    </nav>
 
     <main class="site-body">
       <slot />
@@ -89,6 +151,9 @@
         <NuxtLink to="https://umpku.ac.id/" target="_blank"
           >UMPKU Surakarta</NuxtLink
         >
+        <NuxtLink to="https://pdsi.umpku.ac.id/" target="_blank"
+          >PDSI UMPKU</NuxtLink
+        >
       </nav>
 
       <p class="fc-disclaimer">
@@ -109,8 +174,14 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const menuOpen = ref(false);
 const isLoading = ref(true);
+const openSection = ref(null); // Variabel state untuk submenu
 
-// Definisi handleScroll di luar onMounted untuk akses yang lebih baik
+// Fungsi untuk toggle submenu
+const toggleSection = (section) => {
+  openSection.value = openSection.value === section ? null : section;
+};
+
+// Definisi handleScroll
 const handleScroll = () => {
   const nav = document.querySelector(".nav");
   if (!nav) return;
@@ -305,147 +376,117 @@ onUnmounted(() => {
   background: #ffffff;
 }
 
-/* 🚀 ================= MENU OVERLAY (PERUBAHAN DISINI) ================= 🚀 */
-.menu-overlay {
-  position: fixed;
-  inset: 0;
-  /* Warna latar belakang transparan agar konten di belakangnya terlihat */
-  background: lch(0% 0 0 / 0.5);
-  z-index: 99999;
-  padding: 0;
-  color: white;
-  animation: fadeIn 0.3s ease;
-}
-
-/* Kontainer Sidebar Sebenarnya */
-.menu-sidebar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  /* Lebar Sidebar */
-  width: 320px;
-  max-width: 90vw; /* Responsif */
-  background: #ffffff; /* Warna gelap baru untuk sidebar */
-  padding: 25px 30px;
-  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3);
-  transform: translateX(0); /* Pastikan muncul dari kiri */
-  transition: transform 0.3s ease-out;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Jika Anda ingin animasi slide-in (optional, menuOpen v-if sudah cukup) */
-.menu-overlay:not(.fade-out) .menu-sidebar {
-  transform: translateX(0);
-}
-
-/* Tombol Close */
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 18px; /* Lebih kecil */
-  color: rgb(0, 0, 0);
-  cursor: pointer;
-  margin-bottom: 25px;
-  text-align: left;
-  padding: 0;
-}
-.close-btn:hover {
-  color: var(--neon);
-}
-
-/* Daftar Menu */
+/* ================= MENU LIST/SIDEBAR STYLING ================= */
+/* Anda perlu menambahkan styling untuk membuat menu ini menjadi sidebar yang bisa dibuka/ditutup */
 .menu-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  /* Contoh styling dasar untuk sidebar (asumsi Anda akan menyempurnakannya) */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px; /* Lebar sidebar */
   height: 100%;
-  padding-bottom: 30px;
-  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+  padding: 70px 20px 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%); /* Sembunyikan secara default */
+  transition: transform 0.3s ease-out;
+  z-index: 1000;
+  overflow-y: auto;
 }
 
-.menu-list > a:not(.menu-auth-group *) {
+.menu-list.menu-open {
+  transform: translateX(0); /* Tampilkan saat menuOpen true */
+}
+
+.menu-close-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px; /* ← dari right: 20px menjadi left: 20px */
+  font-size: 24px;
+  cursor: pointer;
+  color: #1f2937;
+}
+
+/* Akhir dari asumsi styling sidebar */
+
+.menu-section {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
-  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.menu-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-title:hover {
+  color: var(--neon);
+  transform: translateX(5px);
+}
+
+/* === SUBMENU === */
+.submenu {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.submenu-item {
+  font-size: 13px;
+  color: #000;
+  padding: 3px 0;
+  padding-left: 10px;
+  opacity: 0.8;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.submenu-item:hover {
+  opacity: 1;
+  color: var(--neon);
+  transform: translateX(5px);
+}
+
+.menu-auth-group {
+  /* Tambahkan styling untuk bagian login/register */
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 20px;
+  margin-top: 20px;
 }
 
 .menu-item {
-  font-size: 20px;
-  font-weight: 500;
-  text-decoration: none;
-  color: rgb(0, 0, 0);
-  transition: 0.3s;
   display: block;
-}
-.menu-item:hover {
-  color: var(--neon);
-  transform: translateX(5px); /* Geser sedikit saat hover */
-}
-
-/* Grup Login/Register di bagian bawah */
-.menu-auth-group {
-  margin-top: auto; /* Mendorong ke bawah */
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Item menu duplikat FITUR & KONTAK yang terpisah dari group auth */
-.menu-duplicate {
-  opacity: 0.5; /* Dibuat lebih pudar seperti di gambar */
-}
-
-/* Style untuk link REGISTER di dalam group auth */
-.menu-auth-group .menu-item:first-child {
-  font-weight: 600;
-  font-size: 13px;
-  padding-bottom: 10px;
-}
-
-/* === LIQUID GLASS LOGIN BUTTON (SMALL VERSION) === */
-.menu-login-btn {
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.22);
+  padding: 10px 0;
+  text-decoration: none;
   text-align: center;
-  padding: 8px 0; /* lebih kecil */
   margin-bottom: 10px;
-  border-radius: 8px; /* sama seperti register */
   font-weight: 600;
-  font-size: 13px; /* diperkecil */
-  color: rgb(0, 0, 0);
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
-  transition: 0.25s;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.menu-login-btn {
+  background-color: #1f2937;
+  color: #ffffff;
 }
 
 .menu-login-btn:hover {
-  background: rgba(0, 0, 0, 0.18);
-  border-color: rgba(0, 0, 0, 0.35);
-  transform: translateY(-2px);
+  background-color: var(--neon);
+  color: #000;
 }
 
-/* === LIQUID GLASS REGISTER LABEL === */
 .menu-register-label {
-  background: rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  text-align: center;
-  padding: 8px 0;
-  border-radius: 8px;
-  font-size: 13px;
-  color: #000000;
-  transition: 0.3s;
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
 }
 
 .menu-register-label:hover {
-  background: rgba(0, 0, 0, 0.18);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
+  background-color: #d1d5db;
 }
 
 /* ================= BODY (TETAP) ================= */
@@ -544,10 +585,6 @@ body {
 @media (max-width: 600px) {
   .footer-grid {
     grid-template-columns: 1fr;
-  }
-  /* Jika di mobile, menu-sidebar bisa dibuat 100% lebar layar */
-  .menu-sidebar {
-    width: 100%;
   }
 }
 </style>
