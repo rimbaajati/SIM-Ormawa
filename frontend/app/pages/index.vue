@@ -115,19 +115,19 @@
 
 // Daftar URL Logo Mitra
 const mitraLogos = [
-  { src: '/mitra/logo1.png', url: 'https://example.com' },
-  { src: '/mitra/logo2.png', url: 'https://example.com' },
-  { src: '/mitra/logo3.jpeg', url: 'https://example.com' },
-  { src: '/logo ormawa/1.png', url: 'https://example.com' },
-  { src: '/logo ormawa/2.png', url: 'https://example.com' },
-  { src: '/logo ormawa/3.png', url: 'https://example.com' },
-  { src: '/logo ormawa/4.png', url: 'https://example.com' },
-  { src: '/logo ormawa/5.png', url: 'https://example.com' },
-  { src: '/logo ormawa/6.png', url: 'https://example.com' },
-  { src: '/logo ormawa/7.png', url: 'https://example.com' },
-  { src: '/logo ormawa/8.png', url: 'https://example.com' },
-  { src: '/logo ormawa/9.png', url: 'https://example.com' },
-  { src: '/logo ormawa/10.png', url: 'https://example.com' }
+  { src: '/mitra/logo1.png', url: 'https://www.instagram.com/dpm_umpku/' },
+  { src: '/mitra/logo2.png', url: 'https://www.instagram.com/bem_umpku/' },
+  { src: '/mitra/logo3.jpeg', url: 'https://www.instagram.com/himanes_umpku/' },
+  { src: '/logo ormawa/1.png', url: 'https://www.instagram.com/himatif.umpku/' },
+  { src: '/logo ormawa/2.png', url: 'https://www.instagram.com/ksr_umpku/' },
+  { src: '/logo ormawa/3.png', url: 'https://www.instagram.com/hima.ners_umpku/' },
+  { src: '/logo ormawa/4.png', url: '#' },
+  { src: '/logo ormawa/5.png', url: '#'},
+  { src: '/logo ormawa/6.png', url: 'https://www.instagram.com/immalfatih.umpku/' },
+  { src: '/logo ormawa/7.png', url: '#' },
+  { src: '/logo ormawa/8.png', url: 'https://www.instagram.com/himagizi.umpku/' },
+  { src: '/logo ormawa/9.png', url: 'https://www.instagram.com/himabid_umpku/' },
+  { src: '/logo ormawa/10.png', url: 'https://www.instagram.com/himaper.umpku/' }
 ];
 
 
