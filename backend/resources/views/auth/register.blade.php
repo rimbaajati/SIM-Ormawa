@@ -1,275 +1,52 @@
-<!doctype html>
-<html lang="en">
+<x-guest-layout>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-<head>
-
-    <meta charset="utf-8" />
-    <title>Register | SIM Ormawa UMPKU </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/Logo UMPKU.png') }}">
-
-    <!-- preloader css -->
-    <link rel="stylesheet" href="assets/css/preloader.min.css" type="text/css" />
-
-    <!-- Bootstrap Css -->
-    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
-</head>
-
-<body>
-
-    <!-- <body data-layout="horizontal"> -->
-    <div class="auth-page" style="height: 100vh; overflow: hidden">
-        <div class="container-fluid p-0">
-            <div class="row g-0">
-                <div class="col-xxl-3 col-lg-4 col-md-5">
-                    <div class="auth-full-page-content d-flex flex-column justify-content-between p-5 pt-3">
-                        <div class="w-100">
-                            <div class="d-flex flex-column h-100">
-                                <div class="mb-3 mt-3 text-center">
-                                    <a href="index.html" class="d-block auth-logo">
-                                        <img src="{{ asset('assets/images/logo-atas.png') }}" alt=""
-                                            height="48">
-                                    </a>
-                                </div>
-                                <div class="auth-content my-auto">
-                                    <div class="text-center mt-0">
-                                        <h5 class="mb-0">Daftar Akun SIM Ormawa</h5>
-                                        <p class="text-muted mt-2">Sistem Informasi Manajemen Organisasi Mahasiswa resmi
-                                            UMPKU.</p>
-                                    </div>
-                                    <form class="needs-validation mt-3 pt-2" novalidate action="index.html"
-                                        method="POST" action="{{ route('register') }}"
-                                        class="needs-validation mt-3 pt-2" novalidate>
-                                        <div class="mb-3">
-                                            <label for="useremail" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="useremail"
-                                                placeholder="Enter email" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Email
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="username" class="form-label">Username</label>
-                                            <input type="text" class="form-control" id="username"
-                                                placeholder="Enter username" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Username
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="userpassword" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="userpassword"
-                                                placeholder="Enter password" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Password
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="userpassword" class="form-label">Konfirmasi Password</label>
-                                            <input type="password" class="form-control" id="userpassword"
-                                                placeholder="Enter password" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Password
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <button class="btn btn-primary w-100 waves-effect waves-light"
-                                                type="submit">Register</button>
-                                        </div>
-                                    </form>
-
-                                    <div class="mt-3 pt-2 text-center">
-                                        <div class="signin-other-title">
-                                            <h5 class="font-size-14 mb-3 text-muted fw-medium">- Sign up using -</h5>
-                                        </div>
-
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-primary text-white border-primary">
-                                                    <i class="mdi mdi-facebook"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-info text-white border-info">
-                                                    <i class="mdi mdi-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-danger text-white border-danger">
-                                                    <i class="mdi mdi-google"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="mt-3
-                                     text-center">
-                                        <p class="text-muted mb-0">Already have an account ? <a href="auth-login.html"
-                                                class="text-primary fw-semibold"> Login </a> </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end auth full page content -->
-                </div>
-                <!-- end col -->
-                <div class="col-xxl-9 col-lg-8 col-md-7">
-                    <div class="auth-bg pt-md-5 p-4 d-flex">
-                        <div class="bg-overlay bg-primary"></div>
-                        <ul class="bg-bubbles">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                        <!-- end bubble effect -->
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-xl-7">
-                                <div class="p-0 p-sm-4 px-xl-0">
-                                    <div id="reviewcarouselIndicators" class="carousel slide"
-                                        data-bs-ride="carousel">
-                                        <div
-                                            class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
-                                            <button type="button" data-bs-target="#reviewcarouselIndicators"
-                                                data-bs-slide-to="0" class="active" aria-current="true"
-                                                aria-label="Slide 1"></button>
-                                            <button type="button" data-bs-target="#reviewcarouselIndicators"
-                                                data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                            <button type="button" data-bs-target="#reviewcarouselIndicators"
-                                                data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                        </div>
-                                        <!-- end carouselIndicators -->
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <div class="testi-contain text-white">
-                                                    <i class="bx bxs-quote-alt-left text-success display-6"></i>
-
-                                                    <h4 class="mt-4 fw-medium lh-base text-white">“I feel confident
-                                                        imposing change
-                                                        on myself. It's a lot more progressing fun than looking back.
-                                                        That's why
-                                                        I ultricies enim
-                                                        at malesuada nibh diam on tortor neaded to throw curve balls.”
-                                                    </h4>
-                                                    <div class="mt-4 pt-3 pb-5">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="flex-shrink-0">
-                                                                <img src="assets/images/users/avatar-1.jpg"
-                                                                    class="avatar-md img-fluid rounded-circle"
-                                                                    alt="...">
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3 mb-4">
-                                                                <h5 class="font-size-18 text-white">Richard Drews
-                                                                </h5>
-                                                                <p class="mb-0 text-white-50">Web Designer</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="carousel-item">
-                                                <div class="testi-contain text-white">
-                                                    <i class="bx bxs-quote-alt-left text-success display-6"></i>
-
-                                                    <h4 class="mt-4 fw-medium lh-base text-white">“Our task must be to
-                                                        free ourselves by widening our circle of compassion to embrace
-                                                        all living
-                                                        creatures and
-                                                        the whole of quis consectetur nunc sit amet semper justo. nature
-                                                        and its beauty.”</h4>
-                                                    <div class="mt-4 pt-3 pb-5">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="flex-shrink-0">
-                                                                <img src="assets/images/users/avatar-2.jpg"
-                                                                    class="avatar-md img-fluid rounded-circle"
-                                                                    alt="...">
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3 mb-4">
-                                                                <h5 class="font-size-18 text-white">Rosanna French
-                                                                </h5>
-                                                                <p class="mb-0 text-white-50">Web Developer</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="carousel-item">
-                                                <div class="testi-contain text-white">
-                                                    <i class="bx bxs-quote-alt-left text-success display-6"></i>
-
-                                                    <h4 class="mt-4 fw-medium lh-base text-white">“I've learned that
-                                                        people will forget what you said, people will forget what you
-                                                        did,
-                                                        but people will never forget
-                                                        how donec in efficitur lectus, nec lobortis metus you made them
-                                                        feel.”</h4>
-                                                    <div class="mt-4 pt-3 pb-5">
-                                                        <div class="d-flex align-items-start">
-                                                            <img src="assets/images/users/avatar-3.jpg"
-                                                                class="avatar-md img-fluid rounded-circle"
-                                                                alt="...">
-                                                            <div class="flex-1 ms-3 mb-4">
-                                                                <h5 class="font-size-18 text-white">Ilse R. Eaton</h5>
-                                                                <p class="mb-0 text-white-50">Manager
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end carousel-inner -->
-                                    </div>
-                                    <!-- end review carousel -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-            </div>
-            <!-- end row -->
+        <!-- Name -->
+        <div>
+            <x-input-label for="name" :value="__('Name')" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
-        <!-- end container fluid -->
-    </div>
 
+        <!-- Email Address -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
 
-    <!-- JAVASCRIPT -->
-    <script src="assets/libs/jquery/jquery.min.js"></script>
-    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/libs/metismenu/metisMenu.min.js"></script>
-    <script src="assets/libs/simplebar/simplebar.min.js"></script>
-    <script src="assets/libs/node-waves/waves.min.js"></script>
-    <script src="assets/libs/feather-icons/feather.min.js"></script>
-    <!-- pace js -->
-    <script src="assets/libs/pace-js/pace.min.js"></script>
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
 
-    <!-- validation init -->
-    <script src="assets/js/pages/validation.init.js"></script>
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="new-password" />
 
-</body>
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
 
-</html>
+        <!-- Confirm Password -->
+        <div class="mt-4">
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                            type="password"
+                            name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+                {{ __('Already registered?') }}
+            </a>
+
+            <x-primary-button class="ms-4">
+                {{ __('Register') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
