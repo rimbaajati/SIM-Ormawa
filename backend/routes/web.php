@@ -7,11 +7,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/manager/dashboard', function () {
-        return view('pages.admin.manager.manager_dashboard');
-    })->name('manager.dashboard');
-});
+//LOGIN AS MANAGER
+Route::get('/manager/dashboard', function () {
+    return view('pages.manager.manager_dashboard');
+})->name('manager.dashboard')->middleware('auth');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
