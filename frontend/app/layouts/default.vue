@@ -47,7 +47,6 @@
             KONTAK
           </NuxtLink>
 
-
           <div class="menu-auth-group">
             <NuxtLink
               to="/login"
@@ -106,16 +105,39 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const menuOpen = ref(false);
 const isLoading = ref(true);
 
+// Definisi handleScroll di luar onMounted untuk akses yang lebih baik
+const handleScroll = () => {
+  const nav = document.querySelector(".nav");
+  if (!nav) return;
+
+  if (window.scrollY > 50) {
+    nav.classList.add("scrolled");
+  } else {
+    nav.classList.remove("scrolled");
+  }
+};
+
 onMounted(() => {
-  // Atur waktu tunggu total (misalnya 2 detik) sebelum fade-out dimulai
+  // Loading fade-out
   setTimeout(() => {
     isLoading.value = false;
   }, 2000);
+
+  // Jalankan handleScroll saat mount untuk kondisi awal
+  handleScroll();
+
+  // Scroll event → ubah navbar
+  window.addEventListener("scroll", handleScroll);
+});
+
+// Bersihkan event saat component unmount
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
 });
 </script>
 
@@ -170,23 +192,80 @@ onMounted(() => {
   }
 }
 
-/* ================= NAVBAR (TETAP) ================= */
+/* ================= NAVBAR (DEFAULT / BELUM SCROLL) ================= */
 .nav {
-  background: #0b1230;
+  background: #ffffff;
   height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 20px;
+  border-bottom: 2px solid #dcdcdc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* RAPIKAN NAV LEFT / CENTER / RIGHT */
 .nav-left {
   width: 80px;
   display: flex;
   align-items: center;
 }
 
+.nav-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+/* SUBTITLE (ATAS) */
+.nav-subtitle {
+  font-size: 12px;
+  font-family: "Audiowide", cursive;
+  letter-spacing: 0.12em;
+  color: #1f2937;
+  margin-bottom: 2px;
+  display: block;
+  transition: 0.3s;
+}
+
+/* TITLE (BAWAH) */
+.nav-title {
+  font-size: 24px;
+  font-family: "Times New Roman", serif;
+  font-weight: 700;
+  color: #1f2937;
+  margin-top: 0;
+  display: block;
+  transition: 0.3s;
+}
+
+.nav-right {
+  width: 90px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* LOGO default */
+.nav-logo {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0); /* hitam */
+  transition: 0.3s ease;
+}
+
+/* ================= HAMBURGER ================= */
 .menu-btn {
   background: none;
   border: none;
@@ -198,61 +277,32 @@ onMounted(() => {
 }
 
 .menu-btn .bar {
-  display: block;
   width: 22px;
   height: 3px;
-  background: #ffffff;
+  background: #1f2937;
   border-radius: 4px;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
-.menu-btn:hover .bar {
-  background: var(--neon);
+/* ================= NAVBAR SCROLL ================= */
+.nav.scrolled {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: orange;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
-.nav-center {
-  flex: 1;
-  text-align: center;
-  color: white;
-  line-height: 1.2;
-}
-
-.nav-subtitle {
-  font-size: 13px;
-  opacity: 1 !important;
-  display: block;
-  color: #ffffff !important;
-  font-family: "Audiowide", cursive;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.nav-title {
-  font-size: 26px;
-  font-weight: 700;
-  font-family: "Times New Roman", serif;
+/* Tekst & logo berubah putih */
+.nav.scrolled .nav-title,
+.nav.scrolled .nav-subtitle {
   color: #ffffff !important;
 }
 
-.nav-right {
-  width: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
+.nav.scrolled .nav-logo {
+  filter: brightness(10);
 }
 
-.logo-link {
-  display: flex;
-  align-items: center;
-}
-
-.nav-logo {
-  height: 45px;
-  opacity: 0.9;
-  width: auto;
-  object-fit: contain;
-  flex-shrink: 0;
+.nav.scrolled .menu-btn .bar {
+  background: #ffffff;
 }
 
 /* 🚀 ================= MENU OVERLAY (PERUBAHAN DISINI) ================= 🚀 */
@@ -260,7 +310,7 @@ onMounted(() => {
   position: fixed;
   inset: 0;
   /* Warna latar belakang transparan agar konten di belakangnya terlihat */
-  background: rgba(0, 0, 0, 0.5);
+  background: lch(0% 0 0 / 0.5);
   z-index: 99999;
   padding: 0;
   color: white;
@@ -276,7 +326,7 @@ onMounted(() => {
   /* Lebar Sidebar */
   width: 320px;
   max-width: 90vw; /* Responsif */
-  background: #161c30; /* Warna gelap baru untuk sidebar */
+  background: #ffffff; /* Warna gelap baru untuk sidebar */
   padding: 25px 30px;
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3);
   transform: translateX(0); /* Pastikan muncul dari kiri */
@@ -295,7 +345,7 @@ onMounted(() => {
   background: none;
   border: none;
   font-size: 18px; /* Lebih kecil */
-  color: white;
+  color: rgb(0, 0, 0);
   cursor: pointer;
   margin-bottom: 25px;
   text-align: left;
@@ -312,11 +362,11 @@ onMounted(() => {
   justify-content: space-between;
   height: 100%;
   padding-bottom: 30px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .menu-list > a:not(.menu-auth-group *) {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   padding-bottom: 5px;
 }
@@ -325,7 +375,7 @@ onMounted(() => {
   font-size: 20px;
   font-weight: 500;
   text-decoration: none;
-  color: white;
+  color: rgb(0, 0, 0);
   transition: 0.3s;
   display: block;
 }
@@ -337,7 +387,7 @@ onMounted(() => {
 /* Grup Login/Register di bagian bawah */
 .menu-auth-group {
   margin-top: auto; /* Mendorong ke bawah */
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   display: flex;
   flex-direction: column;
@@ -357,43 +407,43 @@ onMounted(() => {
 
 /* === LIQUID GLASS LOGIN BUTTON (SMALL VERSION) === */
 .menu-login-btn {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(0, 0, 0, 0.22);
   text-align: center;
-  padding: 8px 0;           /* lebih kecil */
+  padding: 8px 0; /* lebih kecil */
   margin-bottom: 10px;
-  border-radius: 8px;       /* sama seperti register */
+  border-radius: 8px; /* sama seperti register */
   font-weight: 600;
-  font-size: 13px;          /* diperkecil */
-  color: white;
-  box-shadow: 0 3px 15px rgba(255, 255, 255, 0.06);
+  font-size: 13px; /* diperkecil */
+  color: rgb(0, 0, 0);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
   transition: 0.25s;
 }
 
 .menu-login-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(0, 0, 0, 0.35);
   transform: translateY(-2px);
 }
 
 /* === LIQUID GLASS REGISTER LABEL === */
 .menu-register-label {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.18);
   text-align: center;
   padding: 8px 0;
   border-radius: 8px;
   font-size: 13px;
-  color: #e2e2e2;
+  color: #000000;
   transition: 0.3s;
 }
 
 .menu-register-label:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.18);
   border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-2px);
 }
