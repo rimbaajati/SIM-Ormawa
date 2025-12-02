@@ -2,121 +2,99 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-
-class AuthController extends Controller
-{
-    // Register (optional, bisa di-skip dulu)
-    public function register(Request $request)
-    {
-=======
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
-use validator;
 
 class AuthController extends Controller
 {
-    // --- 1. REGISTER (Daftar Akun Baru) ---
+    /**
+     * 1. REGISTER (Daftar Akun Baru)
+     */
     public function register(Request $request): JsonResponse
     {
-        // Validasi input dari frontend
->>>>>>> 9737a2584fa7e057de3d4e009e8dd97b7d41d5bc
+        // Validasi input
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:user,admin,manager',
+            // Kita batasi role apa saja yang boleh didaftarkan
+            'role'     => 'required|in:user,admin,manager', 
         ]);
 
+        // Buat user baru
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-<<<<<<< HEAD
-            'role' => $request->role,
-=======
-            // Default role, jika tabel user Anda punya kolom 'role'
-            // 'role' => 'ormawa' 
->>>>>>> 9737a2584fa7e057de3d4e009e8dd97b7d41d5bc
+            'role'     => $request->role,
         ]);
 
-        return response()->json(['message' => 'User registered', 'user' => $user], 201);
-    }
-    // public function register(Request $request): JsonResponse
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required',
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //         'c_password' => 'required|same:password',
-    //     ]);
-   
-    //     if($validator->fails()){
-    //         return $this->sendError('Validation Error.', $validator->errors());       
-    //     }
-   
-    //     $input = $request->all();
-    //     $input['password'] = bcrypt($input['password']);
-    //     $user = User::create($input);
-    //     $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-    //     $success['name'] =  $user->name;
-   
-    //     return $this->sendResponse($success, 'User register successfully.');
-    // }
+        // Opsional: Langsung login setelah daftar (buat token)
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-<<<<<<< HEAD
-    // Login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-=======
-    // --- 2. LOGIN (Masuk) ---
+        return response()->json([
+            'message' => 'Registrasi berhasil',
+            'user'    => $user,
+            'token'   => $token
+        ], 201);
+    }
+
+    /**
+     * 2. LOGIN (Masuk)
+     */
     public function login(Request $request): JsonResponse
     {
         // Validasi input
         $request->validate([
->>>>>>> 9737a2584fa7e057de3d4e009e8dd97b7d41d5bc
-            'email' => 'required|email',
-            'password' => 'required|string'
+            'email'    => 'required|email',
+            'password' => 'required|string',
         ]);
 
-<<<<<<< HEAD
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-=======
-        // Cari user berdasarkan email
-        $user = User::where('email', $request->email)->first();
-
-        // Cek apakah user ada DAN password cocok
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            // Jika salah, kirim error validasi
+        // Coba login dengan Auth::attempt (otomatis cek hash password)
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            // Jika gagal, lempar error validasi standar Laravel
             throw ValidationException::withMessages([
-               'email' => ['Email atau password yang Anda masukkan salah.']
+                'email' => ['Email atau password salah.'],
             ]);
->>>>>>> 9737a2584fa7e057de3d4e009e8dd97b7d41d5bc
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('api-token')->plainTextToken;
+        // Jika berhasil, ambil data user
+        $user = User::where('email', $request->email)->firstOrFail();
+
+        // Buat token Sanctum
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
-            'token' => $token
+            'message' => 'Login berhasil',
+            'user'    => $user,
+            'token'   => $token,
         ]);
     }
 
-    // Logout
-    public function logout(Request $request)
+    /**
+     * 3. LOGOUT (Keluar)
+     */
+    public function logout(Request $request): JsonResponse
     {
+        // Hapus token yang sedang digunakan saat ini
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out']);
+
+        return response()->json([
+            'message' => 'Berhasil logout'
+        ]);
+    }
+
+    /**
+     * 4. GET USER (Ambil Data Profil User yang Sedang Login)
+     * Method ini diperlukan untuk route '/user'
+     */
+    public function user(Request $request): JsonResponse
+    {
+        return response()->json($request->user());
     }
 }

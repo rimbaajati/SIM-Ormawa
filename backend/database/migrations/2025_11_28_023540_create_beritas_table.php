@@ -10,18 +10,15 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('beritas', function (Blueprint $table) {
+{
+    Schema::create('beritas', function (Blueprint $table) {
         $table->id();
         $table->string('judul');
         $table->text('isi');
-        $table->text('ringkasan')->nullable();
-        $table->string('gambar')->nullable(); // Untuk simpan nama file
-        $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Siapa penulisnya
+        $table->string('gambar')->nullable(); // Path gambar disimpan di sini
         $table->timestamps();
     });
-
-    }
+}
 
     /**
      * Reverse the migrations.
