@@ -47,7 +47,7 @@
     <!-- ================= MITRA SECTION (RUNNING LOGO) ================= -->
     <section class="mitra-section">
       <div class="container">
-        <h2 class="section-title">Mitra Kami</h2>
+        <h2 class="section-title">MITRA KAMI</h2>
       </div>
 
       <!-- Container untuk Marquee (Running Text style) -->
