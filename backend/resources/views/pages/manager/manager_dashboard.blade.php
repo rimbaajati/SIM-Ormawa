@@ -19,7 +19,6 @@
         </div>
     </div>
 
-    <!-- ===== SUMMARY CARDS ===== -->
     <div class="col-xl-3 col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
@@ -58,7 +57,6 @@
 
 </div>
 
-<!-- ===== GRAFIK ===== -->
 <div class="row mt-4">
     <div class="col-md-8">
         <div class="card shadow-sm">
@@ -67,11 +65,11 @@
             </div>
             <div class="card-body">
                 <div id="chart-status"></div>
+                {{-- Di sini tempat Anda menginisialisasi Chart JavaScript Anda menggunakan data dari Controller --}}
             </div>
         </div>
     </div>
 
-    <!-- ===== QUICK ACTION ===== -->
     <div class="col-md-4">
         <div class="card shadow-sm">
             <div class="card-header">
@@ -86,7 +84,6 @@
     </div>
 </div>
 
-<!-- ===== TABLE PENGAJUAN TERBARU ===== -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm">
@@ -105,31 +102,29 @@
                             <th>Aksi</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        @forelse($latestPengajuan ?? [] as $item)
+                        @forelse($recentProposals as $index => $proposal)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->nama_kegiatan }}</td>
-                            <td>{{ $item->organization->name ?? '-' }}</td>
-                            <td>{{ $item->created_at->format('d-m-Y') }}</td>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $proposal->activity_name }}</td>
+                            <td>{{ $proposal->ormawa->name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($proposal->date)->format('d M Y') }}</td>
                             <td>
-                                <span class="badge bg-{{ 
-                                    $item->status == 'approved' ? 'success' :
-                                    ($item->status == 'pending' ? 'warning' : 'danger') 
-                                }}">
-                                    {{ ucfirst($item->status) }}
-                                </span>
+                                @if($proposal->status == 'pending')
+                                    <span class="badge bg-warning">Menunggu</span>
+                                @elseif($proposal->status == 'approved')
+                                    <span class="badge bg-success">Disetujui</span>
+                                @elseif($proposal->status == 'rejected')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                @endif
                             </td>
-                            <td>
-                                <a href="/proposals/{{ $item->id }}" class="btn btn-sm btn-primary">
-                                    Detail
-                                </a>
-                            </td>
+                            <td><a href="/proposals/{{ $proposal->id }}" class="btn btn-sm btn-primary">Lihat</a></td>
                         </tr>
                         @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Belum ada pengajuan</td>
-                        </tr>
+                            <tr>
+                                <td colspan="6" class="text-center">Tidak ada data pengajuan terbaru.</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -137,32 +132,33 @@
         </div>
     </div>
 </div>
+
 @endsection
 
-@push('js')
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var options = {
-        series: [{
-            name: 'Jumlah',
-            data: [
-                {{ $pending ?? 0 }},
-                {{ $approved ?? 0 }},
-                {{ $rejected ?? 0 }}
-            ]
-        }],
-        chart: {
-            type: 'bar',
-            height: 350
-        },
-        xaxis: {
-            categories: ['Pending', 'Approved', 'Rejected']
-        }
-    };
-
-    var chart = new ApexCharts(
-        document.querySelector("#chart-status"), 
-        options
-    );
-    chart.render();
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('chart-status').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'pie',  // Jenis chart: pie (bisa diganti ke 'bar', 'line', dll.)
+            data: {
+                labels: ['Menunggu Verifikasi', 'Disetujui', 'Ditolak'],  // Label sesuai view
+                datasets: [{
+                    data: [{{ $statusData['pending'] ?? 0 }}, {{ $statusData['approved'] ?? 0 }}, {{ $statusData['rejected'] ?? 0 }}],  // Data dari controller
+                    backgroundColor: ['#ffc107', '#28a745', '#dc3545'],  // Warna sesuai badge di view
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+    });
 </script>
 @endpush

@@ -1,139 +1,64 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\TrackingController;
-use App\Http\Controllers\Api\BeritaController;
-use App\Http\Controllers\Api\ProposalApiController;
+namespace Database\Seeders;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-| Semua rute API diletakkan di sini.
-| Gunakan prefix otomatis: /api/... misalnya: /api/login
-|--------------------------------------------------------------------------
-*/
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\QueryException; // Diperlukan untuk menangani error duplikasi
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC ROUTES (Tanpa Login)
-|--------------------------------------------------------------------------
-*/
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        // PENTING: Menonaktifkan/Mengaktifkan Foreign Keys saat truncate
+        Schema::disableForeignKeyConstraints();
+        
+        // Membersihkan tabel users sebelum menyisipkan data baru.
+        // Jika Anda tidak ingin data terhapus, ganti dengan logic update.
+        DB::table('users')->truncate(); 
+        
+        Schema::enableForeignKeyConstraints();
 
-<<<<<<< HEAD
-// ========================================================================
-// 1. RUTE PUBLIK (Bisa diakses tanpa login)
-// ========================================================================
+        // 1. BUAT AKUN ADMIN UTAMA (UNTUK MENGATASI 403 FORBIDDEN)
+        try {
+            DB::table('users')->insert([
+                'name' => 'SIM Administrator',
+                'email' => 'admin@sim.umpku', // Kredensial untuk login
+                'password' => Hash::make('password'), 
+                'role' => 'admin', // Role 'admin' harus mengatasi 403
+            ]);
 
-// Autentikasi Dasar
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+            // 2. BUAT AKUN MANAGER SEKUNDER (Jika dibutuhkan)
+            DB::table('users')->insert([
+                'name' => 'SIM Manager',
+                'email' => 'manager@sim.umpku', // Kredensial untuk login
+                'password' => Hash::make('password'), 
+                'role' => 'manager', 
+            ]);
 
-// Tracking (Publik)
-Route::get('/tracking/{id}', [TrackingController::class, 'show']);
+            // 3. BUAT AKUN USER BIASA (Contoh Mahasiswa)
+            DB::table('users')->insert([
+                'name' => 'Mahasiswa Test',
+                'email' => 'user@sim.umpku', // Kredensial untuk login
+                'password' => Hash::make('password'), 
+                'role' => 'user', 
+            ]);
 
-// Berita (Publik - Semua orang bisa membaca)
-=======
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::get('/tracking/{id}', [TrackingController::class, 'show']);
-
->>>>>>> 23a99be007181f5733afddcccf72c7ef817af630
-Route::get('/berita', [BeritaController::class, 'index']);
-Route::get('/berita/{id}', [BeritaController::class, 'show']);
-
-
-<<<<<<< HEAD
-// ========================================================================
-// 2. RUTE TERLINDUNGI (Wajib Login & Punya Token)
-// ========================================================================
-Route::middleware(['auth:sanctum'])->group(function () {
-
-    // Umum (Semua User Login)
-=======
-/*
-|--------------------------------------------------------------------------
-| PROTECTED ROUTES (Harus Login dengan Sanctum)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['auth:sanctum'])->group(function () {
-
-    // Logout & get user info
->>>>>>> 23a99be007181f5733afddcccf72c7ef817af630
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
-
-    /*
-    |--------------------------------------------------------------------------
-    | ROLE: USER (Mahasiswa/Ormawa)
-    |--------------------------------------------------------------------------
-<<<<<<< HEAD
-=======
-    | User hanya bisa melihat & mengedit proposal miliknya sendiri
->>>>>>> 23a99be007181f5733afddcccf72c7ef817af630
-    */
-    Route::middleware(['role:user'])->group(function () {
-        // Proposal milik sendiri
-        Route::get('/proposal/my', [ProposalApiController::class, 'myProposals']);
-        Route::get('/proposal/my/{id}', [ProposalApiController::class, 'show']);
-        Route::put('/proposal/my/{id}', [ProposalApiController::class, 'update']);
-        // Tambahkan Route::post jika user bisa buat proposal baru
-        Route::post('/proposal', [ProposalApiController::class, 'store']); 
-    });
-
-
-    /*
-    |--------------------------------------------------------------------------
-<<<<<<< HEAD
-    | ROLE: ADMIN & MANAGER (Pengurus)
-    |--------------------------------------------------------------------------
-    */
-    Route::middleware(['role:admin,manager'])->group(function () {
-        // Manajemen Proposal (Melihat semua)
-        Route::get('/admin/proposals', [ProposalApiController::class, 'index']);
-        Route::post('/admin/proposals/{id}/comment', [ProposalApiController::class, 'comment']);
-
-        // Manajemen Berita (CRUD Lengkap: Tambah, Edit, Hapus)
-        // Ini yang digunakan oleh form upload di Nuxt kamu tadi
-=======
-    | ADMIN & MANAGER ROUTES
-    |--------------------------------------------------------------------------
-    | Admin dan manager bisa mengelola semua proposal dan berita
-    */
-    Route::middleware(['role:admin,manager'])->group(function () {
-
-        // Proposal list + comment
-        Route::get('/admin/proposals', [ProposalApiController::class, 'index']);
-        Route::post('/admin/proposals/{id}/comment', [ProposalApiController::class, 'comment']);
-
-        // CRUD Berita
->>>>>>> 23a99be007181f5733afddcccf72c7ef817af630
-        Route::post('/berita', [BeritaController::class, 'store']);
-        Route::put('/berita/{id}', [BeritaController::class, 'update']);
-        Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
-    });
-
-
-    /*
-    |--------------------------------------------------------------------------
-<<<<<<< HEAD
-    | ROLE: MANAGER (Petinggi/Dosen Pembina)
-    |--------------------------------------------------------------------------
-=======
-    | MANAGER ONLY ROUTES
-    |--------------------------------------------------------------------------
-    | Manager bisa approve / reject proposal
->>>>>>> 23a99be007181f5733afddcccf72c7ef817af630
-    */
-    Route::middleware(['role:manager'])->group(function () {
-        // Approval Proposal (Approve/Reject)
-        Route::post('/admin/proposals/{id}/status', [ProposalApiController::class, 'updateStatus']);
-    });
-<<<<<<< HEAD
-
-});
-=======
-});
->>>>>>> 23a99be007181f5733afddcccf72c7ef817af630
+        } catch (QueryException $e) {
+            // Tangani error jika terjadi duplikasi meskipun sudah di-truncate (jarang terjadi)
+            echo "Error saat seeding: " . $e->getMessage() . "\n";
+        }
+        
+        // Panggil seeder lain di sini jika ada (Contoh: OrmawaSeeder::class)
+        // $this->call([
+        //     OrmawaSeeder::class,
+        // ]);
+    }
+}

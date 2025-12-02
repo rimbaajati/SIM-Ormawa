@@ -44,30 +44,35 @@
 
     <!-- ================= MITRA SECTION (RUNNING LOGO) ================= -->
     <section class="mitra-section">
-      <div class="container">
-        <h2 class="section-title">MITRA KAMI</h2>
-      </div>
+  <div class="container">
+    <h2 class="section-title">MITRA KAMI</h2>
+  </div>
 
-      <div class="marquee-wrapper">
-        <div class="marquee-track">
-          
-          <!-- GROUP 1 -->
-          <div class="marquee-group">
-            <div v-for="(logo, index) in mitraLogos" :key="'a-'+index" class="logo-item">
-              <img :src="logo" alt="Mitra Kampus" loading="lazy" />
-            </div>
-          </div>
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
 
-          <!-- GROUP 2 (Clone) -->
-          <div aria-hidden="true" class="marquee-group">
-            <div v-for="(logo, index) in mitraLogos" :key="'b-'+index" class="logo-item">
-              <img :src="logo" alt="Mitra Kampus" loading="lazy" />
-            </div>
-          </div>
-
+      <!-- GROUP 1 -->
+      <div class="marquee-group">
+        <div v-for="(logo, index) in mitraLogos" :key="'a-'+index" class="logo-item">
+          <a :href="logo.url" target="_blank" rel="noopener noreferrer">
+            <img :src="logo.src" alt="Mitra Kampus" loading="lazy" />
+          </a>
         </div>
       </div>
-    </section>
+
+      <!-- GROUP 2 (Clone) -->
+      <div aria-hidden="true" class="marquee-group">
+        <div v-for="(logo, index) in mitraLogos" :key="'b-'+index" class="logo-item">
+          <a :href="logo.url" target="_blank" rel="noopener noreferrer">
+            <img :src="logo.src" alt="Mitra Kampus" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
     <!-- ================= BERITA SECTION ================= -->
     <section class="berita-section">
@@ -110,20 +115,21 @@
 
 // Daftar URL Logo Mitra
 const mitraLogos = [
-  '/mitra/logo1.png',
-  '/mitra/logo2.png',
-  '/mitra/logo3.jpeg',
-  '/logo ormawa/1.png',
-  '/logo ormawa/2.png',
-  '/logo ormawa/3.png',
-  '/logo ormawa/4.png',
-  '/logo ormawa/5.png',
-  '/logo ormawa/6.png',
-  '/logo ormawa/7.png',
-  '/logo ormawa/8.png',
-  '/logo ormawa/9.png',
-  '/logo ormawa/10.png'
+  { src: '/mitra/logo1.png', url: 'https://example.com' },
+  { src: '/mitra/logo2.png', url: 'https://example.com' },
+  { src: '/mitra/logo3.jpeg', url: 'https://example.com' },
+  { src: '/logo ormawa/1.png', url: 'https://example.com' },
+  { src: '/logo ormawa/2.png', url: 'https://example.com' },
+  { src: '/logo ormawa/3.png', url: 'https://example.com' },
+  { src: '/logo ormawa/4.png', url: 'https://example.com' },
+  { src: '/logo ormawa/5.png', url: 'https://example.com' },
+  { src: '/logo ormawa/6.png', url: 'https://example.com' },
+  { src: '/logo ormawa/7.png', url: 'https://example.com' },
+  { src: '/logo ormawa/8.png', url: 'https://example.com' },
+  { src: '/logo ormawa/9.png', url: 'https://example.com' },
+  { src: '/logo ormawa/10.png', url: 'https://example.com' }
 ];
+
 
 // Data Dummy Berita
 const newsItems = [
