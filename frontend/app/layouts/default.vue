@@ -5,7 +5,7 @@
       :class="['loading-overlay', { 'fade-out': !isLoading }]"
     >
       <div class="loading-content">
-        <img src="/logo-load.png" alt="Loading Logo" class="loading-logo" />
+        <img src="/logo.png" alt="Loading Logo" class="loading-logo" />
       </div>
     </div>
 

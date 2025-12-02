@@ -5,6 +5,7 @@
       <div class="hero-bg-container">
         <div class="hero-video-overlay"></div>
 
+        <!-- Pastikan file video ada di folder public -->
         <video
           autoplay
           muted
@@ -40,18 +41,34 @@
     </section>
 
     <!-- ================= FITUR SECTION ================= -->
+    <!-- Komponen ini diasumsikan sudah ada di proyek Anda -->
     <FiturSection />
 
-    <!-- ================= MITRA SECTION (ONLY) ================= -->
-    <section class="mitra-section container">
-      <h2 class="section-title">Mitra Kami</h2>
+    <!-- ================= MITRA SECTION (RUNNING LOGO) ================= -->
+    <section class="mitra-section">
+      <div class="container">
+        <h2 class="section-title">Mitra Kami</h2>
+      </div>
 
-      <div class="partners-grid">
-        <img src="/mitra/logo1.png" alt="Mitra 1" loading="lazy" />
-        <img src="/mitra/logo2.png" alt="Mitra 2" loading="lazy" />
-        <img src="/mitra/logo3.jpeg" alt="Mitra 3" loading="lazy" />
-        <img src="/logo.png" alt="Mitra 4" loading="lazy" />
-        
+      <!-- Container untuk Marquee (Running Text style) -->
+      <div class="marquee-wrapper">
+        <div class="marquee-track">
+          
+          <!-- GROUP 1: Logo Asli -->
+          <div class="marquee-group">
+            <div v-for="(logo, index) in mitraLogos" :key="'a-'+index" class="logo-item">
+              <img :src="logo" alt="Mitra Kampus" loading="lazy" />
+            </div>
+          </div>
+
+          <!-- GROUP 2: Logo Duplikat (Agar looping seamless/tidak putus) -->
+          <div aria-hidden="true" class="marquee-group">
+            <div v-for="(logo, index) in mitraLogos" :key="'b-'+index" class="logo-item">
+              <img :src="logo" alt="Mitra Kampus" loading="lazy" />
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   </div>
@@ -70,6 +87,23 @@ useHead({
     },
   ],
 });
+
+// Daftar URL Logo Mitra
+const mitraLogos = [
+  '/mitra/logo1.png',
+  '/mitra/logo2.png',
+  '/mitra/logo3.jpeg',
+  '/logo ormawa/1.png',
+  '/logo ormawa/2.png',
+  '/logo ormawa/3.png',
+  '/logo ormawa/4.png',
+  '/logo ormawa/5.png',
+  '/logo ormawa/6.png',
+  '/logo ormawa/7.png',
+  '/logo ormawa/8.png',
+  '/logo ormawa/9.png',
+  '/logo ormawa/10.png'
+];
 </script>
 
 <style scoped>
@@ -160,7 +194,7 @@ useHead({
   transform: scale(1.05);
 }
 
-/* Animasi */
+/* Animasi Fade In */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -182,48 +216,106 @@ useHead({
   animation-delay: 0.4s;
 }
 
-/* =================== MITRA SECTION =================== */
+/* =================== MITRA SECTION (MARQUEE) =================== */
 .mitra-section {
-  margin-top: 80px;
-  margin-bottom: 100px;
+  margin-top: 20px;
+  margin-bottom: 50px;
   text-align: center;
+  overflow: hidden; /* Penting agar tidak scroll horizontal browser */
 }
 
 .mitra-section .section-title {
   font-size: 28px;
-  font-family: "times new roman", serif;
+  font-family: "oswald", serif;
   font-weight: 800;
   color: rgb(0, 0, 0);
-  margin-bottom: 25px;
+  margin-bottom: 40px;
 }
 
-.partners-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 25px;
+/* Container Pembungkus */
+.marquee-wrapper {
+  position: relative;
+  width: 200%;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  /* Masking gradient kiri kanan agar terlihat halus saat muncul/hilang */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+/* Track yang bergerak */
+.marquee-track {
+  display: flex;
+  gap: 3rem; /* Jarak antar grup logo */
+  width: max-content; /* Lebar menyesuaikan isi */
+  animation: scroll-left 40s linear infinite; /* Kecepatan animasi (makin besar makin pelan) */
+}
+
+/* Grup Logo */
+.marquee-group {
+  display: flex;
   align-items: center;
+  justify-content: space-around;
+  gap: 3rem; /* Jarak antar logo individual */
+  min-width: 100%;
 }
 
-.partners-grid img {
-  width: 100%;
-  max-width: 120px;
-  opacity: 0.8;
-  filter: grayscale(40%);
+/* Styling Item Logo individual */
+.logo-item img {
+  height: 150px; /* Tinggi logo seragam */
+  width: auto;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: grayscale(100%);
   transition: all 0.3s ease;
-  display: block;
-  margin: 0 auto;
+  cursor: pointer;
 }
 
-.partners-grid img:hover {
+.logo-item img:hover {
   opacity: 1;
   filter: grayscale(0%);
-  transform: scale(1.08);
+  transform: scale(1.1);
+}
+
+/* Keyframes untuk pergerakan */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Geser setengah karena kita punya 2 grup duplikat */
+  }
+}
+
+/* Optional: Pause saat hover */
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
 }
 
 /* RESPONSIVE */
-@media (max-width: 900px) {
-  .partners-grid {
-    justify-content: center;
+@media (max-width: 768px) {
+  .marquee-track {
+    gap: 1.5rem;
+    animation-duration: 25s; /* Lebih cepat sedikit di mobile */
+  }
+  .marquee-group {
+    gap: 1.5rem;
+  }
+  .logo-item img {
+    height: 60px; /* Logo lebih kecil di mobile */
   }
 }
 </style>
