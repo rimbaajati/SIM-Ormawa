@@ -31,7 +31,7 @@
         </p>
 
         <NuxtLink
-          to="/register"
+          to="/login"
           class="cta-primary hover:scale-[1.05] transition-transform animate-fade-in delay-400"
         >
           Masuk ke Sistem Sekarang
@@ -107,18 +107,6 @@
 </template>
 
 <script setup>
-import { useHead } from "#app";
-
-useHead({
-  title: "Beranda - SIM Ormawa UMPKU",
-  meta: [
-    {
-      name: "description",
-      content:
-        "Sistem Informasi Manajemen Organisasi Mahasiswa untuk digitalisasi kegiatan.",
-    },
-  ],
-});
 
 // Daftar URL Logo Mitra
 const mitraLogos = [
@@ -283,7 +271,7 @@ const newsItems = [
 
 /* =================== MITRA SECTION (MARQUEE) =================== */
 .mitra-section {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
   text-align: center;
   overflow: hidden; 
@@ -376,14 +364,14 @@ const newsItems = [
 /* =================== BERITA SECTION =================== */
 .berita-section {
   padding: 80px 0;
-  background-color: rgba(14, 13, 13, 1); /* Gray-50 */
+  background-color: rgb(53, 52, 52); /* Gray-50 */
 }
 
 .berita-section .section-title {
   font-size: 28px;
   font-family: "oswald", serif;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #f05501;
   margin-bottom: 50px;
   text-transform: uppercase;
   letter-spacing: 2px;
