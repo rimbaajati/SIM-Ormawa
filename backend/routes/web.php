@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Proposal;
 use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -37,7 +38,8 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 
     // Proposal
     Route::get('/manager/proposal/all', function () {
-        return view('pages.manager.manager_allproposal');
+        $proposals = Proposal::all(); 
+        return view('pages.manager.manager_allproposal', compact('proposals'));
     })->name('manager.proposal.all');
 
     Route::get('/manager/propsal/create', function () {
@@ -66,8 +68,7 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 // USER AREA
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])
-    ->name('user.dashboard')
-    ->middleware('role:user');
+        ->name('user.dashboard');
 });
 
 // LOGOUT
