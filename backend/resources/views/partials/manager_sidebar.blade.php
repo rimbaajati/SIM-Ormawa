@@ -24,7 +24,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li>
-                            <a href="{{ route('manager.proposals.all') }}">
+                            <a href="{{ route('manager.proposal.all') }}">
                                 <span data-key="t-calendar">All Proposal</span>
                             </a>
                         </li>

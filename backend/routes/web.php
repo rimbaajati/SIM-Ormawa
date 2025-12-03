@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Proposal;
 use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -36,14 +37,15 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 
     // Proposal
     Route::get('/manager/proposal/all', function () {
-        return view('pages.manager.manager_allproposal');
-    })->name('manager.proposal.all');
+        $proposals = Proposal::all(); // ambil semua data proposal
+        return view('pages.manager.manager_allproposal', compact('proposals'));
+    })->name('manager.proposal.all')->middleware(['auth','role:manager']);
 
     Route::get('/manager/propsal/create', function () {
         return view('pages.manager.manager_createproposal');
     })->name('manager.proposal.create');
 
-    
+
 
     // Organisasi, Jadwal, dll
     Route::get('/manager/organization/all', function () {

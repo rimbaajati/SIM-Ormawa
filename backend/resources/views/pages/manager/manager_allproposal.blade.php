@@ -21,7 +21,7 @@
         <div class="card-body">
 
             <!-- FILTER -->
-            <form method="GET" action="{{ route('manager.proposals.all') }}" class="row g-2 mb-3">
+            <form method="GET" action="{{ route('manager.proposal.all') }}" class="row g-2 mb-3">
                 <div class="col-md-3">
                     <select name="status" class="form-control">
                         <option value="">-- All Status --</option>
@@ -74,30 +74,29 @@
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
                                 <td>
                                     <span
-                                        class="badge bg-
-                                {{ $item->status == 'approved'
-                                    ? 'success'
-                                    : ($item->status == 'pending'
-                                        ? 'warning'
-                                        : ($item->status == 'revision'
-                                            ? 'info'
-                                            : 'danger')) }}">
-                                        {{ ucfirst($item->status) }}
+                                        class="badge bg-{{ $proposal->status == 'approved'
+                                            ? 'success'
+                                            : ($proposal->status == 'pending'
+                                                ? 'warning'
+                                                : ($proposal->status == 'revision'
+                                                    ? 'info'
+                                                    : 'danger')) }}">
+                                        {{ ucfirst($proposal->status) }}
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('manager.proposals.detail', $item->id) }}"
+                                    <a href="{{ route('manager.proposals.detail', $proposal->id) }}"
                                         class="btn btn-sm btn-info">
                                         Detail
                                     </a>
 
-                                    @if ($item->status == 'pending')
-                                        <a href="{{ route('manager.proposals.approve', $item->id) }}"
+                                    @if ($proposal->status == 'pending')
+                                        <a href="{{ route('manager.proposals.approve', $proposal->id) }}"
                                             class="btn btn-sm btn-success">
                                             Approve
                                         </a>
 
-                                        <a href="{{ route('manager.proposals.reject', $item->id) }}"
+                                        <a href="{{ route('manager.proposals.reject', $proposal->id) }}"
                                             class="btn btn-sm btn-danger">
                                             Reject
                                         </a>
@@ -109,10 +108,10 @@
                                 <td colspan="7" class="text-center">No proposals found</td>
                             </tr>
                         @endforelse
-
                     </tbody>
                 </table>
             </div>
+
 
         </div>
     </div>
