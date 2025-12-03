@@ -31,7 +31,7 @@
         </p>
 
         <NuxtLink
-          to="/register"
+          to="/login"
           class="cta-primary hover:scale-[1.05] transition-transform animate-fade-in delay-400"
         >
           Masuk ke Sistem Sekarang
@@ -44,30 +44,35 @@
 
     <!-- ================= MITRA SECTION (RUNNING LOGO) ================= -->
     <section class="mitra-section">
-      <div class="container">
-        <h2 class="section-title">MITRA KAMI</h2>
-      </div>
+  <div class="container">
+    <h2 class="section-title">MITRA KAMI</h2>
+  </div>
 
-      <div class="marquee-wrapper">
-        <div class="marquee-track">
-          
-          <!-- GROUP 1 -->
-          <div class="marquee-group">
-            <div v-for="(logo, index) in mitraLogos" :key="'a-'+index" class="logo-item">
-              <img :src="logo" alt="Mitra Kampus" loading="lazy" />
-            </div>
-          </div>
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
 
-          <!-- GROUP 2 (Clone) -->
-          <div aria-hidden="true" class="marquee-group">
-            <div v-for="(logo, index) in mitraLogos" :key="'b-'+index" class="logo-item">
-              <img :src="logo" alt="Mitra Kampus" loading="lazy" />
-            </div>
-          </div>
-
+      <!-- GROUP 1 -->
+      <div class="marquee-group">
+        <div v-for="(logo, index) in mitraLogos" :key="'a-'+index" class="logo-item">
+          <a :href="logo.url" target="_blank" rel="noopener noreferrer">
+            <img :src="logo.src" alt="Mitra Kampus" loading="lazy" />
+          </a>
         </div>
       </div>
-    </section>
+
+      <!-- GROUP 2 (Clone) -->
+      <div aria-hidden="true" class="marquee-group">
+        <div v-for="(logo, index) in mitraLogos" :key="'b-'+index" class="logo-item">
+          <a :href="logo.url" target="_blank" rel="noopener noreferrer">
+            <img :src="logo.src" alt="Mitra Kampus" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
     <!-- ================= BERITA SECTION ================= -->
     <section class="berita-section">
@@ -107,35 +112,24 @@
 </template>
 
 <script setup>
-import { useHead } from "#app";
-
-useHead({
-  title: "Beranda - SIM Ormawa UMPKU",
-  meta: [
-    {
-      name: "description",
-      content:
-        "Sistem Informasi Manajemen Organisasi Mahasiswa untuk digitalisasi kegiatan.",
-    },
-  ],
-});
 
 // Daftar URL Logo Mitra
 const mitraLogos = [
-  '/mitra/logo1.png',
-  '/mitra/logo2.png',
-  '/mitra/logo3.jpeg',
-  '/logo ormawa/1.png',
-  '/logo ormawa/2.png',
-  '/logo ormawa/3.png',
-  '/logo ormawa/4.png',
-  '/logo ormawa/5.png',
-  '/logo ormawa/6.png',
-  '/logo ormawa/7.png',
-  '/logo ormawa/8.png',
-  '/logo ormawa/9.png',
-  '/logo ormawa/10.png'
+  { src: '/mitra/logo1.png', url: 'https://www.instagram.com/dpm_umpku/' },
+  { src: '/mitra/logo2.png', url: 'https://www.instagram.com/bem_umpku/' },
+  { src: '/mitra/logo3.jpeg', url: 'https://www.instagram.com/himanes_umpku/' },
+  { src: '/logo ormawa/1.png', url: 'https://www.instagram.com/himatif.umpku/' },
+  { src: '/logo ormawa/2.png', url: 'https://www.instagram.com/ksr_umpku/' },
+  { src: '/logo ormawa/3.png', url: 'https://www.instagram.com/hima.ners_umpku/' },
+  { src: '/logo ormawa/4.png', url: '#' },
+  { src: '/logo ormawa/5.png', url: '#'},
+  { src: '/logo ormawa/6.png', url: 'https://www.instagram.com/immalfatih.umpku/' },
+  { src: '/logo ormawa/7.png', url: '#' },
+  { src: '/logo ormawa/8.png', url: 'https://www.instagram.com/himagizi.umpku/' },
+  { src: '/logo ormawa/9.png', url: 'https://www.instagram.com/himabid_umpku/' },
+  { src: '/logo ormawa/10.png', url: 'https://www.instagram.com/himaper.umpku/' }
 ];
+
 
 // Data Dummy Berita
 const newsItems = [
@@ -283,7 +277,7 @@ const newsItems = [
 
 /* =================== MITRA SECTION (MARQUEE) =================== */
 .mitra-section {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
   text-align: center;
   overflow: hidden; 
@@ -376,14 +370,14 @@ const newsItems = [
 /* =================== BERITA SECTION =================== */
 .berita-section {
   padding: 80px 0;
-  background-color: rgba(14, 13, 13, 1); /* Gray-50 */
+  background-color: rgb(53, 52, 52); /* Gray-50 */
 }
 
 .berita-section .section-title {
   font-size: 28px;
   font-family: "oswald", serif;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #f05501;
   margin-bottom: 50px;
   text-transform: uppercase;
   letter-spacing: 2px;

@@ -2,24 +2,31 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+// database/seeders/DatabaseSeeder.php
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema; // <--- TAMBAHKAN INI
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-        // User::factory(10)->create();
+        // --- HAPUS DATA LAMA UNTUK MENGHINDARI KONFLIK ---
+        Schema::disableForeignKeyConstraints(); // Penting jika ada Foreign Keys
+        DB::table('users')->truncate();
+        Schema::enableForeignKeyConstraints();
+        // -------------------------------------------------
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Masukkan logic admin Anda:
+        DB::table('users')->insert([
+            'name' => 'Manager Admin',
+            'email' => 'manager@sim.umpku', 
+            'password' => Hash::make('password'), 
+            'role' => 'manager', 
         ]);
+
+        // ... (Kode seeding lainnya)
     }
 }
