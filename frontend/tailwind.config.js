@@ -1,11 +1,14 @@
-// tailwind.config.js
 module.exports = {
   content: [
-    // Sesuaikan path agar sesuai dengan struktur Anda (frontend/...)
-    "./frontend/**/*.{vue,js,ts,jsx,tsx}", 
-    "./frontend/components/**/*.{vue,js,ts,jsx,tsx}",
-    "./frontend/layouts/**/*.{vue,js,ts,jsx,tsx}",
-    "./frontend/pages/**/*.{vue,js,ts,tsj,tsx}",
+    "./components/**/*.{vue,js,ts}",
+    "./layouts/**/*.{vue,js,ts}",
+    "./pages/**/*.{vue,js,ts}",
+    "./app/**/*.{vue,js,ts}",
+    "./plugins/**/*.{js,ts}",
+    "./*.{vue,js,ts}"
   ],
-  // ...konfigurasi lainnya
-}
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};

@@ -1,92 +1,67 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ManagerDashboardController;
-
-/*
-|--------------------------------------------------------------------------
-| Homepage → Redirect Berdasarkan Role
-|--------------------------------------------------------------------------
-|
-| Jika user belum login → redirect ke login.
-| Jika sudah login → redirect sesuai role.
-|
-*/
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
-    if (!auth()->check()) {
-        return redirect('/login');
-    }
-
-    $role = auth()->user()->role;
-
-    return match ($role) {
-        'admin' => redirect()->route('admin.dashboard'),
-        'manager' => redirect()->route('manager.dashboard'),
-        'user' => redirect()->route('user.dashboard'),
-        default => abort(403, 'Role tidak dikenali'),
-    };
+    return view('welcome');
 });
 
-
-/*
-|--------------------------------------------------------------------------
-| Protected Routes (Auth Required)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth'])->group(function () {
-
-    // Dashboard default (Laravel Breeze)
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['verified'])->name('dashboard');
-
-    // Profile
+// ROUTE PROFILE BAWAAN LARAVEL
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-/*
-|--------------------------------------------------------------------------
-| Role Based Routes
-|--------------------------------------------------------------------------
-*/
-
-//
-// ADMIN
-//
+// ADMIN AREA
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return 'ADMIN AREA';
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', fn() => 'ADMIN AREA');
 });
 
-//
-// MANAGER
-//
+// MANAGER AREA
 Route::middleware(['auth', 'role:manager'])->group(function () {
+
+    // Dashboard manager (hanya satu)
     Route::get('/manager/dashboard', function () {
         return view('pages.manager.manager_dashboard');
     })->name('manager.dashboard');
+
+    // Profile manager (sekarang aman dan terproteksi)
+    Route::get('/manager/profile', function () {
+        return view('pages.manager.manager_profile');
+    })->name('manager.profile');
+
+    Route::get('/manager/proposals/all', function () {
+        return view('pages.manager.manager_allproposal');
+    })->name('manager.proposals.all');
+
+    Route::get('/manager/organization/all', function () {
+        return view('pages.manager.manager_allorganization');
+    })->name('manager.organization.all');
+
+    Route::get('/manager/schedules/all', function () {
+        return view('pages.manager.manager_allschedule');
+    })->name('manager.schedules.all');
+
+    Route::get('/manager/organizations/profile', function () {
+        return view('pages.manager.manager_organizationprofile');
+    })->name('manager.organizations.profile');
+
+    Route::get('/manager/mail/all', function () {
+        return view('pages.manager.manager_mail');
+    })->name('manager.mail.all');
 });
 
-//
-// USER
-//
+// USER AREA
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return 'USER AREA';
-    })->name('user.dashboard');
+    Route::get('/user/dashboard', fn() => 'USER AREA');
 });
 
-Route::get('/check-session', function () {
-    return session()->all();
-});
 
-Route::get('/manager/dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard')->middleware('auth');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
 
-require __DIR__ . '/auth.php';
+// ROUTE AUTH BREEZE
+require __DIR__.'/auth.php';

@@ -32,6 +32,11 @@ export default defineNuxtConfig({
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap'
         },
+        {
+          rel: 'stylesheet',
+          href:"https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Oswald:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        },
+
         { 
           rel: 'icon',
           type: 'image/png',
