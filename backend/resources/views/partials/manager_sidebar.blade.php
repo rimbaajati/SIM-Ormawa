@@ -24,7 +24,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li>
-                            <a href="{{ route('manager.proposals.all') }}">
+                            <a href="{{ route('manager.proposal.all') }}">
                                 <span data-key="t-calendar">All Proposal</span>
                             </a>
                         </li>
@@ -120,6 +120,17 @@
                         <li><a href="pages-starter.html" data-key="t-starter-page">All LPJ</a></li>
                     </ul>
                 </li>
+                @if(Auth::user()->role === 'manager')
+    <a class="dropdown-item" href="{{ route('manager.dashboard') }}">
+        <i class="ri-dashboard-line"></i> Manager Dashboard
+    </a>
+@endif
+
+@if(Auth::user()->role === 'user')
+    <a class="dropdown-item" href="{{ route('user.dashboard') }}">
+        <i class="ri-user-line"></i> User Dashboard
+    </a>
+@endif
 
             </ul>
         </div>

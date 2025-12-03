@@ -120,14 +120,39 @@
       </div>
 
       <div class="menu-auth-group">
-        <NuxtLink to="/login" class="menu-item menu-login-btn">
-          LOGIN
-        </NuxtLink>
-        <NuxtLink to="/register" class="menu-item menu-register-label">
-          REGISTER
-        </NuxtLink>
+        <template v-if="!isLoggedIn">
+          <NuxtLink
+            to="/login"
+            class="menu-item menu-login-btn"
+            @click="menuOpen = false"
+          >
+            LOGIN
+          </NuxtLink>
+          <NuxtLink
+            to="/register"
+            class="menu-item menu-register-label"
+            @click="menuOpen = false"
+          >
+            REGISTER
+          </NuxtLink>
+        </template>
+        <template v-else>
+          <div class="menu-logged-in-info">
+            👋 Halo, **{{ userName }}**!
+          </div>
+          <NuxtLink
+            to="/profil"
+            class="menu-item menu-profile-btn"
+            @click="menuOpen = false"
+          >
+            UBAH PROFIL
+          </NuxtLink>
+          <div class="menu-item menu-logout-btn" @click="logout">
+            LOGOUT
+          </div>
+        </template>
       </div>
-    </nav>
+      </nav>
 
     <main class="site-body">
       <slot />
@@ -170,45 +195,52 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore(); // 👈 INISIALISASI STORE
 
 const menuOpen = ref(false);
 const isLoading = ref(true);
-const openSection = ref(null); // Variabel state untuk submenu
+const openSection = ref(null);
+
+// ===============================================
+// HAPUS SEMUA KODE SIMULASI (isLoggedIn, userName, checkAuthStatus)
+// GANTI DENGAN computed property DARI PINIA STORE
+// ===============================================
+
+// 1. Ambil status dari Store menggunakan computed
+const isLoggedIn = computed(() => authStore.getIsLoggedIn);
+const userName = computed(() => authStore.userName);
+
+// 2. Fungsi Logout yang memanggil aksi dari Store
+const logout = () => {
+    authStore.logout();
+    menuOpen.value = false;
+    alert('Anda telah berhasil logout.'); // Atau gunakan notifikasi yang lebih baik
+};
 
 // Fungsi untuk toggle submenu
 const toggleSection = (section) => {
   openSection.value = openSection.value === section ? null : section;
 };
 
-// Definisi handleScroll
-const handleScroll = () => {
-  const nav = document.querySelector(".nav");
-  if (!nav) return;
-
-  if (window.scrollY > 50) {
-    nav.classList.add("scrolled");
-  } else {
-    nav.classList.remove("scrolled");
-  }
-};
+// ... (handleScroll function tetap sama)
 
 onMounted(() => {
+  // Panggil aksi inisialisasi untuk mengecek status token saat mount
+  authStore.initializeAuth(); // 👈 PANGGIL AKSI PINIA
+
   // Loading fade-out
   setTimeout(() => {
     isLoading.value = false;
   }, 2000);
 
-  // Jalankan handleScroll saat mount untuk kondisi awal
-  handleScroll();
-
-  // Scroll event → ubah navbar
-  window.addEventListener("scroll", handleScroll);
+  // ... (kode handleScroll tetap sama)
 });
 
-// Bersihkan event saat component unmount
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
+  // ... (kode handleScroll tetap sama)
 });
 </script>
 
@@ -217,7 +249,7 @@ onUnmounted(() => {
   --neon: #00e0ff;
 }
 
-/* ================= LOADING PAGE (TETAP) ================= */
+/* ================= LOADING PAGE ================= */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -378,37 +410,33 @@ onUnmounted(() => {
 }
 
 /* ================= MENU LIST/SIDEBAR STYLING ================= */
-/* Anda perlu menambahkan styling untuk membuat menu ini menjadi sidebar yang bisa dibuka/ditutup */
 .menu-list {
-  /* Contoh styling dasar untuk sidebar (asumsi Anda akan menyempurnakannya) */
   position: fixed;
   top: 0;
   left: 0;
-  width: 300px; /* Lebar sidebar */
+  width: 300px;
   height: 100%;
   background-color: #ffffff;
   padding: 70px 20px 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  transform: translateX(-100%); /* Sembunyikan secara default */
+  transform: translateX(-100%);
   transition: transform 0.3s ease-out;
   z-index: 1000;
   overflow-y: auto;
 }
 
 .menu-list.menu-open {
-  transform: translateX(0); /* Tampilkan saat menuOpen true */
+  transform: translateX(0);
 }
 
 .menu-close-btn {
   position: absolute;
   top: 20px;
-  left: 20px; /* ← dari right: 20px menjadi left: 20px */
+  left: 20px;
   font-size: 24px;
   cursor: pointer;
   color: #1f2937;
 }
-
-/* Akhir dari asumsi styling sidebar */
 
 .menu-section {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -452,8 +480,8 @@ onUnmounted(() => {
   transform: translateX(5px);
 }
 
+/* === GROUP AUTENTIKASI DEFAULT (LOGIN/REGISTER) === */
 .menu-auth-group {
-  /* Tambahkan styling untuk bagian login/register */
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   margin-top: 20px;
@@ -490,7 +518,36 @@ onUnmounted(() => {
   background-color: #d1d5db;
 }
 
-/* ================= BODY (TETAP) ================= */
+/* === GROUP AUTENTIKASI LOGGED IN (PROFIL/LOGOUT) === */
+.menu-logged-in-info {
+  text-align: center;
+  padding: 10px 0;
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.menu-profile-btn {
+  background-color: #007bff; /* Biru */
+  color: #ffffff;
+}
+
+.menu-profile-btn:hover {
+  background-color: #0056b3;
+}
+
+.menu-logout-btn {
+  background-color: #dc3545; /* Merah */
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.menu-logout-btn:hover {
+  background-color: #c82333;
+}
+
+/* ================= BODY ================= */
 body {
   background: #301d0b !important;
 }
@@ -505,7 +562,7 @@ body {
   padding-top: 0 !important;
 }
 
-/* ====================== FOOTER (TETAP) ====================== */
+/* ====================== FOOTER ====================== */
 
 .footer-center {
   background: #000;
