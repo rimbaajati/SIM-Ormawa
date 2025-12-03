@@ -178,13 +178,14 @@ const newsItems = [
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  z-index: 1;
 }
 
 .hero-bg-container {
   position: absolute;
   inset: 0;
   width: 100%;
-  height: 100%;
+  height: 80%;
   overflow: hidden;
 }
 
@@ -208,7 +209,7 @@ const newsItems = [
 .content-wrap {
   position: relative;
   z-index: 10;
-  height: 100%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,7 +223,7 @@ const newsItems = [
   font-weight: 900;
   font-family: "Oswald", "Times New Roman", serif;
   color: white;
-  line-height: 1.1;
+  line-height: 1,1;
   margin-bottom: 0.5em;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 }
@@ -247,10 +248,12 @@ const newsItems = [
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.4);
   font-family: 'Roboto', sans-serif;
+  backdrop-filter: blur(10px);
 }
 
 .cta-primary:hover {
   transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* Animasi Fade In */
@@ -277,13 +280,28 @@ const newsItems = [
 
 /* =================== MITRA SECTION (MARQUEE) =================== */
 .mitra-section {
-  margin-top: 10px;
+  position: relative;
+  z-index: 10;
+  margin-top: -100px;
   margin-bottom: 20px;
   text-align: center;
   overflow: hidden; 
-  background: #fff; 
+  /* background: #fff;  */
   padding-top: 50px;
   padding-bottom: 50px;
+}
+
+.mitra-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Mengisi seluruh section */
+  /* Gradasi dari transparan ke putih solid di bagian atas */
+  background: linear-gradient(to bottom, transparent 0%, #ffffff 25%, #ffffff 100%);
+  z-index: -1; /* Di belakang konten teks/logo */
+  pointer-events: none;
 }
 
 .mitra-section .section-title {
@@ -294,6 +312,7 @@ const newsItems = [
   margin-bottom: 40px;
   text-transform: uppercase;
   letter-spacing: 2px;
+  position: relative;
 }
 
 /* Container Pembungkus */
