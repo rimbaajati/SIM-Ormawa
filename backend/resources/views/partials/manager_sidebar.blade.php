@@ -70,6 +70,19 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
+                        <i data-feather="mail"></i>
+                        <span>Surat & Permohonan</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('manager.mail.all') }}">Semua Surat</a></li>
+                        <li><a href="auth-register.html" data-key="t-register">Surat Masuk</a></li>
+                        <li><a href="auth-recoverpw.html" data-key="t-recover-password">Surat Keluar</a></li>
+                        <li><a href="auth-lock-screen.html" data-key="t-lock-screen">Riawayat Aktivitas</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="file-text"></i>
                         <span data-key="t-pages">User</span>
                     </a>

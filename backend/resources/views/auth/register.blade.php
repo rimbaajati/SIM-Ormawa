@@ -76,6 +76,16 @@
 
                                         <button class="btn btn-primary w-100 waves-effect waves-light"
                                             type="submit">Register</button>
+
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger mt-3">
+                                                <ul class="mb-0">
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
                                     </form>
 
 
