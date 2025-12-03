@@ -282,7 +282,7 @@ const newsItems = [
 .mitra-section {
   position: relative;
   z-index: 10;
-  margin-top: -100px;
+  margin-top: -150px;
   margin-bottom: 20px;
   text-align: center;
   overflow: hidden; 
