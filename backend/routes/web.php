@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
@@ -23,20 +24,28 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // MANAGER AREA
 Route::middleware(['auth', 'role:manager'])->group(function () {
 
-    // Dashboard manager (hanya satu)
+    // Dashboard manager
     Route::get('/manager/dashboard', function () {
         return view('pages.manager.manager_dashboard');
     })->name('manager.dashboard');
 
-    // Profile manager (sekarang aman dan terproteksi)
+    // Profile manager
     Route::get('/manager/profile', function () {
         return view('pages.manager.manager_profile');
     })->name('manager.profile');
 
-    Route::get('/manager/proposals/all', function () {
+    // Proposal
+    Route::get('/manager/proposal/all', function () {
         return view('pages.manager.manager_allproposal');
-    })->name('manager.proposals.all');
+    })->name('manager.proposal.all');
 
+    Route::get('/manager/propsal/create', function () {
+        return view('pages.manager.manager_createproposal');
+    })->name('manager.proposal.create');
+
+    
+
+    // Organisasi, Jadwal, dll
     Route::get('/manager/organization/all', function () {
         return view('pages.manager.manager_allorganization');
     })->name('manager.organization.all');
@@ -52,16 +61,16 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::get('/manager/mail/all', function () {
         return view('pages.manager.manager_mail');
     })->name('manager.mail.all');
-});
+
+}); // <-- tutup group manager
 
 // USER AREA
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', fn() => 'USER AREA');
 });
 
-
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
+    ->name('logout');
 
 // ROUTE AUTH BREEZE
 require __DIR__.'/auth.php';
