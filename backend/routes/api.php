@@ -1,64 +1,57 @@
 <?php
 
-namespace Database\Seeders;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\PersonalTaskController;
+use App\Http\Controllers\Api\AuthController; 
+use App\Http\Controllers\Api\RoomController;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\QueryException; // Diperlukan untuk menangani error duplikasi
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
 
-class DatabaseSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        // PENTING: Menonaktifkan/Mengaktifkan Foreign Keys saat truncate
-        Schema::disableForeignKeyConstraints();
-        
-        // Membersihkan tabel users sebelum menyisipkan data baru.
-        // Jika Anda tidak ingin data terhapus, ganti dengan logic update.
-        DB::table('users')->truncate(); 
-        
-        Schema::enableForeignKeyConstraints();
+// --- Rute Publik (Tidak perlu login) ---
+// Alamat ini ( /api/register ) akan memanggil fungsi 'register' di AuthController
+Route::post('/register', [AuthController::class, 'register']);
 
-        // 1. BUAT AKUN ADMIN UTAMA (UNTUK MENGATASI 403 FORBIDDEN)
-        try {
-            DB::table('users')->insert([
-                'name' => 'SIM Administrator',
-                'email' => 'admin@sim.umpku', // Kredensial untuk login
-                'password' => Hash::make('password'), 
-                'role' => 'admin', // Role 'admin' harus mengatasi 403
-            ]);
+// Alamat ini ( /api/login ) akan memanggil fungsi 'login' di AuthController
+Route::post('/login', [AuthController::class, 'login']);
 
-            // 2. BUAT AKUN MANAGER SEKUNDER (Jika dibutuhkan)
-            DB::table('users')->insert([
-                'name' => 'SIM Manager',
-                'email' => 'manager@sim.umpku', // Kredensial untuk login
-                'password' => Hash::make('password'), 
-                'role' => 'manager', 
-            ]);
 
-            // 3. BUAT AKUN USER BIASA (Contoh Mahasiswa)
-            DB::table('users')->insert([
-                'name' => 'Mahasiswa Test',
-                'email' => 'user@sim.umpku', // Kredensial untuk login
-                'password' => Hash::make('password'), 
-                'role' => 'user', 
-            ]);
+// --- Rute Terproteksi (Wajib login / kirim token) ---
+Route::middleware('auth:sanctum')->group(function () {
+    
+    // Alamat untuk mengambil data user ( /api/user )
+    Route::get('/user', function (Request $request) {
+        return $request->user(); // Ini untuk 'fetchUser' di Nuxt
+    });
 
-        } catch (QueryException $e) {
-            // Tangani error jika terjadi duplikasi meskipun sudah di-truncate (jarang terjadi)
-            echo "Error saat seeding: " . $e->getMessage() . "\n";
-        }
-        
-        // Panggil seeder lain di sini jika ada (Contoh: OrmawaSeeder::class)
-        // $this->call([
-        //     OrmawaSeeder::class,
-        // ]);
-    }
-}
+    // Alamat untuk logout ( /api/logout )
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // --- Rute untuk "Tugas Pribadi" ---
+    // GET /api/personal-tasks -> Panggil fungsi index()
+    Route::get('/personal-tasks', [PersonalTaskController::class, 'index']);
+    
+    // POST /api/personal-tasks -> Panggil fungsi store()
+    Route::post('/personal-tasks', [PersonalTaskController::class, 'store']);
+    
+    // PUT /api/personal-tasks/{task} -> Panggil fungsi update()
+    Route::put('/personal-tasks/{task}', [PersonalTaskController::class, 'update']);
+    
+    // DELETE /api/personal-tasks/{task} -> Panggil fungsi destroy()
+    Route::delete('/personal-tasks/{task}', [PersonalTaskController::class, 'destroy']);
+
+    // --- RUTE UNTUK KELAS (ROOM) ---
+    
+    // 1. Lihat daftar kelas
+    Route::get('/rooms', [RoomController::class, 'index']);
+    
+    // 2. Buat kelas baru
+    Route::post('/rooms', [RoomController::class, 'store']);
+    
+    // 3. Gabung kelas pakai kode
+    Route::post('/rooms/join', [RoomController::class, 'join']);    
+});
