@@ -56,7 +56,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Kegiatan</th>
-                            <th>Deskripsi</th>
+                            <th>Organisasi</th>
                             <th>Waktu</th>
                             <th>Anggaran</th>
                             <th>Status</th>
@@ -69,7 +69,7 @@
                             <tr>
                                 <td>{{ $proposal->id }}</td>
                                 <td>{{ $proposal->judul }}</td>
-                                <td>{{ $proposal->deskripsi }}</td>
+                                <td>{{ $proposal->Organisasi }}</td>
                                 <td>{{ $proposal->waktu->format('d-m-Y') }}</td>
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
                                 <td>

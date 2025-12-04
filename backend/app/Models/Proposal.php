@@ -8,6 +8,7 @@ class Proposal extends Model
 {
     protected $fillable = [
         'judul',
+        'organisasi',
         'deskripsi',
         'waktu',
         'tempat',

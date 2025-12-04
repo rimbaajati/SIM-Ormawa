@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\ManagerDashboardController;
+use App\Models\Organization;
 
 
 Route::get('/', function () {
@@ -43,9 +44,14 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
         return view('pages.manager.manager_allproposal', compact('proposals'));
     })->name('manager.proposal.all');
 
-    Route::get('/manager/propsal/create', function () {
-        return view('pages.manager.manager_createproposal');
+    Route::get('/manager/proposal/create', function () {
+        $organizations = Organization::orderBy('name')->get();
+        return view('pages.manager.manager_createproposal', compact('organizations'));
     })->name('manager.proposal.create');
+
+    Route::post('/manager/proposal/store', [ProposalController::class, 'store'])
+    ->name('manager.proposal.store')
+    ->middleware(['auth','role:manager']);
 
     // Organisasi, Jadwal, dll
     Route::get('/manager/organization/all', function () {

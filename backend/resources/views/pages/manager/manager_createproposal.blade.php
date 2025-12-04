@@ -1,114 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.manager_app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Proposal Baru</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('title', 'Ajukan Proposal')
 
-<body style="background: #f2f2f2">
+@section('content')
 
-    <div class="container mt-5 mb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
+    <div class="page-title-box d-flex align-items-center justify-content-between mb-0">
+        <h4 class="mb-0">Ajukan Proposal</h4>
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item">Manager</li>
+            <li class="breadcrumb-item active">Ajukan Proposals</li>
+        </ol>
+    </div>
 
-                <div class="card border-0 shadow-sm rounded">
-                    <div class="card-body">
+    <div class="card shadow-sm p-10">
+        <div class="w-100">
+            <div class="card-body p-4">
 
-                        <h4 class="mb-4">Buat Proposal Baru</h4>
+                <h5 class="mb-4 y">Buat Proposal Baru</h5>
 
-                        <form action="" method="POST" enctype="multipart/form-data">
-                            @csrf
+                <form action="{{ route('manager.proposal.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-                            {{-- JUDUL --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Judul Proposal</label>
-                                <input type="text" class="form-control @error('judul') is-invalid @enderror"
-                                    name="judul" value="{{ old('judul') }}" placeholder="Masukkan judul proposal">
+                    <div class="row">
+                        {{-- JUDUL --}}
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-medium">Judul Proposal</label>
+                            <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
+                                value="{{ old('judul') }}" placeholder="Masukkan judul proposal">
+                            @error('judul')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                @error('judul')
-                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        {{-- ORGANISASI --}}
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-medium">Organisasi</label>
 
-                            {{-- DESKRIPSI --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Deskripsi</label>
-                                <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5"
-                                    placeholder="Tuliskan deskripsi proposal">{{ old('deskripsi') }}</textarea>
+                            <select name="organization_id"
+                                class="form-select @error('organization_id') is-invalid @enderror">
+                                <option value="">-- Pilih Organisasi --</option>
 
-                                @error('deskripsi')
-                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                @enderror
-                            </div>
+                                @foreach ($organizations as $org)
+                                    <option value="{{ $org->id }}"
+                                        {{ old('organization_id') == $org->id ? 'selected' : '' }}>
+                                        {{ $org->name }}
+                                    </option>
+                                @endforeach
+                            </select>
 
-                            {{-- WAKTU --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Waktu Pelaksanaan</label>
-                                <input type="date" class="form-control @error('waktu') is-invalid @enderror"
-                                    name="waktu" value="{{ old('waktu') }}">
+                            @error('organization_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                @error('waktu')
-                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                            {{-- TEMPAT --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Tempat</label>
-                                <input type="text" class="form-control @error('tempat') is-invalid @enderror"
-                                    name="tempat" value="{{ old('tempat') }}" placeholder="Masukkan lokasi kegiatan">
+                        {{-- DESKRIPSI --}}
+                        <div class="col-12 mb-3">
+                            <label class="form-label fw-medium">Deskripsi</label>
+                            <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" rows="5"
+                                placeholder="Tuliskan deskripsi proposal">{{ old('deskripsi') }}</textarea>
+                            @error('deskripsi')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                @error('tempat')
-                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        {{-- WAKTU --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">Waktu Pelaksanaan</label>
+                            <input type="date" class="form-control @error('waktu') is-invalid @enderror" name="waktu"
+                                value="{{ old('waktu') }}">
+                            @error('waktu')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                            {{-- ANGGARAN --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">Anggaran (Rp)</label>
-                                <input type="number" class="form-control @error('anggaran') is-invalid @enderror"
-                                    name="anggaran" value="{{ old('anggaran') }}"
-                                    placeholder="Masukkan nominal anggaran">
+                        {{-- TEMPAT --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">Tempat</label>
+                            <input type="text" class="form-control @error('tempat') is-invalid @enderror" name="tempat"
+                                value="{{ old('tempat') }}" placeholder="Masukkan lokasi kegiatan">
+                            @error('tempat')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                @error('anggaran')
-                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        {{-- ANGGARAN --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">Anggaran (Rp)</label>
+                            <input type="number" class="form-control @error('anggaran') is-invalid @enderror"
+                                name="anggaran" value="{{ old('anggaran') }}" placeholder="Masukkan nominal anggaran">
+                            @error('anggaran')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                            {{-- FILE PROPOSAL --}}
-                            <div class="form-group mb-3">
-                                <label class="font-weight-bold">File Proposal (PDF Maks 2 MB)</label>
-                                <input type="file" class="form-control @error('file_proposal') is-invalid @enderror"
-                                    name="file_proposal">
-
-                                @error('file_proposal')
-                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- BUTTON --}}
-                            <button type="submit" class="btn btn-primary me-3">Simpan</button>
-                            <button type="reset" class="btn btn-warning">Reset</button>
-                        </form>
+                        {{-- FILE --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">File Proposal (PDF Maks 2 MB)</label>
+                            <input type="file" class="form-control @error('file_proposal') is-invalid @enderror"
+                                name="file_proposal">
+                            @error('file_proposal')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                     </div>
-                </div>
+
+                    {{-- BUTTON --}}
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="reset" class="btn btn-warning me-2 px-4">Reset</button>
+                        <button type="submit" class="btn btn-primary px-4">Simpan</button>
+                    </div>
+
+                </form>
 
             </div>
         </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- Jika mau CKEditor untuk deskripsi --}}
-    <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+    {{-- CKEditor --}}
+    <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
     <script>
         CKEDITOR.replace('deskripsi');
     </script>
 
-</body>
-
-</html>
+@endsection

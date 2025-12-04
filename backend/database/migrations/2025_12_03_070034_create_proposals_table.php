@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('proposals', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
+            $table->string('organisasi')->nullable();
             $table->text('deskripsi');
             $table->dateTime('waktu');
             $table->string('tempat');

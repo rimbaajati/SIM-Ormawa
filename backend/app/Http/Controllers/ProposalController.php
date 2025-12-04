@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proposal;
+use App\Models\Organization;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class ProposalController extends Controller
 {
     // 🟦 INDEX — list proposal (manager)
-    public function index(): View
+    public function index()
     {
         $proposals = Proposal::latest()->paginate(10);
 
@@ -22,14 +24,15 @@ class ProposalController extends Controller
     // 🟩 CREATE — tampilkan form tambah
     public function create(): View
     {
-        return view('pages.manager.manager_createproposal');
+        $organizations = Organization::orderBy('name')->get();
+        return view('pages.manager.manager_createproposal', compact('organizations'));
     }
 
     // 🟩 STORE — simpan proposal baru
-    public function store(Request $request): RedirectResponse
-    {
+    public function store(Request $request): RedirectResponse {
         $request->validate([
             'judul'         => 'required',
+            'organisasi'    => 'required|string|max:255',
             'deskripsi'     => 'required',
             'waktu'         => 'required|date',
             'tempat'        => 'required',
@@ -41,6 +44,7 @@ class ProposalController extends Controller
 
         Proposal::create([
             'judul'         => $request->judul,
+            'organisasi'    => $request->organisasi,
             'deskripsi'     => $request->deskripsi,
             'waktu'         => $request->waktu,
             'tempat'        => $request->tempat,
@@ -50,8 +54,9 @@ class ProposalController extends Controller
             'user_id'       => Auth::id(),
         ]);
 
-        return redirect()->route('proposals.index')
-            ->with('success', 'Proposal berhasil dibuat.');
+       return redirect()->route('manager.proposal.all')
+            ->with('success', 'Proposal berhasil diajukan');
+
     }
 
     // 🟧 SHOW (opsional)
@@ -77,6 +82,7 @@ class ProposalController extends Controller
 
         $request->validate([
             'judul'         => 'required',
+            'organisasi'    => 'required',
             'deskripsi'     => 'required',
             'waktu'         => 'required|date',
             'tempat'        => 'required',
@@ -96,7 +102,7 @@ class ProposalController extends Controller
 
         $proposal->update($data);
 
-        return redirect()->route('proposals.index')
+        return redirect()->route('manager.proposal.all')
             ->with('success', 'Proposal berhasil diperbarui.');
     }
 
@@ -108,7 +114,7 @@ class ProposalController extends Controller
         Storage::disk('public')->delete($proposal->file_proposal);
         $proposal->delete();
 
-        return redirect()->route('proposals.index')
+        return redirect()->route('manager.proposal.all')
             ->with('success', 'Proposal berhasil dihapus.');
     }
 
