@@ -5,7 +5,10 @@ use App\Models\Proposal;
 use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-  
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\ManagerDashboardController;
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,10 +28,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // MANAGER AREA
 Route::middleware(['auth', 'role:manager'])->group(function () {
 
-    // Dashboard manager
-    Route::get('/manager/dashboard', function () {
-        return view('pages.manager.manager_dashboard');
-    })->name('manager.dashboard');
+    // Dashboard manager pakai Controller
+    Route::get('/manager/dashboard', [ManagerDashboardController::class, 'index'])
+        ->name('manager.dashboard');
 
     // Profile manager
     Route::get('/manager/profile', function () {
@@ -37,15 +39,13 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 
     // Proposal
     Route::get('/manager/proposal/all', function () {
-        $proposals = Proposal::all(); // ambil semua data proposal
+        $proposals = Proposal::all(); 
         return view('pages.manager.manager_allproposal', compact('proposals'));
-    })->name('manager.proposal.all')->middleware(['auth','role:manager']);
+    })->name('manager.proposal.all');
 
     Route::get('/manager/propsal/create', function () {
         return view('pages.manager.manager_createproposal');
     })->name('manager.proposal.create');
-
-
 
     // Organisasi, Jadwal, dll
     Route::get('/manager/organization/all', function () {
@@ -64,15 +64,17 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
         return view('pages.manager.manager_mail');
     })->name('manager.mail.all');
 
-}); // <-- tutup group manager
+});
 
 // USER AREA
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/user/dashboard', fn() => 'USER AREA');
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])
+        ->name('user.dashboard');
 });
 
+// LOGOUT
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
-// ROUTE AUTH BREEZE
+// AUTH BREEZE
 require __DIR__.'/auth.php';
