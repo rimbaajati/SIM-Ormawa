@@ -172,6 +172,23 @@ const newsItems = [
   --text-gray: #666;
 }
 
+/* =================== GLOBAL CONTAINER (DITAMBAHKAN) =================== */
+/* Ini adalah perbaikan utama untuk memastikan konten di dalam elemen dengan kelas 'container' terpusat */
+.container {
+    max-width: 1200px; /* Batasi lebar maksimum */
+    margin-left: auto;  /* Pusatkan secara horizontal */
+    margin-right: auto; /* Pusatkan secara horizontal */
+    padding-left: 20px; /* Tambahkan padding agar tidak menempel di tepi layar */
+    padding-right: 20px;
+}
+@media (max-width: 640px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+
 /* =================== HERO SECTION =================== */
 .hero-section {
   position: relative;
@@ -209,12 +226,12 @@ const newsItems = [
 .content-wrap {
   position: relative;
   z-index: 10;
-  height: 80%;
+  height: 80%; 
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  align-items: center; /* Pemusatan Horizontal untuk Flex items */
+  justify-content: center; /* Pemusatan Vertikal */
+  text-align: center; /* Pemusatan Teks di dalamnya */
   padding: 0 15px;
 }
 
@@ -223,7 +240,7 @@ const newsItems = [
   font-weight: 900;
   font-family: "Oswald", "Times New Roman", serif;
   color: white;
-  line-height: 1,1;
+  line-height: 1.1; /* Diperbaiki: menggunakan titik desimal */
   margin-bottom: 0.5em;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 }
@@ -297,10 +314,10 @@ const newsItems = [
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* Mengisi seluruh section */
+  height: 100%; 
   /* Gradasi dari transparan ke putih solid di bagian atas */
   background: linear-gradient(to bottom, transparent 0%, #ffffff 25%, #ffffff 100%);
-  z-index: -1; /* Di belakang konten teks/logo */
+  z-index: -1; 
   pointer-events: none;
 }
 
@@ -562,6 +579,13 @@ const newsItems = [
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+    /* Perbaikan: Pastikan .container responsive */
+    .container {
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
   .marquee-track { animation-duration: 30s; }
   .marquee-group { gap: 2rem; padding-right: 2rem; }
   .logo-item img { height: 60px; }

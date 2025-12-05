@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <header class="nav fixed w-full z-50">
+    <header ref="nav" class="nav fixed w-full z-50">
       <div class="nav-left">
         <button class="menu-btn" @click="menuOpen = true">
           <span class="bar"></span>
@@ -152,7 +152,7 @@
           </div>
         </template>
       </div>
-      </nav>
+    </nav>
 
     <main class="site-body">
       <slot />
@@ -203,6 +203,7 @@ const authStore = useAuthStore(); // 👈 INISIALISASI STORE
 const menuOpen = ref(false);
 const isLoading = ref(true);
 const openSection = ref(null);
+const nav = ref(null); // Ref untuk navbar
 
 // ===============================================
 // HAPUS SEMUA KODE SIMULASI (isLoggedIn, userName, checkAuthStatus)
@@ -215,9 +216,9 @@ const userName = computed(() => authStore.userName);
 
 // 2. Fungsi Logout yang memanggil aksi dari Store
 const logout = () => {
-    authStore.logout();
-    menuOpen.value = false;
-    alert('Anda telah berhasil logout.'); // Atau gunakan notifikasi yang lebih baik
+  authStore.logout();
+  menuOpen.value = false;
+  alert('Anda telah berhasil logout.'); // Atau gunakan notifikasi yang lebih baik
 };
 
 // Fungsi untuk toggle submenu
@@ -225,7 +226,14 @@ const toggleSection = (section) => {
   openSection.value = openSection.value === section ? null : section;
 };
 
-// ... (handleScroll function tetap sama)
+// Fungsi untuk handle scroll dan menambahkan class 'scrolled'
+const handleScroll = () => {
+  if (window.scrollY > 50) { // Threshold scroll, bisa disesuaikan
+    nav.value.classList.add('scrolled');
+  } else {
+    nav.value.classList.remove('scrolled');
+  }
+};
 
 onMounted(() => {
   // Panggil aksi inisialisasi untuk mengecek status token saat mount
@@ -236,11 +244,13 @@ onMounted(() => {
     isLoading.value = false;
   }, 2000);
 
-  // ... (kode handleScroll tetap sama)
+  // Tambahkan event listener untuk scroll
+  window.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
-  // ... (kode handleScroll tetap sama)
+  // Hapus event listener saat unmount
+  window.removeEventListener('scroll', handleScroll);
 });
 </script>
 
@@ -390,7 +400,6 @@ onUnmounted(() => {
 /* ================= NAVBAR SCROLL ================= */
 .nav.scrolled {
   background: rgba(0, 0, 0, 0.85);
-  border-color: orange;
   border-color: #ffa500;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
