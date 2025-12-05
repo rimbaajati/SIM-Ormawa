@@ -12,21 +12,18 @@
     <header
       ref="nav"
       class="nav fixed w-full z-50"
-      :class="[pageThemeClass, { scrolled: isScrolled }]"
+      :class="{ scrolled: isScrolled }"
     >
       <div class="nav-left">
         <button class="menu-btn" @click="menuOpen = true">
           <span class="bar"></span>
-
           <span class="bar"></span>
-
           <span class="bar"></span>
         </button>
       </div>
 
       <NuxtLink to="/" class="nav-center nav-center-link">
         <span class="nav-subtitle">SISTEM INFORMASI ORMAWA</span>
-
         <span class="nav-title">UMPKU SURAKARTA</span>
       </NuxtLink>
 
@@ -47,7 +44,6 @@
           <NuxtLink to="/berita" class="submenu-item" @click="menuOpen = false">
             SEMUA BERITA
           </NuxtLink>
-
           <NuxtLink
             to="/berita-terbaru"
             class="submenu-item"
@@ -55,7 +51,6 @@
           >
             BERITA TERBARU
           </NuxtLink>
-
           <NuxtLink
             to="/upload-berita"
             class="submenu-item"
@@ -73,7 +68,6 @@
           <NuxtLink to="/fitur" class="submenu-item" @click="menuOpen = false">
             SEMUA FITUR
           </NuxtLink>
-
           <NuxtLink
             to="/fitur/pengajuan"
             class="submenu-item"
@@ -81,7 +75,6 @@
           >
             FITUR PENGAJUAN
           </NuxtLink>
-
           <NuxtLink
             to="/fitur/formdetail"
             class="submenu-item"
@@ -89,7 +82,6 @@
           >
             FITUR FORM DETAIL
           </NuxtLink>
-
           <NuxtLink
             to="/fitur/uploaddokumen"
             class="submenu-item"
@@ -97,7 +89,6 @@
           >
             FITUR UPLOAD DOKUMEN
           </NuxtLink>
-
           <NuxtLink
             to="/fitur/notifikasi"
             class="submenu-item"
@@ -105,7 +96,6 @@
           >
             FITUR NOTIFIKASI REVISI
           </NuxtLink>
-
           <NuxtLink
             to="/fitur/tracking"
             class="submenu-item"
@@ -113,7 +103,6 @@
           >
             FITUR TRACKING REAL TIME
           </NuxtLink>
-
           <NuxtLink
             to="/fitur/download"
             class="submenu-item"
@@ -143,7 +132,6 @@
           >
             LOGIN
           </NuxtLink>
-
           <NuxtLink
             to="/register"
             class="menu-item menu-register-label"
@@ -152,10 +140,8 @@
             REGISTER
           </NuxtLink>
         </template>
-
         <template v-else>
           <div class="menu-logged-in-info">👋 Halo, **{{ userName }}**!</div>
-
           <NuxtLink
             to="/profil"
             class="menu-item menu-profile-btn"
@@ -163,7 +149,6 @@
           >
             UBAH PROFIL
           </NuxtLink>
-
           <div class="menu-item menu-logout-btn" @click="logout">LOGOUT</div>
         </template>
       </div>
@@ -180,21 +165,17 @@
         <NuxtLink to="https://pmb.umpku.ac.id/" target="_blank"
           >PMB UMPKU</NuxtLink
         >
-
         <NuxtLink to="https://mylms.umpku.ac.id/" target="_blank"
           >LMS UMPKU</NuxtLink
         >
-
         <NuxtLink
           to="https://myakademik.itspku.ac.id/site/login"
           target="_blank"
           >My Akademik</NuxtLink
         >
-
         <NuxtLink to="https://umpku.ac.id/" target="_blank"
           >UMPKU Surakarta</NuxtLink
         >
-
         <NuxtLink to="https://pdsi.umpku.ac.id/" target="_blank"
           >PDSI UMPKU</NuxtLink
         >
@@ -202,7 +183,6 @@
 
       <p class="fc-disclaimer">
         Email: <a href="mailto:info@umpku.ac.id">info@umpku.ac.id</a><br />
-
         Telp: 0271 734955
       </p>
 
@@ -216,104 +196,52 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from "vue";
-
 import { useAuthStore } from "@/stores/auth";
-
-import { useRoute } from "vue-router"; // Tambahkan untuk mendeteksi route
 
 const authStore = useAuthStore();
 
-const route = useRoute(); // Untuk mendeteksi halaman berdasarkan route
-
 const menuOpen = ref(false);
-
 const isLoading = ref(true);
-
 const openSection = ref(null);
-
 const nav = ref(null);
-
-const isScrolled = ref(false); // Ganti dari class 'scrolled' ke ref boolean
-
-// ===============================================
-
-// HAPUS SEMUA KODE SIMULASI (isLoggedIn, userName, checkAuthStatus)
-
-// GANTI DENGAN computed property DARI PINIA STORE
-
-// ===============================================
+const isScrolled = ref(false);
 
 // 1. Ambil status dari Store menggunakan computed
-
 const isLoggedIn = computed(() => authStore.getIsLoggedIn);
-
 const userName = computed(() => authStore.userName);
 
 // 2. Fungsi Logout yang memanggil aksi dari Store
-
 const logout = () => {
   authStore.logout();
-
   menuOpen.value = false;
-
   alert("Anda telah berhasil logout."); // Atau gunakan notifikasi yang lebih baik
 };
 
 // Fungsi untuk toggle submenu
-
 const toggleSection = (section) => {
   openSection.value = openSection.value === section ? null : section;
 };
 
-// Computed untuk menentukan tema halaman berdasarkan route
-
-// Sesuaikan path sesuai kebutuhan (contoh: halaman dengan gambar/video, halaman hitam, halaman putih)
-
-const pageTheme = computed(() => {
-  const path = route.path;
-
-  if (
-    path.includes("/galeri") ||
-    path.includes("/video") ||
-    path.includes("/image")
-  ) {
-    return "image-video"; // Full transparan
-  } else if (path.includes("/dark") || path.includes("/hitam")) {
-    return "dark"; // Navbar putih transparan
-  } else {
-    return "light"; // Navbar hitam transparan (default)
-  }
-});
-
-// Computed untuk class tema
-
-const pageThemeClass = computed(() => `theme-${pageTheme.value}`);
-
-// Fungsi untuk handle scroll dan menambahkan class 'scrolled'
-
+// Fungsi untuk handle scroll
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50; // Threshold scroll, bisa disesuaikan
 };
 
 onMounted(() => {
   // Panggil aksi inisialisasi untuk mengecek status token saat mount
-
   authStore.initializeAuth();
 
   // Loading fade-out
-
   setTimeout(() => {
     isLoading.value = false;
   }, 2000);
 
   // Tambahkan event listener untuk scroll
-
   window.addEventListener("scroll", handleScroll);
 });
 
 onUnmounted(() => {
   // Hapus event listener saat unmount
-
   window.removeEventListener("scroll", handleScroll);
 });
 </script>
@@ -324,327 +252,177 @@ onUnmounted(() => {
 }
 
 /* ================= LOADING PAGE ================= */
-
 .loading-overlay {
   position: fixed;
-
   inset: 0;
-
   background: #000000;
-
   z-index: 100000;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   flex-direction: column;
-
   opacity: 1;
-
   transition: opacity 0.5s ease-out, visibility 1s ease-out;
 }
 
 .loading-overlay.fade-out {
   opacity: 0;
-
   visibility: hidden;
 }
 
 .loading-content {
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   animation: logoFadeIn 1.5s ease-out forwards;
 }
 
 .loading-logo {
   width: 200px;
-
   height: auto;
 }
 
 @keyframes logoFadeIn {
   0% {
     opacity: 0;
-
     transform: scale(0.8);
   }
-
   50% {
     opacity: 1;
-
     transform: scale(1.1);
   }
-
   100% {
     opacity: 1;
-
     transform: scale(1);
   }
 }
 
 /* ================= NAVBAR (DEFAULT / BELUM SCROLL) ================= */
-
 .nav {
+  background: #ffffff; /* Default putih */
   height: 70px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   padding: 0 20px;
-
+  border-bottom: 2px solid #dcdcdc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   position: fixed;
-
   top: 0;
-
   width: 100%;
-
   z-index: 999;
-
   transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Tema default (light) - navbar hitam transparan */
-
-.nav.theme-light {
-  background: rgba(0, 0, 0, 0.85);
-
-  border-bottom: 2px solid #dcdcdc;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+/* RAPIKAN NAV LEFT / CENTER / RIGHT */
+.nav-left {
+  width: 80px;
+  display: flex;
+  align-items: center;
 }
 
-.nav.theme-light .nav-title,
-.nav.theme-light .nav-subtitle {
-  color: #ffffff;
+.nav-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1.2;
+  transition: color 0.3s ease;
 }
 
-.nav.theme-light .nav-logo {
-  filter: brightness(10); /* putih */
+/* SUBTITLE (ATAS) */
+.nav-subtitle {
+  font-size: 12px;
+  font-family: "Audiowide", cursive;
+  letter-spacing: 0.12em;
+  color: #1f2937; /* Hitam default */
+  margin-bottom: 2px;
+  display: block;
+  transition: 0.3s;
 }
 
-.nav.theme-light .menu-btn .bar {
-  background: #ffffff;
+/* TITLE (BAWAH) */
+.nav-title {
+  font-size: 24px;
+  font-family: "Times New Roman", serif;
+  font-weight: 700;
+  color: #1f2937; /* Hitam default */
+  margin-top: 0;
+  display: block;
+  transition: 0.3s;
 }
 
-/* Tema dark - navbar putih transparan */
-
-.nav.theme-dark {
-  background: rgba(255, 255, 255, 0.85);
-
-  border-bottom: 2px solid #dcdcdc;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+.nav-right {
+  width: 90px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-.nav.theme-dark .nav-title,
-.nav.theme-dark .nav-subtitle {
-  color: #1f2937;
+/* LOGO default */
+.nav-logo {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0); /* Hitam default */
+  transition: 0.3s ease;
 }
 
-.nav.theme-dark .nav-logo {
-  filter: brightness(0); /* hitam */
+/* ================= HAMBURGER ================= */
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.nav.theme-dark .menu-btn .bar {
-  background: #1f2937;
+.menu-btn .bar {
+  width: 22px;
+  height: 3px;
+  background: #1f2937; /* Hitam default */
+  border-radius: 4px;
+  transition: 0.3s ease;
 }
 
-/* Tema image-video - full transparan */
-
-.nav.theme-image-video {
-  background: transparent;
-
-  border-bottom: none;
-
-  box-shadow: none;
-}
-
-.nav.theme-image-video .nav-title,
-.nav.theme-image-video .nav-subtitle {
-  color: #ffffff; /* Asumsikan teks putih untuk kontras */
-}
-
-.nav.theme-image-video .nav-logo {
-  filter: brightness(10); /* putih */
-}
-
-.nav.theme-image-video .menu-btn .bar {
-  background: #ffffff;
-}
-
-/* ================= SCROLL EFFECT (OVERRIDE UNTUK SEMUA TEMA) ================= */
-
+/* ================= NAVBAR SCROLL ================= */
 .nav.scrolled {
-  background: rgba(
-    0,
-    0,
-    0,
-    0.85
-  ) !important; /* Selalu hitam transparan saat scroll */
-
+  background: rgba(0, 0, 0, 0.85); /* Hitam transparan saat scroll */
   border-color: #ffa500;
-
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* Tekst & logo berubah putih saat scroll */
 .nav.scrolled .nav-title,
 .nav.scrolled .nav-subtitle {
   color: #ffffff !important;
 }
 
 .nav.scrolled .nav-logo {
-  filter: brightness(10) !important;
+  filter: brightness(10) !important; /* Putih */
 }
 
 .nav.scrolled .menu-btn .bar {
   background: #ffffff !important;
 }
 
-/* RAPIKAN NAV LEFT / CENTER / RIGHT */
-
-.nav-left {
-  width: 80px;
-
-  display: flex;
-
-  align-items: center;
-}
-
-.nav-center {
-  flex: 1;
-
-  display: flex;
-
-  flex-direction: column;
-
-  justify-content: center;
-
-  align-items: center;
-
-  text-align: center;
-
-  line-height: 1.2;
-
-  transition: color 0.3s ease;
-}
-
-/* SUBTITLE (ATAS) */
-
-.nav-subtitle {
-  font-size: 12px;
-
-  font-family: "Audiowide", cursive;
-
-  letter-spacing: 0.12em;
-
-  margin-bottom: 2px;
-
-  display: block;
-
-  transition: 0.3s;
-}
-
-/* TITLE (BAWAH) */
-
-.nav-title {
-  font-size: 24px;
-
-  font-family: "Times New Roman", serif;
-
-  font-weight: 700;
-
-  margin-top: 0;
-
-  display: block;
-
-  transition: 0.3s;
-}
-
-.nav-right {
-  width: 90px;
-
-  display: flex;
-
-  justify-content: flex-end;
-
-  align-items: center;
-}
-
-/* LOGO default */
-
-.nav-logo {
-  height: 45px;
-
-  width: auto;
-
-  object-fit: contain;
-
-  transition: 0.3s ease;
-}
-
-/* ================= HAMBURGER ================= */
-
-.menu-btn {
-  background: none;
-
-  border: none;
-
-  cursor: pointer;
-
-  padding: 10px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 4px;
-}
-
-.menu-btn .bar {
-  width: 22px;
-
-  height: 3px;
-
-  border-radius: 4px;
-
-  transition: 0.3s ease;
-}
-
 /* ================= MENU LIST/SIDEBAR STYLING ================= */
-
 .menu-list {
   position: fixed;
-
   top: 0;
-
   left: 0;
-
   width: 300px;
-
   height: 100%;
-
   background-color: #ffffff;
-
   padding: 70px 20px 20px;
-
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-
   transform: translateX(-100%);
-
   transition: transform 0.3s ease-out;
-
   z-index: 1000;
-
   overflow-y: auto;
 }
 
@@ -654,123 +432,86 @@ onUnmounted(() => {
 
 .menu-close-btn {
   position: absolute;
-
   top: 20px;
-
   left: 20px;
-
   font-size: 24px;
-
   cursor: pointer;
-
   color: #1f2937;
 }
 
 .menu-section {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-
   padding-top: 20px;
-
   margin-bottom: 10px;
 }
 
 .menu-title {
   font-size: 18px;
-
   font-weight: 600;
-
   color: #000;
-
   cursor: pointer;
-
   transition: 0.2s;
 }
 
 .menu-title:hover {
   color: var(--neon);
-
   transform: translateX(5px);
 }
 
 /* === SUBMENU === */
-
 .submenu {
   margin-top: 10px;
-
   display: flex;
-
   flex-direction: column;
 }
 
 .submenu-item {
   font-size: 13px;
-
   color: #000;
-
   padding: 3px 0;
-
   padding-left: 10px;
-
   opacity: 0.8;
-
   text-decoration: none;
-
   transition: 0.2s ease;
 }
 
 .submenu-item:hover {
   opacity: 1;
-
   color: var(--neon);
-
   transform: translateX(5px);
 }
 
 /* === GROUP AUTENTIKASI DEFAULT (LOGIN/REGISTER) === */
-
 .menu-auth-group {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-
   padding-top: 20px;
-
   margin-top: 20px;
 }
 
 .menu-item {
   display: block;
-
   padding: 10px 0;
-
   text-decoration: none;
-
   text-align: center;
-
   margin-bottom: 10px;
-
   font-weight: 600;
-
   border-radius: 5px;
-
   transition: 0.2s;
 }
 
 .menu-login-btn {
   background-color: #1f2937;
-
   color: #ffffff;
 }
 
 .menu-login-btn:hover {
   background-color: var(--neon);
-
   color: #000;
 }
 
 .menu-register-label {
   background-color: #f3f4f6;
-
   color: #1f2937;
-
   border: 1px solid #d1d5db;
 }
 
@@ -779,24 +520,17 @@ onUnmounted(() => {
 }
 
 /* === GROUP AUTENTIKASI LOGGED IN (PROFIL/LOGOUT) === */
-
 .menu-logged-in-info {
   text-align: center;
-
   padding: 10px 0;
-
   color: #1f2937;
-
   font-size: 14px;
-
   font-weight: 500;
-
   margin-bottom: 10px;
 }
 
 .menu-profile-btn {
   background-color: #007bff; /* Biru */
-
   color: #ffffff;
 }
 
