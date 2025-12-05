@@ -1,54 +1,68 @@
 // stores/auth.js
-
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: null,
     isLoggedIn: false,
-    user: { name: "Pengunjung" },
+    // Ubah default jadi null agar mudah dicek. 
+    // Nanti kita handle tampilan "Pengunjung" di getters atau component.
+    user: null, 
   }),
 
   getters: {
-    userName: (state) => state.user.name || "Pengunjung",
+    // Jika user ada, ambil namanya. Jika tidak, tampilkan "Pengunjung"
+    userName: (state) => state.user?.name || "Pengunjung",
+    // Getter untuk ambil email atau role jika ada
+    userEmail: (state) => state.user?.email || "",
+    userRole: (state) => state.user?.role || "", 
     getIsLoggedIn: (state) => state.isLoggedIn,
   },
 
   actions: {
     async initializeAuth() {
-      // 1. Ambil token dari Local Storage
-      // Catatan: localStorage hanya tersedia di sisi client
+      // Hanya jalan di sisi client (karena butuh localStorage)
+      if (process.server) return;
+
       const config = useRuntimeConfig();
       
+      // --- PERBAIKAN 1: Ambil token dari LocalStorage ---
+      const storedToken = localStorage.getItem("authToken");
+
       if (!storedToken) {
         this.isLoggedIn = false;
-        this.user = { name: "Pengunjung" };
-        this.token = null; // Pastikan token null jika tidak ada
+        this.user = null;
+        this.token = null;
         return;
       }
 
       this.token = storedToken;
 
-      // 2. Verifikasi token ke API Laravel menggunakan $fetch
       try {
-      const userData = await $fetch("user", { // Cukup 'user' karena Base URL akan menangani sisanya
-        method: 'GET',
-        baseURL: config.public.apiBase, // 👈 GUNAKAN BASE URL DI SINI
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      });
+        // Panggil API User
+        const userData = await $fetch("/user", { // Pastikan endpoint sesuai routes Laravel (biasanya /api/user atau /user)
+          method: 'GET',
+          baseURL: config.public.apiBase, 
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+            Accept: 'application/json'
+          },
+        });
         
-        // 3. Jika valid
-        if (userData && userData.name) {
+        // --- PERBAIKAN 2: Simpan seluruh data user ---
+        // Sesuaikan dengan respon Laravel. 
+        // Jika Laravel pakai API Resource (ada wrapper 'data'), gunakan userData.data
+        // Jika langsung object, gunakan userData.
+        const userPayload = userData.data || userData;
+
+        if (userPayload) {
           this.isLoggedIn = true;
-          this.user = { name: userData.name };
+          this.user = userPayload; // Simpan semua (id, name, email, role, foto, dll)
         } else {
-          // Response sukses, tapi data user kosong
           this.logout(false);
         }
+
       } catch (error) {
-        // Gagal (termasuk 401 Unauthorized)
         console.error("Gagal memverifikasi token:", error);
         this.logout(false);
       }
@@ -60,16 +74,21 @@ export const useAuthStore = defineStore("auth", {
       }
       this.token = token;
       this.isLoggedIn = true;
-      this.user = user;
+      this.user = user; // User yang dikirim dari form login disimpan di sini
     },
 
     async logout(callApi = true) {
       if (callApi) {
         try {
-          // Panggil API logout jika perlu
-          // await $fetch('/api/logout', { method: 'POST' }); 
+           const config = useRuntimeConfig();
+           // Panggil API logout agar token di BE hangus (opsional tapi disarankan)
+           await $fetch('/logout', { 
+             method: 'POST',
+             baseURL: config.public.apiBase,
+             headers: { Authorization: `Bearer ${this.token}` }
+           }); 
         } catch (e) {
-          console.error("Gagal memanggil API logout:", e);
+          console.error("Gagal logout di server:", e);
         }
       }
       
@@ -78,8 +97,10 @@ export const useAuthStore = defineStore("auth", {
       }
       this.token = null;
       this.isLoggedIn = false;
-      this.user = { name: "Pengunjung" };
-      await navigateTo("/");
-    },
+      this.user = null;
+      
+      // Redirect ke login atau home
+      navigateTo("/login"); 
+    }
   },
 });

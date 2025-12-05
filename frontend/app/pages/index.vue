@@ -377,8 +377,8 @@ const newsItems = [
 /* =================== BERITA SECTION =================== */
 .berita-section {
   position: relative; /* Penting untuk pseudo-element */
-  padding: 80px 0;
-  background-color: rgb(53, 52, 52); /* Warna Gelap Berita */
+  padding: 50px 0;
+  background-color: rgb(234, 111, 16); /* Warna Gelap Berita */
 }
 
 .berita-section::before {
@@ -389,7 +389,7 @@ const newsItems = [
   width: 100%;
   height: 150px; /* Panjang area gradasi */
   /* Dari Putih (Mitra) ke Warna Background Berita */
-  background: linear-gradient(to bottom, #ffffff 0%, rgb(53, 52, 52) 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, rgb(234, 111, 16) 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -404,7 +404,7 @@ const newsItems = [
   font-size: 28px;
   font-family: "oswald", serif;
   font-weight: 800;
-  color: #f05501;
+  color: #000000;
   margin-bottom: 50px;
   text-transform: uppercase;
   letter-spacing: 2px;
