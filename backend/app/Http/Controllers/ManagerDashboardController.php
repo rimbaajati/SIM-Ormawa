@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Proposal;  // Pastikan model Proposal ada dan memiliki relasi ormawa
+use App\Models\Proposal;  
+
 
 class ManagerDashboardController extends Controller
 {
@@ -15,10 +16,10 @@ class ManagerDashboardController extends Controller
     $approved = Proposal::where('status', 'approved')->count();
     $rejected = Proposal::where('status', 'rejected')->count();
 
-    $recentProposals = Proposal::with('ormawa')
+    $recentProposals = Proposal::orderBy('created_at', 'desc')
         ->orderBy('created_at', 'desc')
-        ->limit(5)
-        ->get();
+        ->limit(5);
+        // ->get();
 
     $statusData = [
         'pending' => $pending,

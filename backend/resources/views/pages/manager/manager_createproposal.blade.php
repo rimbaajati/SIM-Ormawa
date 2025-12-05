@@ -15,9 +15,7 @@
     <div class="card shadow-sm p-10">
         <div class="w-100">
             <div class="card-body p-4">
-
                 <h5 class="mb-4 y">Buat Proposal Baru</h5>
-
                 <form action="{{ route('manager.proposal.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 

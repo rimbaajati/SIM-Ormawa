@@ -69,8 +69,8 @@
                             <tr>
                                 <td>{{ $proposal->id }}</td>
                                 <td>{{ $proposal->judul }}</td>
-                                <td>{{ $proposal->Organisasi }}</td>
-                                <td>{{ $proposal->waktu->format('d-m-Y') }}</td>
+                                <td>{{ $proposal->organisasi }}</td>
+                                <td>{{ \Carbon\Carbon::parse($proposal->waktu)->format('d M Y H:i') }}</td>
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
                                 <td>
                                     <span
@@ -85,19 +85,17 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('manager.proposals.detail', $proposal->id) }}"
+                                    <a href="{{ route('manager.proposal.detail', $proposal->id) }}"
                                         class="btn btn-sm btn-info">
                                         Detail
                                     </a>
 
                                     @if ($proposal->status == 'pending')
-                                        <a href="{{ route('manager.proposals.approve', $proposal->id) }}"
-                                            class="btn btn-sm btn-success">
+                                        <a href="" class="btn btn-sm btn-success">
                                             Approve
                                         </a>
 
-                                        <a href="{{ route('manager.proposals.reject', $proposal->id) }}"
-                                            class="btn btn-sm btn-danger">
+                                        <a href="" class="btn btn-sm btn-danger">
                                             Reject
                                         </a>
                                     @endif

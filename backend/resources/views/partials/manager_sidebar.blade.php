@@ -120,17 +120,19 @@
                         <li><a href="pages-starter.html" data-key="t-starter-page">All LPJ</a></li>
                     </ul>
                 </li>
-                @if(Auth::user()->role === 'manager')
-    <a class="dropdown-item" href="{{ route('manager.dashboard') }}">
-        <i class="ri-dashboard-line"></i> Manager Dashboard
-    </a>
-@endif
+                @if (Auth::user()->role === 'manager')
+                    <a class="dropdown-item" href="{{ route('manager.dashboard') }}">
+                        <i class="ri-dashboard-line"></i> Manager Dashboard
+                    </a>
+                @endif
 
-@if(Auth::user()->role === 'user')
-    <a class="dropdown-item" href="{{ route('user.dashboard') }}">
-        <i class="ri-user-line"></i> User Dashboard
-    </a>
-@endif
+                <li>
+                    @if (Auth::user()->role === 'user')
+                        <a class="dropdown-item" href="{{ route('user.dashboard') }}">
+                            <i class="ri-user-line"></i> User Dashboard
+                        </a>
+                    @endif
+                </li>
 
             </ul>
         </div>

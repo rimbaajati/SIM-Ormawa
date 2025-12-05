@@ -10,41 +10,45 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
 class ProposalController extends Controller
 {
-    // 🟦 INDEX — list proposal (manager)
+    // INDEX
     public function index()
     {
         $proposals = Proposal::latest()->paginate(10);
-
         return view('pages.manager.manager_allproposal', compact('proposals'));
     }
 
-    // 🟩 CREATE — tampilkan form tambah
+    // CREATE
     public function create(): View
     {
         $organizations = Organization::orderBy('name')->get();
         return view('pages.manager.manager_createproposal', compact('organizations'));
     }
 
-    // 🟩 STORE — simpan proposal baru
+    // STORE 
     public function store(Request $request): RedirectResponse {
+        
         $request->validate([
-            'judul'         => 'required',
-            'organisasi'    => 'required|string|max:255',
-            'deskripsi'     => 'required',
-            'waktu'         => 'required|date',
-            'tempat'        => 'required',
-            'anggaran'      => 'required|numeric',
-            'file_proposal' => 'required|file|mimes:pdf|max:2048',
+            'judul'           => 'required|string|max:255',
+            'organization_id' => 'required|exists:organizations,id', // Validasi ID dari form
+            'deskripsi'       => 'required',
+            'waktu'           => 'required|date',
+            'tempat'          => 'required',
+            'anggaran'        => 'required|numeric',
+            'file_proposal'   => 'required|file|mimes:pdf|max:2048',
         ]);
 
+        // 1. Cari Nama Organisasi berdasarkan ID yang dipilih
+        $organization = Organization::findOrFail($request->organization_id);
+
+        // 2. Upload File
         $file = $request->file('file_proposal')->store('proposals', 'public');
 
+        // 3. Simpan ke Database
         Proposal::create([
             'judul'         => $request->judul,
-            'organisasi'    => $request->organisasi,
+            'organisasi'    => $organization->name, // Simpan NAMANYA, bukan ID-nya
             'deskripsi'     => $request->deskripsi,
             'waktu'         => $request->waktu,
             'tempat'        => $request->tempat,
@@ -54,49 +58,54 @@ class ProposalController extends Controller
             'user_id'       => Auth::id(),
         ]);
 
-       return redirect()->route('manager.proposal.all')
-            ->with('success', 'Proposal berhasil diajukan');
-
+        return redirect()->route('manager.proposal.all')
+            ->with('success', 'Proposal berhasil diajukan!');
     }
 
-    // 🟧 SHOW (opsional)
+    // SHOW
     public function show(Proposal $proposal): View
     {
         $this->authorizeAccess($proposal);
-
         return view('pages.manager.manager_showproposal', compact('proposal'));
     }
 
-    // 🟨 EDIT — tampilkan form edit
+    //  EDIT
     public function edit(Proposal $proposal): View
     {
         $this->authorizeAccess($proposal);
-
-        return view('pages.manager.manager_editproposal', compact('proposal'));
+        $organizations = Organization::orderBy('name')->get();
+        return view('pages.manager.manager_editproposal', compact('proposal', 'organizations'));
     }
 
-    // 🟨 UPDATE — update data proposal
+    //  UPDATE 
     public function update(Request $request, Proposal $proposal): RedirectResponse
     {
         $this->authorizeAccess($proposal);
 
         $request->validate([
-            'judul'         => 'required',
-            'organisasi'    => 'required',
-            'deskripsi'     => 'required',
-            'waktu'         => 'required|date',
-            'tempat'        => 'required',
-            'anggaran'      => 'required|numeric',
-            'file_proposal' => 'nullable|file|mimes:pdf|max:2048',
+            'judul'           => 'required|string|max:255',
+            'organization_id' => 'required|exists:organizations,id',
+            'deskripsi'       => 'required',
+            'waktu'           => 'required|date',
+            'tempat'          => 'required',
+            'anggaran'        => 'required|numeric',
+            'file_proposal'   => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        $data = $request->only([
-            'judul', 'deskripsi', 'waktu', 'tempat', 'anggaran'
-        ]);
+        // Cari Nama Organisasi baru (jika user mengubah pilihan)
+        $organization = Organization::findOrFail($request->organization_id);
+
+        $data = [
+            'judul'      => $request->judul,
+            'organisasi' => $organization->name, // Update nama organisasi
+            'deskripsi'  => $request->deskripsi,
+            'waktu'      => $request->waktu,
+            'tempat'     => $request->tempat,
+            'anggaran'   => $request->anggaran,
+        ];
 
         if ($request->hasFile('file_proposal')) {
             Storage::disk('public')->delete($proposal->file_proposal);
-
             $data['file_proposal'] = $request->file('file_proposal')->store('proposals', 'public');
         }
 
@@ -106,19 +115,22 @@ class ProposalController extends Controller
             ->with('success', 'Proposal berhasil diperbarui.');
     }
 
-    // 🟥 DELETE — hapus proposal
+    // DELETE
     public function destroy(Proposal $proposal): RedirectResponse
     {
         $this->authorizeAccess($proposal);
 
-        Storage::disk('public')->delete($proposal->file_proposal);
+        if($proposal->file_proposal) {
+             Storage::disk('public')->delete($proposal->file_proposal);
+        }
+        
         $proposal->delete();
 
         return redirect()->route('manager.proposal.all')
             ->with('success', 'Proposal berhasil dihapus.');
     }
 
-    // 🔒 Akses hanya untuk pemilik
+    // Authorize
     private function authorizeAccess(Proposal $proposal)
     {
         if ($proposal->user_id !== Auth::id()) {
