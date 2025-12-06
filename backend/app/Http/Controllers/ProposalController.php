@@ -35,7 +35,7 @@ class ProposalController extends Controller
             'deskripsi'       => 'required',
             'waktu'           => 'required|date',
             'tempat'          => 'required',
-            'anggaran'        => 'required|numeric',
+            'anggaran'        => 'nullable|numeric',
             'file_proposal'   => 'required|file|mimes:pdf|max:2048',
         ]);
 
@@ -65,8 +65,8 @@ class ProposalController extends Controller
     // SHOW
     public function show(Proposal $proposal): View
     {
-        $this->authorizeAccess($proposal);
-        return view('pages.manager.manager_showproposal', compact('proposal'));
+        $proposal->load('details');
+        return view('pages.manager.manager_detailproposal', compact('proposal'));
     }
 
     //  EDIT

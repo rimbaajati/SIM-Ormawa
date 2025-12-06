@@ -62,7 +62,7 @@
                             @enderror
                         </div>
 
-                        {{-- WAKTU --}}
+                        <!--- WAKTU --->
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium">Waktu Pelaksanaan</label>
                             <input type="date" class="form-control @error('waktu') is-invalid @enderror" name="waktu"
@@ -72,7 +72,7 @@
                             @enderror
                         </div>
 
-                        {{-- TEMPAT --}}
+                        <!--- TEMPAT --->
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium">Tempat</label>
                             <input type="text" class="form-control @error('tempat') is-invalid @enderror" name="tempat"
@@ -82,11 +82,16 @@
                             @enderror
                         </div>
 
-                        {{-- ANGGARAN --}}
+                        <!--- ANGGARAN --->
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium">Anggaran (Rp)</label>
-                            <input type="number" class="form-control @error('anggaran') is-invalid @enderror"
-                                name="anggaran" value="{{ old('anggaran') }}" placeholder="Masukkan nominal anggaran">
+
+                            <input type="number" class="form-control bg-light @error('anggaran') is-invalid @enderror"
+                                name="anggaran" value="{{ old('anggaran') }}" placeholder="Otomatis dihitung dari rincian"
+                                readonly>
+
+                            <small class="text-muted">Nominal akan terisi otomatis dari tabel rincian.</small>
+
                             @error('anggaran')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
