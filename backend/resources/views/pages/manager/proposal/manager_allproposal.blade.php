@@ -1,13 +1,11 @@
 @extends('layouts.manager_app')
-
 @section('title', 'All Proposals')
-
 @section('content')
 
     <div class="page-title-box d-flex align-items-center justify-content-between">
         <h4 class="mb-0">All Proposals</h4>
         <ol class="breadcrumb m-0">
-            <li class="breadcrumb-item">Manager</li>
+            <li class="breadcrumb-item">Proposal</li>
             <li class="breadcrumb-item active">All Proposals</li>
         </ol>
     </div>
@@ -42,7 +40,7 @@
                     </button>
                 </div>
 
-                <div class="col-md-1 ms-auto">
+                <div class="col-md-2 ms-auto">
                     <a href="{{ route('manager.proposal.create') }}" class="btn btn-primary w-100">
                         <i data-feather="plus"></i> Create
                     </a>

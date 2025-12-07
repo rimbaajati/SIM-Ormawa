@@ -16,14 +16,14 @@ class ProposalController extends Controller
     public function index()
     {
         $proposals = Proposal::latest()->paginate(10);
-        return view('pages.manager.manager_allproposal', compact('proposals'));
+        return view('pages.manager.proposal.manager_allproposal', compact('proposals'));
     }
 
     // CREATE
     public function create(): View
     {
         $organizations = Organization::orderBy('name')->get();
-        return view('pages.manager.manager_createproposal', compact('organizations'));
+        return view('pages.manager.proposal.manager_createproposal', compact('organizations'));
     }
 
     // STORE 
@@ -66,7 +66,7 @@ class ProposalController extends Controller
     public function show(Proposal $proposal): View
     {
         $proposal->load('details');
-        return view('pages.manager.manager_detailproposal', compact('proposal'));
+        return view('pages.manager.proposal.manager_detailproposal', compact('proposal'));
     }
 
     //  EDIT
@@ -74,7 +74,7 @@ class ProposalController extends Controller
     {
         $this->authorizeAccess($proposal);
         $organizations = Organization::orderBy('name')->get();
-        return view('pages.manager.manager_editproposal', compact('proposal', 'organizations'));
+        return view('pages.manager.proposal.manager_editproposal', compact('proposal', 'organizations'));
     }
 
     //  UPDATE 

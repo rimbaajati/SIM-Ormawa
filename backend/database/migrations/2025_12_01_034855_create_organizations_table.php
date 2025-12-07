@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('id_organization', 20)->unique();
+            $table->string('name')->unique();
             $table->string('logo')->nullable();
-            $table->string('deskripsi')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('ketua')->nullable();
             $table->string('kontak')->nullable();
+            $table->string('email')->nullable()->unique();
+            $table->string('instagram')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

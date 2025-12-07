@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="main-content">
-
         <div class="page-content">
             <div class="container-fluid">
 
@@ -15,10 +14,16 @@
                             <h4 class="mb-sm-0 font-size-18">Profile</h4>
 
                             <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Contacts</a></li>
-                                    <li class="breadcrumb-item active">Profile</li>
-                                </ol>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item">
+                                            <a href="{{ route('manager.organization.all') }}">All Organizations</a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">
+                                            {{ $organization->name }}
+                                        </li>
+                                    </ol>
+                                </nav>
                             </div>
 
                         </div>
@@ -41,7 +46,7 @@
                                             </div>
                                             <div class="flex-grow-1">
                                                 <div>
-                                                    <h5 class="font-size-16 mb-1">Phyllis Gatlin</h5>
+                                                    <h5 class="font-size-16 mb-1">{{ $organizations->name }}</h5>
                                                     <p class="text-muted font-size-13">Full Stack Developer</p>
 
                                                     <div

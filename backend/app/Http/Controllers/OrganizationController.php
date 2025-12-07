@@ -10,84 +10,103 @@ use Illuminate\Support\Facades\Storage;
 
 class OrganizationController extends Controller
 {
-    // INDEX - Buat Nampilin List Ormawa UMPKU 
+    // INDEX
     public function index() : View
     {
         $organizations = Organization::latest()->get();
-        return view('pages.manager.manager_allorganization', compact('organizations'));
+        return view('pages.manager.organization.manager_allorganization', compact('organizations'));
     }
 
-    // CREATE - Form Tambah Data
+    public function show($id): View
+    {
+        $organization = Organization::findOrFail($id);
+        return view('pages.manager.organization.manager_organizationprofile', compact('organization')); 
+    }
+
+    // CREATE
     public function create() : View
     {
-        return view('pages.manager.organization.create');
+        return view('pages.manager.organization.manager_createorganization');
     }
 
-    // STORE - Simpan data baru
+    // STORE (REVISI)
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name'      =>  'required|string|max:255',
-            'logo'      =>  'required|image|mimes:jpeg,png,jpg|max:2048',
-            'deskripsi' =>  'required|string',
-            'kontak'    =>  'required|string',
+        // 1. Validasi Inputan Baru
+        $validated = $request->validate([
+            'name'      => 'required|string|max:255',
+            'ketua'     => 'required|string|max:255', // Baru
+            'kontak'    => 'required|string|max:50',
+            'email'     => 'nullable|email|max:255',  // Baru
+            'instagram' => 'nullable|string|max:255', // Baru
+            'deskripsi' => 'required|string',
+            'logo'      => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-    // Upload Logo
-        $logoPath = $request->file('logo')->store('logos', 'public');
+        // 2. Upload Logo
+        if ($request->hasFile('logo')) {
+            $validated['logo'] = $request->file('logo')->store('logos', 'public');
+        }
+
+        // 3. Handle Status Active
+        // Checkbox di HTML: kalau dicentang kirim "on" / "1", kalau tidak dicentang tidak kirim apa-apa.
+        // Kita paksa jadi boolean true/false.
+        $validated['is_active'] = $request->has('is_active'); 
         
-        Organization::create([
-            'name'      =>  $request->name,
-            'logo'      =>  $logoPath,
-            'deskripsi' => $request->deskripsi,
-            'kontak'    => $request->kontak,
-        ]);
+        // 4. Create Data (ID Organization otomatis dibuat oleh Model)
+        Organization::create($validated);
+
         return redirect()->route('manager.organization.all')
             ->with('success', 'Organisasi berhasil didaftarkan!');
     }
 
-    // EDIT - Form Edit Data
+    // EDIT
     public function edit(Organization $organization): View
     {
         return view('pages.manager.manager.organization.edit', compact('organization'));
     }
 
-    // 🟨 UPDATE - Update data
+    // UPDATE (REVISI)
     public function update(Request $request, Organization $organization): RedirectResponse
     {
-        $request->validate([
+        // 1. Validasi (Logo jadi nullable)
+        $validated = $request->validate([
             'name'      => 'required|string|max:255',
-            'logo'      => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Boleh kosong jika tidak ganti gambar
-            'deskripsi' => 'required|string',
+            'ketua'     => 'required|string|max:255',
             'kontak'    => 'required|string|max:50',
+            'email'     => 'nullable|email|max:255',
+            'instagram' => 'nullable|string|max:255',
+            'deskripsi' => 'required|string',
+            'logo'      => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = [
-            'name'      => $request->name,
-            'deskripsi' => $request->deskripsi,
-            'kontak'    => $request->kontak,
-        ];
-
-        // Cek apakah user upload logo baru
+        // 2. Cek Upload Logo Baru
         if ($request->hasFile('logo')) {
             // Hapus logo lama
             if ($organization->logo) {
                 Storage::disk('public')->delete($organization->logo);
             }
-            // Upload logo baru
-            $data['logo'] = $request->file('logo')->store('logos', 'public');
+            // Simpan logo baru & update array data
+            $validated['logo'] = $request->file('logo')->store('logos', 'public');
+        } else {
+            // Jika tidak upload logo, hapus key 'logo' dari array agar tidak menimpa data lama dengan null
+            unset($validated['logo']);
         }
 
-        $organization->update($data);
+        // 3. Handle Status Active untuk Update
+        // Penting: Kita cek apakah ada input bernama 'is_active'.
+        $validated['is_active'] = $request->has('is_active');
+
+        // 4. Update Data
+        $organization->update($validated);
 
         return redirect()->route('manager.organization.all')
             ->with('success', 'Organisasi berhasil diperbarui');
     }
 
-    // DELETE - Hapus data
+    // DELETE (TETAP)
     public function destroy(Organization $organization): RedirectResponse
     {
-        // Hapus file gambar dari storage
         if ($organization->logo) {
             Storage::disk('public')->delete($organization->logo);
         }

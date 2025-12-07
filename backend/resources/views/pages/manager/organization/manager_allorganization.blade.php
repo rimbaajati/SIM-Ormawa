@@ -1,8 +1,7 @@
 @extends('layouts.manager_app')
-
 @section('title', 'All Ormawa')
-
 @section('content')
+
     <div id="layout-wrapper">
         <div class="main-content p-0 m-0 ">
             <div class="page-content p-0">
@@ -109,7 +108,7 @@
                                         </div>
 
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('manager.organizations.profile', $org->id) }}">
+                                            <a href="{{ route('manager.organization.profile', $org->id) }}">
                                                 <button type="button" class="btn btn-outline-light text-truncate"><i
                                                         class="uil uil-user me-1"></i> Profile</button></a>
                                         </div>
