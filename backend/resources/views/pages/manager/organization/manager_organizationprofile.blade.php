@@ -46,8 +46,8 @@
                                             </div>
                                             <div class="flex-grow-1">
                                                 <div>
-                                                    <h5 class="font-size-16 mb-1">{{ $organizations->name }}</h5>
-                                                    <p class="text-muted font-size-13">Full Stack Developer</p>
+                                                    <h5 class="font-size-16 mb-1">{{ $organization->name }}</h5>
+                                                    <p class="text-muted font-size-13">{{ $organization->deskripsi }}</p>
 
                                                     <div
                                                         class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">

@@ -31,17 +31,13 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
     // --- Organization Management (CRUD) ---
     Route::controller(OrganizationController::class)->group(function () {
         Route::get('/organizations', 'index')->name('manager.organization.all');
-        Route::get('/manager/organization/profile/{id}', 'show')->name('manager.organization.show');
+        Route::get('/manager/organizations/{organization}/profile', 'show')->name('manager.organization.show');
         Route::get('/organizations/create', 'create')->name('manager.organization.create');
         Route::post('/organizations', 'store')->name('organization.store');
         Route::get('/organizations/{organization}/edit', 'edit')->name('manager.organization.edit');
         Route::put('/organizations/{organization}', 'update')->name('manager.organization.update');
         Route::delete('/organizations/{organization}', 'destroy')->name('manager.organization.destroy');
     });
-    // --- Organization Profile View (FIX ERROR DISINI) ---
-    Route::get('/manager/organizations/{organization}/profile', function (Organization $organization) {
-    return view('pages.manager.organization.manager_organizationprofile', ['org' => $organization] );
-})->name('manager.organization.profile');
 
     // === Proposal Management ===
     Route::prefix('manager/proposal')->group(function () {

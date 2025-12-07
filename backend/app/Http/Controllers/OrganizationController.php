@@ -17,9 +17,8 @@ class OrganizationController extends Controller
         return view('pages.manager.organization.manager_allorganization', compact('organizations'));
     }
 
-    public function show($id): View
+    public function show(Organization $organization): View
     {
-        $organization = Organization::findOrFail($id);
         return view('pages.manager.organization.manager_organizationprofile', compact('organization')); 
     }
 

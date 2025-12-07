@@ -108,7 +108,7 @@
                                         </div>
 
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('manager.organization.profile', $org->id) }}">
+                                            <a href="{{ route('manager.organization.show', $org) }}">
                                                 <button type="button" class="btn btn-outline-light text-truncate"><i
                                                         class="uil uil-user me-1"></i> Profile</button></a>
                                         </div>
