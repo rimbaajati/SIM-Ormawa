@@ -14,7 +14,7 @@
                      </span>
                  </a>
 
-                 <a href="index.html" class="logo logo-light">
+                 <a href="{{ route('manager.dashboard') }}" class="logo logo-light">
                      <span class="logo-sm">
                          <img src="{{ asset('assets\images\Logo UMPKU.png') }}" alt="" height="24">
                      </span>

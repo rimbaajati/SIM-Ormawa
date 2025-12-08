@@ -8,8 +8,10 @@ use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\PeriodController;
 use App\Models\Organization; // Penting agar tidak error class not found
 use App\Models\Proposal;
+use App\Models\Period;
 
 // === 1. PUBLIC ROUTES ===
 Route::get('/', function () {
@@ -38,6 +40,10 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
         Route::put('/organizations/{organization}', 'update')->name('manager.organization.update');
         Route::delete('/organizations/{organization}', 'destroy')->name('manager.organization.destroy');
     });
+
+    // === Periode Organisasi
+    Route::resource('periods', PeriodController::class)->names('manager.period'); // Route Resource untuk CRUD standar
+    Route::put('/periods/activate', [PeriodController::class, 'activate'])->name('manager.period.activate'); // Route Khusus untuk tombol "Set Aktif"
 
     // === Proposal Management ===
     Route::prefix('manager/proposal')->group(function () {

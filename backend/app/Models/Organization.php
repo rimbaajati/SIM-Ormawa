@@ -4,44 +4,75 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+// Pastikan import ini benar
+use App\Models\Event;
+use App\Models\ManagementOrganization; 
+use App\Models\Period;
 
 class Organization extends Model
 {
     use HasFactory;
-    // 1. Pastikan id_organization masuk ke fillable
+
+    protected $table = 'organizations';
+
     protected $fillable = [
         'id_organization', 
         'name',
+        'full_name',
         'logo',
         'deskripsi',
+        // --- Catatan: Field di bawah ini nanti bisa dihapus jika sudah full pindah ke tabel management ---
+        'visi',
+        'misi',
         'ketua',
+        'pembimbing',
+        // -----------------------------------------------------------------------------------------------
         'kontak',
         'email',
         'instagram',
         'is_active',
     ];
-    // 2. Tambahkan logika otomatisasi ID di sini
+
+    // Logika Otomatisasi ID (Sudah Benar)
     protected static function booted()
     {
         static::creating(function ($model) {
-            // Tentukan Prefix
             $prefix = 'UKM-';
-            
-            // Cari data terakhir untuk melihat nomor terakhir
             $latestOrg = static::orderBy('id', 'desc')->first();
-
+            
             if (!$latestOrg) {
-                // Jika belum ada data, mulai dari UKM-001
                 $model->id_organization = $prefix . '001';
             } else {
-                // Jika sudah ada, ambil nomor terakhir (misal UKM-015)
-                // Ambil 3 karakter terakhir, ubah jadi integer
+                // Ambil 3 digit terakhir
                 $lastNumber = (int) substr($latestOrg->id_organization, -3);
-                // Tambah 1
                 $newNumber = $lastNumber + 1;
-                // Gabungkan lagi: UKM- + 016
                 $model->id_organization = $prefix . sprintf('%03d', $newNumber);
             }
+        });
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    // 1. Relasi ke SEMUA riwayat kepengurusan
+    public function managements()
+    {
+        // Saya tambahkan 'organization_id' agar lebih pasti
+        return $this->hasMany(ManagementOrganization::class, 'organization_id');
+    }
+
+    // 2. Relasi KHUSUS kepengurusan yang sedang AKTIF sekarang
+    public function currentManagement()
+    {
+        // Saya tambahkan 'organization_id' agar lebih pasti
+        return $this->hasOne(ManagementOrganization::class, 'organization_id')->ofMany([
+            'id' => 'max',
+        ], function ($query) {
+            $query->whereHas('period', function ($q) {
+                $q->where('is_active', true);
+            });
         });
     }
 }

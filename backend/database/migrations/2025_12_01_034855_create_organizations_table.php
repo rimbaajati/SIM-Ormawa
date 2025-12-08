@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('id_organization', 20)->unique();
             $table->string('name')->unique();
+            $table->string('full_name')->nullable();
             $table->string('logo')->nullable();
             $table->text('deskripsi')->nullable();
+            $table->text('visi')->nullable();
+            $table->text('misi')->nullable(); 
             $table->string('ketua')->nullable();
+            $table->string('pembimbing')->nullable();
             $table->string('kontak')->nullable();
             $table->string('email')->nullable()->unique();
             $table->string('instagram')->nullable();

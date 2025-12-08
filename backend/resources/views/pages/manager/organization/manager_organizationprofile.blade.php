@@ -40,22 +40,22 @@
                                         <div class="d-flex align-items-start mt-3 mt-sm-0">
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-xl me-3">
-                                                    <img src="{{ asset('storage/logos/' . $organization->logo) }}"
+                                                    <img src="{{ asset('storage/' . $organization->logo) }}"
                                                         alt="Logo Organisasi" class="img-fluid rounded-circle d-block">
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
                                                 <div>
                                                     <h5 class="font-size-16 mb-1">{{ $organization->name }}</h5>
-                                                    <p class="text-muted font-size-13">{{ $organization->deskripsi }}</p>
+                                                    <p class="text-muted font-size-13">{{ $organization->full_name }}</p>
 
                                                     <div
                                                         class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
                                                         <div><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Development
+                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>{{ $organization->instagram }}
                                                         </div>
                                                         <div><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>phyllisgatlin@minia.com
+                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>{{ $organization->email }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -110,75 +110,158 @@
                             <div class="tab-pane active" id="overview" role="tabpanel">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">About</h5>
+                                        <h5 class="card-title mb-0">Tentang {{ $organization->name }}</h5>
                                     </div>
                                     <div class="card-body">
                                         <div>
+                                            {{-- BAGIAN VISI --}}
                                             <div class="pb-3">
                                                 <div class="row">
                                                     <div class="col-xl-2">
                                                         <div>
-                                                            <h5 class="font-size-15">Bio :</h5>
+                                                            <h5 class="font-size-15">Visi :</h5>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl">
                                                         <div class="text-muted">
-                                                            <p class="mb-2">Hi I'm Phyllis Gatlin, Lorem Ipsum is simply
-                                                                dummy text of the printing and typesetting industry. Lorem
-                                                                Ipsum has been the industry's standard dummy text ever since
-                                                                the 1500s, when an unknown printer took a galley of type and
-                                                                scrambled it to make a type specimen book. It has survived
-                                                                not only five centuries, but also the leap into electronic
-                                                                typesetting, remaining essentially unchanged. It was
-                                                                popularised in the 1960s with the release of Letraset sheets
-                                                                containing Lorem Ipsum passages</p>
-                                                            <p class="mb-0">It is a long established fact that a reader
-                                                                will be distracted by the readable content of a page when
-                                                                looking at it has a more-or-less normal distribution of
-                                                                letters</p>
+                                                            <p class="mb-2">{{ $organization->visi ?? '-' }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            {{-- BAGIAN MISI --}}
                                             <div class="py-3">
                                                 <div class="row">
                                                     <div class="col-xl-2">
                                                         <div>
-                                                            <h5 class="font-size-15">Experience :</h5>
+                                                            <h5 class="font-size-15">Misi :</h5>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl">
                                                         <div class="text-muted">
-                                                            <p>If several languages coalesce, the grammar of the resulting
-                                                                language is more simple and regular than that of the
-                                                                individual languages. The new common language will be more
-                                                                simple and regular than the existing European languages. It
-                                                                will be as simple as Occidental; in fact, it will be
-                                                                Occidental. To an English person, it will seem like
-                                                                simplified English, as a skeptical Cambridge friend of mine
-                                                                told me what Occidental is. The European languages are
-                                                                members of the same family. Their separate existence is a
-                                                                myth. For science, music, sport, etc</p>
-
-                                                            <ul class="list-unstyled mb-0">
-                                                                <li class="py-1"><i
-                                                                        class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Donec
-                                                                    vitae sapien ut libero venenatis faucibus</li>
-                                                                <li class="py-1"><i
-                                                                        class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Quisque
-                                                                    rutrum aenean imperdiet</li>
-                                                                <li class="py-1"><i
-                                                                        class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Integer
-                                                                    ante a consectetuer eget</li>
-                                                                <li class="py-1"><i
-                                                                        class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Phasellus
-                                                                    nec sem in justo pellentesque</li>
-                                                            </ul>
+                                                            {{-- nl2br agar enter/baris baru terbaca --}}
+                                                            <p class="mb-2">{!! nl2br(e($organization->misi ?? '-')) !!}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {{-- GARIS PEMBATAS --}}
+                                            <hr class="my-4">
+
+                                            {{-- BAGIAN DETAIL ORGANISASI --}}
+
+                                            {{-- 1. KETUA --}}
+                                            <div class="py-2">
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-sm-4"> {{-- Lebar label diperbesar sedikit biar muat --}}
+                                                        <div>
+                                                            <h5 class="font-size-15">
+                                                                <i class="bx bx-user me-2 text-primary"></i>Ketua Umum :
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-9 col-sm-8">
+                                                        <div class="text-muted">
+                                                            <p class="mb-0 fw-bold">{{ $organization->ketua }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- 2. PEMBIMBING --}}
+                                            <div class="py-2">
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-sm-4">
+                                                        <div>
+                                                            <h5 class="font-size-15">
+                                                                <i class="bx bx-user-voice me-2 text-info"></i>Pembimbing :
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-9 col-sm-8">
+                                                        <div class="text-muted">
+                                                            <p class="mb-0">{{ $organization->pembimbing ?? '-' }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- 3. KONTAK --}}
+                                            <div class="py-2">
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-sm-4">
+                                                        <div>
+                                                            <h5 class="font-size-15">
+                                                                <i class="bx bx-phone me-2 text-success"></i>Kontak / WA :
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-9 col-sm-8">
+                                                        <div class="text-muted">
+                                                            <p class="mb-0">{{ $organization->kontak }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- 4. EMAIL --}}
+                                            <div class="py-2">
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-sm-4">
+                                                        <div>
+                                                            <h5 class="font-size-15">
+                                                                <i class="bx bx-envelope me-2 text-warning"></i>Email :
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-9 col-sm-8">
+                                                        <div class="text-muted">
+                                                            <p class="mb-0">
+                                                                @if ($organization->email)
+                                                                    <a href="mailto:{{ $organization->email }}"
+                                                                        class="text-decoration-underline text-muted">
+                                                                        {{ $organization->email }}
+                                                                    </a>
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- 5. INSTAGRAM --}}
+                                            <div class="py-2">
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-sm-4">
+                                                        <div>
+                                                            <h5 class="font-size-15">
+                                                                <i class="bx bxl-instagram me-2 text-danger"></i>Instagram
+                                                                :
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-9 col-sm-8">
+                                                        <div class="text-muted">
+                                                            <p class="mb-0">
+                                                                @if ($organization->instagram)
+                                                                    <a href="https://instagram.com/{{ str_replace('@', '', $organization->instagram) }}"
+                                                                        target="_blank" class="text-primary">
+                                                                        {{ $organization->instagram }} <i
+                                                                            class="bx bx-link-external small ms-1"></i>
+                                                                    </a>
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <!-- end card body -->
@@ -189,7 +272,7 @@
                                     <div class="card-header">
                                         <div class="d-flex">
                                             <div class="flex-grow-1">
-                                                <h5 class="card-title mb-0">Post</h5>
+                                                <h5 class="card-title mb-0">Events</h5>
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <a href="#post">View All</a>

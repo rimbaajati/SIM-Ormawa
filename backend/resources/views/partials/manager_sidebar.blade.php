@@ -62,7 +62,8 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{ route('manager.organization.all') }}">All Organizations</a></li>
-                        <li><a href="auth-register.html" data-key="t-register">Active Ormawa</a></li>
+                        <li><a href="{{ route('manager.period.activate') }}" data-key="t-register">Kelola Periode</a>
+                        </li>
                         <li><a href="auth-recoverpw.html" data-key="t-recover-password">Inactive Ormawa</a></li>
                         <li><a href="auth-lock-screen.html" data-key="t-lock-screen">Activity History</a></li>
                     </ul>

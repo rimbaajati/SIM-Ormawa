@@ -36,7 +36,8 @@
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <h4 class="card-title">Ormawa List <span class="text-muted fw-normal ms-2">(834)</span>
+                                    <h4 class="card-title">Ormawa List <span
+                                            class="text-muted fw-normal ms-2">({{ $organizations->count() }})</span>
                                     </h4>
                                 </div>
                             </div>
@@ -80,8 +81,27 @@
                                                 </a>
 
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Remove</a>
+                                                    {{-- Tombol Edit --}}
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('manager.organization.edit', $org->id) }}">
+                                                        <i class="bx bx-edit font-size-16 align-middle me-1"></i> Edit
+                                                    </a>
+
+                                                    {{-- Tombol Remove (Pemicu) --}}
+                                                    {{-- Kita beri warna merah (text-danger) sebagai penanda bahaya --}}
+                                                    <a class="dropdown-item text-danger" href="javascript:void(0);"
+                                                        onclick="confirmDelete({{ $org->id }})">
+                                                        <i class="bx bx-trash font-size-16 align-middle me-1"></i> Remove
+                                                    </a>
+
+                                                    {{-- Form Delete Tersembunyi --}}
+                                                    {{-- Form ini tidak terlihat, tapi akan disubmit oleh Javascript saat user klik "Ya" --}}
+                                                    <form id="delete-form-{{ $org->id }}"
+                                                        action="{{ route('manager.organization.destroy', $org->id) }}"
+                                                        method="POST" style="display: none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
                                                 </div>
                                             </div>
 
@@ -104,13 +124,17 @@
                                             <h5 class="font-size-16 mb-1"><a href="#"
                                                     class="text-body">{{ $org->name }}</a>
                                             </h5>
-                                            <p class="text-muted mb-2">{{ $org->deskripsi }}</p>
+                                            <p class="text-muted mb-2">{{ $org->full_name }}</p>
                                         </div>
 
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('manager.organization.show', $org) }}">
-                                                <button type="button" class="btn btn-outline-light text-truncate"><i
-                                                        class="uil uil-user me-1"></i> Profile</button></a>
+                                        <div class="btn-group w-100" role="group">
+                                            <a href="{{ route('manager.organization.show', $org) }}"
+                                                class="btn btn-outline-light text-truncate w-50">
+                                                <i class="uil uil-envelope-alt me-1"></i> Profile
+                                            </a>
+                                            <a href="#" class="btn btn-outline-light text-truncate w-50">
+                                                <i class="uil uil-envelope-alt me-1"></i> Message
+                                            </a>
                                         </div>
                                     </div>
                                     <!--- End Card --->
@@ -125,4 +149,27 @@
             </div>
         </div>
     </div>
+
+    {{-- Load SweetAlert2 (Jika belum ada di layout) --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Hapus Organisasi ini?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33', // Warna merah untuk tombol hapus
+                cancelButtonColor: '#3085d6', // Warna biru untuk batal
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Cari form yang ID-nya sesuai, lalu submit
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            })
+        }
+    </script>
 @endsection
