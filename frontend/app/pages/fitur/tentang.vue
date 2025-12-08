@@ -1,57 +1,212 @@
 <template>
-  <section class="administration-section">
-    <div class="container-admin">
+  <div>
+    <section class="administration-section">
+      <div class="container-admin">
+        <h2 class="admin-title">Pimpinan Bidang Kemahasiswaan</h2>
 
-      <h2 class="admin-title">The Administration</h2>
-
-      <div class="admin-grid">
-
-        <div class="admin-card">
-          <div class="img-wrapper">
-            <img src="/fitur/foto1.jpeg" class="admin-img" />
-            <div class="img-overlay"></div>
+        <div class="admin-grid">
+          <div class="admin-card">
+            <div class="img-wrapper">
+              <img src="/fitur/foto1.jpeg" class="admin-img" />
+              <div class="img-overlay"></div>
+            </div>
+            <h3 class="admin-name">Dr. Suyanto, S.Pd.I, M.Pd.I.</h3>
+            <p class="admin-role">WAKIL REKTOR III</p>
           </div>
-          <h3 class="admin-name">NAMA SATU</h3>
-          <p class="admin-role">JABATAN LEMBAGA</p>
-        </div>
 
-        <div class="admin-card">
-          <div class="img-wrapper">
-            <img src="/fitur/foto2.jpg" class="admin-img" />
-            <div class="img-overlay"></div>
+          <div class="admin-card">
+            <div class="img-wrapper">
+              <img src="/fitur/foto2.jpg" class="admin-img" />
+              <div class="img-overlay"></div>
+            </div>
+            <h3 class="admin-name">NAMA DUA</h3>
+            <p class="admin-role">KEMAHASISWAAN</p>
           </div>
-          <h3 class="admin-name">NAMA DUA</h3>
-          <p class="admin-role">JABATAN LEMBAGA</p>
-        </div>
 
-        <div class="admin-card">
-          <div class="img-wrapper">
-            <img src="/fitur/foto3.jpg" class="admin-img" />
-            <div class="img-overlay"></div>
+          <div class="admin-card">
+            <div class="img-wrapper">
+              <img src="/fitur/foto3.jpg" class="admin-img" />
+              <div class="img-overlay"></div>
+            </div>
+            <h3 class="admin-name">NAMA TIGA</h3>
+            <p class="admin-role">JABATAN LEMBAGA</p>
           </div>
-          <h3 class="admin-name">NAMA TIGA</h3>
-          <p class="admin-role">JABATAN LEMBAGA</p>
-        </div>
 
-        <div class="admin-card">
-          <div class="img-wrapper">
-            <img src="/fitur/foto4.jpg" class="admin-img" />
-            <div class="img-overlay"></div>
+          <div class="admin-card">
+            <div class="img-wrapper">
+              <img src="/fitur/foto4.jpg" class="admin-img" />
+              <div class="img-overlay"></div>
+            </div>
+            <h3 class="admin-name">NAMA EMPAT</h3>
+            <p class="admin-role">KETERANGAN LAINNYA</p>
           </div>
-          <h3 class="admin-name">NAMA EMPAT</h3>
-          <p class="admin-role">KETERANGAN LAINNYA</p>
         </div>
-
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="learn-more-section">
+      <div class="container-learn">
+        <h3 class="learn-more-title-main">SIM ORMAWA</h3>
+
+        <div class="sim-ormawa-tabs">
+          <button
+            :class="{ 'tab-item': true, active: activeTab === 'apa-itu' }"
+            @click="activeTab = 'apa-itu'"
+          >
+            APA ITU SIM ORMAWA
+          </button>
+          <button
+            :class="{ 'tab-item': true, active: activeTab === 'fungsi' }"
+            @click="activeTab = 'fungsi'"
+          >
+            FUNGSI UTAMA SIM ORMAWA
+          </button>
+          <button
+            :class="{ 'tab-item': true, active: activeTab === 'manfaat' }"
+            @click="activeTab = 'manfaat'"
+          >
+            MANFAAT SIM ORMAWA
+          </button>
+        </div>
+
+        <div class="tab-content-wrapper">
+          <div class="content-grid">
+            <div class="content-text">
+              <div v-if="activeTab === 'apa-itu'">
+                <p class="content-paragraph">
+                  SIM ORMAWA adalah singkatan dari **Sistem Informasi Manajemen
+                  Organisasi Mahasiswa**. Ini merupakan sebuah platform digital
+                  atau aplikasi berbasis web/mobile yang dirancang khusus untuk
+                  memfasilitasi, mengelola, dan mengintegrasikan berbagai
+                  aktivitas, administrasi, dan informasi yang terkait dengan
+                  Organisasi Mahasiswa (ORMAWA) di lingkungan perguruan tinggi.
+                </p>
+                <p class="content-paragraph-detail">
+                  Tujuan utama dari SIM ORMAWA adalah untuk meningkatkan
+                  **efisiensi, transparansi, dan akuntabilitas** dalam
+                  pengelolaan kegiatan mahasiswa.
+                </p>
+              </div>
+
+              <div v-if="activeTab === 'fungsi'">
+                <p class="content-paragraph">
+                  Fungsi-fungsi kunci SIM ORMAWA meliputi:
+                </p>
+                <ul class="ormawa-functions-list-tab">
+                  <li>
+                    **Administrasi Keanggotaan:** Pendataan, pendaftaran, dan
+                    pengelolaan status anggota ORMAWA secara terpusat.
+                  </li>
+                  <li>
+                    **Manajemen Kegiatan/Proyek:** Pengajuan, perencanaan,
+                    pelaksanaan, monitoring, dan pelaporan program kerja.
+                  </li>
+                  <li>
+                    **Pengelolaan Anggaran:** Pengajuan dan pelaporan penggunaan
+                    dana kegiatan yang terintegrasi dengan sistem keuangan
+                    universitas.
+                  </li>
+                  <li>
+                    **Dokumentasi dan Arsip:** Tempat penyimpanan terpusat untuk
+                    surat, laporan akhir, sertifikat, dan dokumen penting
+                    lainnya.
+                  </li>
+                  <li>
+                    **Sistem Komunikasi:** Menyediakan platform untuk pengumuman
+                    resmi, koordinasi, dan penyebaran informasi.
+                  </li>
+                  <li>
+                    **Evaluasi Kinerja:** Alat bantu bagi pihak kemahasiswaan
+                    untuk memantau dan mengevaluasi kinerja setiap ORMAWA.
+                  </li>
+                </ul>
+              </div>
+
+              <div v-if="activeTab === 'manfaat'">
+                <p class="content-paragraph">
+                  SIM ORMAWA memberikan manfaat besar bagi seluruh ekosistem
+                  kemahasiswaan:
+                </p>
+                <ul class="ormawa-functions-list-tab">
+                  <li>
+                    **Bagi Mahasiswa/ORMAWA:** Proses administrasi lebih cepat,
+                    akses informasi terpusat, dan kemudahan kolaborasi.
+                  </li>
+                  <li>
+                    **Bagi Pimpinan/Universitas:** Peningkatan transparansi
+                    anggaran, kemudahan monitoring aktivitas, dan data akurat
+                    untuk pengambilan keputusan.
+                  </li>
+                  <li>
+                    **Akurasi Data:** Mengurangi kesalahan data manual dan
+                    memastikan semua data kegiatan tersimpan dengan aman.
+                  </li>
+                  <li>
+                    **Efisiensi Waktu:** Mempersingkat waktu pengajuan proposal,
+                    laporan, dan persetujuan.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="content-picture">
+                <img 
+                    v-if="activeTab === 'apa-itu'" 
+                    src="/fitur/foto3.jpg" 
+                    class="sim-ormawa-img" 
+                    alt="Ilustrasi Aplikasi SIM ORMAWA"
+                />
+                
+                <div 
+                    v-else-if="activeTab === 'fungsi'" 
+                    class="content-picture-grid"
+                >
+                    <img src="/fitur/foto1.jpeg" class="grid-item" alt="Administrasi Keanggotaan" />
+                    <img src="/fitur/foto2.jpg" class="grid-item" alt="Manajemen Kegiatan" />
+                    <img src="/fitur/foto3.jpg" class="grid-item" alt="Pengelolaan Anggaran" />
+                    <img src="/fitur/foto4.jpg" class="grid-item" alt="Evaluasi Kinerja" />
+                </div>
+
+                <img 
+                    v-else-if="activeTab === 'manfaat'" 
+                    src="/fitur/foto4.jpg" 
+                    class="sim-ormawa-img" 
+                    alt="Ilustrasi Manfaat dan Kolaborasi"
+                />
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
+const activeTab = ref("apa-itu");
 </script>
 
 <style scoped>
-/* SECTION */
+/* KEYFRAMES */
+/* Animasi Fade-in standar */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animasi Slide-up dan Fade-in untuk kartu */
+@keyframes slideUpFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------- */
+/* SECTION 1: ADMINISTRATION (BAGIAN ASLI DENGAN ANIMASI) */
+/* ---------------------------------------------------- */
 .administration-section {
   width: 100%;
   padding: 80px 0 100px;
@@ -71,6 +226,9 @@
   font-family: "Playfair Display", serif;
   text-align: center;
   margin-bottom: 45px;
+  /* Animasi Fade-in untuk Judul */
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
 }
 
 /* GRID */
@@ -96,6 +254,24 @@
 .admin-card {
   text-align: center;
   cursor: pointer;
+  /* Animasi Staggered */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUpFadeIn 0.8s ease-out forwards;
+}
+
+/* Penundaan (Delay) untuk setiap kartu */
+.admin-grid :nth-child(1).admin-card {
+  animation-delay: 0.2s;
+}
+.admin-grid :nth-child(2).admin-card {
+  animation-delay: 0.4s;
+}
+.admin-grid :nth-child(3).admin-card {
+  animation-delay: 0.6s;
+}
+.admin-grid :nth-child(4).admin-card {
+  animation-delay: 0.8s;
 }
 
 .img-wrapper {
@@ -104,6 +280,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0);
+  transition: box-shadow 0.3s ease;
 }
 
 /* IMAGE */
@@ -114,11 +292,11 @@
   transition: 0.4s ease;
 }
 
-/* ✨ OVERLAY GRADIENT (PUTIH → TRANSPARAN SESUAI PERMINTAAN) */
+/* OVERLAY GRADIENT */
 .img-overlay {
   position: absolute;
   bottom: 0;
-  height: 50%; /* bisa kamu sesuaikan */
+  height: 50%;
   width: 100%;
   background: linear-gradient(
     to top,
@@ -131,11 +309,18 @@
   pointer-events: none;
 }
 
-
-/* HOVER */
+/* HOVER EFFECTS */
 .admin-card:hover .admin-img {
   transform: scale(1.04);
   opacity: 0.92;
+}
+
+.admin-card:hover .img-wrapper {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card:hover .admin-name {
+  color: #ff8000; /* Warna Hover */
 }
 
 /* TEXT */
@@ -145,6 +330,7 @@
   font-weight: 600;
   font-family: "Playfair Display", serif;
   letter-spacing: 0.6px;
+  transition: color 0.3s ease;
 }
 
 .admin-role {
@@ -152,5 +338,184 @@
   font-size: 13px;
   color: #000000;
   letter-spacing: 0.4px;
+}
+
+/* ---------------------------------------------------- */
+/* SECTION 2: SIM ORMAWA (TAMPILAN BARU) */
+/* ---------------------------------------------------- */
+.learn-more-section {
+  width: 100%;
+  padding: 60px 0 100px;
+  background-color: #f7f7f7;
+  text-align: center;
+}
+
+.container-learn {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.learn-more-title-main {
+  font-size: 34px;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+/* --- TAB NAVIGATION STYLING --- */
+.sim-ormawa-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.tab-item {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #fff;
+  background-color: #ff8000;
+  box-shadow: 0 4px 10px rgba(255, 128, 0, 0.3);
+}
+
+.tab-item:hover:not(.active) {
+  color: #ff8000;
+}
+
+/* --- CONTENT GRID STYLING --- */
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 50px;
+  text-align: left;
+}
+
+.content-text {
+  padding-top: 20px;
+}
+
+.content-paragraph {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.content-paragraph-detail {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 30px;
+  border-left: 3px solid #ff8000;
+  padding-left: 15px;
+}
+
+/* Kanan: Kontainer Gambar */
+.content-picture {
+  background-color: #e0e0e0;
+  height: 300px;
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative; /* Penting untuk mengelola gambar di dalamnya */
+}
+
+/* Styling Gambar Tunggal (Untuk 'Apa Itu' dan 'Manfaat') */
+.content-picture .sim-ormawa-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s ease; /* Transisi saat berganti gambar */
+}
+
+/* Styling Khusus untuk Kolase 2x2 (Untuk 'Fungsi') */
+.content-picture-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    height: 100%;
+    width: 100%;
+    gap: 5px; /* Jarak antar gambar kolase */
+    padding: 5px; /* Padding di sekitar grid */
+    background-color: #f0f0f0; /* Warna background kolase */
+}
+
+.content-picture-grid .grid-item {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px; /* Sudut sedikit melengkung untuk gambar di dalam kolase */
+}
+
+/* Hapus placeholder teks karena sudah ada gambar */
+.picture-placeholder {
+    display: none; 
+}
+
+
+/* --- LIST STYLING UNTUK TAB FUNGSI/MANFAAT --- */
+.ormawa-functions-list-tab {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 40px;
+}
+
+.ormawa-functions-list-tab li {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.ormawa-functions-list-tab li::before {
+  content: '✓';
+  color: #ff8000;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Hapus styling lama yang tidak digunakan lagi */
+.separator-line, .sub-title-sim-ormawa, .learn-more-button, .cta-sim-ormawa, .cta-wrapper, .learn-more-text {
+  display: none;
+}
+
+/* Media query untuk tampilan mobile */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    .content-picture {
+        order: -1;
+        margin-bottom: 20px;
+    }
+    .sim-ormawa-tabs {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .tab-item {
+        width: 100%;
+    }
 }
 </style>
