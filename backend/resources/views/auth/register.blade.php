@@ -63,16 +63,36 @@
 
                                         <div class="mb-3">
                                             <label for="password" class="form-label">Password</label>
-                                            <input type="password" name="password" class="form-control" id="password"
-                                                placeholder="Enter password" required>
+                                            <div class="position-relative">
+                                                <input type="password" name="password"
+                                                    class="form-control @error('password') is-invalid @enderror"
+                                                    id="password" placeholder="Enter password" required
+                                                    style="padding-right: 40px;"> <span
+                                                    class="position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"
+                                                    id="togglePassword" style="cursor: pointer;">
+                                                    <i class="fa fa-eye" id="icon-password"></i>
+                                                </span>
+
+                                                @error('password')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="password_confirmation" class="form-label">Konfirmasi
                                                 Password</label>
-                                            <input type="password" name="password_confirmation" class="form-control"
-                                                placeholder="Enter password" id="password_confirmation" required
-                                                autocomplete="new-password">
+                                            <div class="position-relative">
+                                                <input type="password" name="password_confirmation" class="form-control"
+                                                    placeholder="Enter password" id="password_confirmation" required
+                                                    autocomplete="new-password" style="padding-right: 40px;"> <span
+                                                    class="position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"
+                                                    id="toggleConfirmPassword" style="cursor: pointer;">
+                                                    <i class="fa fa-eye" id="icon-confirm"></i>
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <button class="btn btn-primary w-100 waves-effect waves-light"
@@ -121,7 +141,8 @@
                         <div class="row justify-content-center align-items-center">
                             <div class="col-xl-7">
                                 <div class="p-0 p-sm-4 px-xl-0">
-                                    <div id="reviewcarouselIndicators" class="carousel slide" data-bs-ride="carousel">
+                                    <div id="reviewcarouselIndicators" class="carousel slide"
+                                        data-bs-ride="carousel">
                                         <div
                                             class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
                                             <button type="button" data-bs-target="#reviewcarouselIndicators"
@@ -242,6 +263,32 @@
 
     <!-- validation init -->
     <script src="assets/js/pages/validation.init.js"></script>
+
+    <script>
+        // Fungsi untuk mengatur toggle password
+        function setupPasswordToggle(inputId, toggleId, iconId) {
+            const input = document.querySelector('#' + inputId);
+            const toggleBtn = document.querySelector('#' + toggleId);
+            const icon = document.querySelector('#' + iconId);
+
+            if (input && toggleBtn && icon) {
+                toggleBtn.addEventListener('click', function() {
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            }
+        }
+        setupPasswordToggle('password', 'togglePassword', 'icon-password');
+        setupPasswordToggle('password_confirmation', 'toggleConfirmPassword', 'icon-confirm');
+    </script>
 
 </body>
 

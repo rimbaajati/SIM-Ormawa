@@ -62,14 +62,23 @@
 
                                         <div class="mb-3">
                                             <label for="userpassword" class="form-label">Password</label>
-                                            <input type="password"
-                                                class="form-control @error('password') is-invalid @enderror"
-                                                id="userpassword" placeholder="Enter password" name="password" required>
-                                            @error('password')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+
+                                            <div class="position-relative">
+                                                <input type="password"
+                                                    class="form-control @error('password') is-invalid @enderror"
+                                                    id="userpassword" placeholder="Enter password" name="password"
+                                                    required style="padding-right: 40px;"> <span
+                                                    class="position-absolute top-50 end-0 translate-middle-y me-3"
+                                                    id="togglePassword" style="cursor: pointer;">
+                                                    <i class="fa fa-eye" id="icon-toggle"></i>
+                                                </span>
+
+                                                @error('password')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
 
                                         <div class="mb-3">
@@ -231,6 +240,30 @@
 
     <!-- validation init -->
     <script src="assets/js/pages/validation.init.js"></script>
+
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#userpassword');
+        const icon = document.querySelector('#icon-toggle');
+
+        togglePassword.addEventListener('click', function() {
+            // 1. Cek tipe atribut saat ini
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+
+            // 2. Ubah tipe input
+            passwordInput.setAttribute('type', type);
+
+            // 3. Ubah ikon (opsional: mata terbuka / tertutup)
+            // Sesuaikan class icon dengan library yang Anda pakai (contoh: FontAwesome)
+            if (type === 'text') {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 
 </body>
 
