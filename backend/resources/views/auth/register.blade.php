@@ -30,7 +30,7 @@
         <div class="container-fluid p-0">
             <div class="row g-0">
                 <div class="col-xxl-3 col-lg-4 col-md-5">
-                    <div class="auth-full-page-content d-flex flex-column justify-content-between p-5 pt-3">
+                    <div class="auth-full-page-content d-flex flex-column justify-content-between p-5 pt-3 mt-3">
                         <div class="w-100">
                             <div class="d-flex flex-column h-100">
                                 <div class="mb-3 mt-3 text-center">
@@ -71,7 +71,8 @@
                                             <label for="password_confirmation" class="form-label">Konfirmasi
                                                 Password</label>
                                             <input type="password" name="password_confirmation" class="form-control"
-                                                id="password_confirmation" required autocomplete="new-password">
+                                                placeholder="Enter password" id="password_confirmation" required
+                                                autocomplete="new-password">
                                         </div>
 
                                         <button class="btn btn-primary w-100 waves-effect waves-light"
@@ -88,38 +89,10 @@
                                         @endif
                                     </form>
 
-
-                                    <div class="mt-3 pt-2 text-center">
-                                        <div class="signin-other-title">
-                                            <h5 class="font-size-14 mb-3 text-muted fw-medium">- Sign up using -</h5>
-                                        </div>
-
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-primary text-white border-primary">
-                                                    <i class="mdi mdi-facebook"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-info text-white border-info">
-                                                    <i class="mdi mdi-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-danger text-white border-danger">
-                                                    <i class="mdi mdi-google"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
                                     <div class="mt-3
                                      text-center">
-                                        <p class="text-muted mb-0">Already have an account ? <a
-                                                href="{{ route('login') }}" class="text-primary fw-semibold"> Login
+                                        <p class="text-muted mb-0">Sudah punya akun? <a href="{{ route('login') }}"
+                                                class="text-primary fw-semibold"> Login
                                             </a> </p>
                                     </div>
                                 </div>
@@ -148,8 +121,7 @@
                         <div class="row justify-content-center align-items-center">
                             <div class="col-xl-7">
                                 <div class="p-0 p-sm-4 px-xl-0">
-                                    <div id="reviewcarouselIndicators" class="carousel slide"
-                                        data-bs-ride="carousel">
+                                    <div id="reviewcarouselIndicators" class="carousel slide" data-bs-ride="carousel">
                                         <div
                                             class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
                                             <button type="button" data-bs-target="#reviewcarouselIndicators"

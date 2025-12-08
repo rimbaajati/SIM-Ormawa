@@ -30,7 +30,7 @@
         <div class="container-fluid p-0">
             <div class="row g-0">
                 <div class="col-xxl-3 col-lg-4 col-md-5">
-                    <div class="auth-full-page-content d-flex flex-column justify-content-between p-5 pt-3">
+                    <div class="auth-full-page-content d-flex flex-column justify-content-between p-5 pt-3 mt-3">
                         <div class="w-100">
                             <div class="d-flex flex-column h-100">
                                 <div class="mb-3 mt-3 text-center">
@@ -52,18 +52,22 @@
                                             <label for="useremail" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="useremail"
                                                 placeholder="Enter email" name="email" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Email
-                                            </div>
+                                            @error('email')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="userpassword" class="form-label">Password</label>
                                             <input type="password" class="form-control" id="userpassword"
                                                 placeholder="Enter password" name="password" required>
-                                            <div class="invalid-feedback">
-                                                Please Enter Password
-                                            </div>
+                                            @error('password')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
 
                                         <div class="mb-3">
@@ -72,37 +76,10 @@
                                         </div>
                                     </form>
 
-                                    <div class="mt-3 pt-2 text-center">
-                                        <div class="signin-other-title">
-                                            <h5 class="font-size-14 mb-3 text-muted fw-medium">- Sign in using -</h5>
-                                        </div>
-
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-primary text-white border-primary">
-                                                    <i class="mdi mdi-facebook"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-info text-white border-info">
-                                                    <i class="mdi mdi-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()"
-                                                    class="social-list-item bg-danger text-white border-danger">
-                                                    <i class="mdi mdi-google"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
                                     <div class="mt-3
                                      text-center">
-                                        <p class="text-muted mb-0">Belum punya akun? Daftar <a
-                                                href="{{ route('register') }}" class="text-primary fw-semibold"> Daftar
+                                        <p class="text-muted mb-0">Belum punya akun?<a href="{{ route('register') }}"
+                                                class="text-primary fw-semibold"> Daftar
                                             </a> </p>
                                     </div>
                                 </div>
