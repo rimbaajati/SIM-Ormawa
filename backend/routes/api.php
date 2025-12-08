@@ -5,13 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PersonalTaskController;
 use App\Http\Controllers\Api\RoomController;
-use App\Http\Controllers\Api\ProductController; // Pastikan controller ini ada jika ingin pakai fitur produk
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\TrackingController;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+// Tracking
+Route::middleware('auth:sanctum')->get('/tracking/{id}', [TrackingController::class, 'show']);
 
 // --- Rute Publik (Tidak perlu login) ---
 
