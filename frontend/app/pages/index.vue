@@ -19,35 +19,35 @@ const mitraLogos = [
 
 
 // Data Dummy Berita
-const newsItems = [
-  {
-    id: 1,
-    title: "Pelantikan Pengurus Baru Ormawa Periode 2024/2025",
-    category: "Kegiatan Kampus",
-    dateDay: "12",
-    dateMonth: "Okt",
-    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    excerpt: "Universitas resmi melantik seluruh pengurus organisasi mahasiswa baru dengan semangat kolaborasi dan inovasi digital."
-  },
-  {
-    id: 2,
-    title: "Workshop Digitalisasi Administrasi Organisasi",
-    category: "Pelatihan",
-    dateDay: "05",
-    dateMonth: "Okt",
-    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    excerpt: "Pelatihan penggunaan sistem informasi manajemen baru untuk sekretaris dan bendahara ormawa."
-  },
-  {
-    id: 3,
-    title: "Prestasi Mahasiswa di Pekan Ilmiah Nasional",
-    category: "Prestasi",
-    dateDay: "28",
-    dateMonth: "Sep",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    excerpt: "Delegasi UMPKU berhasil membawa pulang medali emas dalam kategori inovasi teknologi tepat guna."
-  }
-];
+// const newsItems = [
+//   {
+//     id: 1,
+//     title: "Pelantikan Pengurus Baru Ormawa Periode 2024/2025",
+//     category: "Kegiatan Kampus",
+//     dateDay: "12",
+//     dateMonth: "Okt",
+//     image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+//     excerpt: "Universitas resmi melantik seluruh pengurus organisasi mahasiswa baru dengan semangat kolaborasi dan inovasi digital."
+//   },
+//   {
+//     id: 2,
+//     title: "Workshop Digitalisasi Administrasi Organisasi",
+//     category: "Pelatihan",
+//     dateDay: "05",
+//     dateMonth: "Okt",
+//     image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+//     excerpt: "Pelatihan penggunaan sistem informasi manajemen baru untuk sekretaris dan bendahara ormawa."
+//   },
+//   {
+//     id: 3,
+//     title: "Prestasi Mahasiswa di Pekan Ilmiah Nasional",
+//     category: "Prestasi",
+//     dateDay: "28",
+//     dateMonth: "Sep",
+//     image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+//     excerpt: "Delegasi UMPKU berhasil membawa pulang medali emas dalam kategori inovasi teknologi tepat guna."
+//   }
+// ];
 </script>
 
 <template>
@@ -127,7 +127,7 @@ const newsItems = [
 
 
     <!-- ================= BERITA SECTION ================= -->
-    <section class="berita-section">
+    <!-- <section class="berita-section">
       <div class="container">
         <h2 class="section-title">BERITA TERBARU</h2>
         
@@ -159,7 +159,7 @@ const newsItems = [
           </NuxtLink>
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 

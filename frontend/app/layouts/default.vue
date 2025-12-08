@@ -97,18 +97,18 @@ onUnmounted(() => {
         <div class="menu-title" @click="toggleSection('berita')">BERITA</div>
 
         <div class="submenu" v-if="openSection === 'berita'">
-          <NuxtLink to="/berita" class="submenu-item" @click="menuOpen = false">
+          <NuxtLink to="/user/error" class="submenu-item" @click="menuOpen = false">
             SEMUA BERITA
           </NuxtLink>
           <NuxtLink
-            to="/berita-terbaru"
+            to="/user/error"
             class="submenu-item"
             @click="menuOpen = false"
           >
             BERITA TERBARU
           </NuxtLink>
           <NuxtLink
-            to="/upload-berita"
+            to="/user/error"
             class="submenu-item"
             @click="menuOpen = false"
           >

@@ -67,7 +67,7 @@ onMounted(() => {
         <NuxtLink to="/fitur/pengajuan" class="btn-primary"
           >AJUKAN SEKARANG</NuxtLink
         >
-        <NuxtLink to="/fitur/tentang" class="btn-secondary"
+        <NuxtLink to="/user/error" class="btn-secondary"
           >PELAJARI LEBIH LANJUT</NuxtLink
         >
       </div>

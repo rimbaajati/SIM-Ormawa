@@ -41,8 +41,11 @@
             <p class="admin-role">KETERANGAN LAINNYA</p>
           </div>
         </div>
+        
       </div>
     </section>
+
+    ---
 
     <section class="learn-more-section">
       <div class="container-learn">
@@ -70,112 +73,113 @@
         </div>
 
         <div class="tab-content-wrapper">
-          <div class="content-grid">
-            <div class="content-text">
-              <div v-if="activeTab === 'apa-itu'">
-                <p class="content-paragraph">
-                  SIM ORMAWA adalah singkatan dari **Sistem Informasi Manajemen
-                  Organisasi Mahasiswa**. Ini merupakan sebuah platform digital
-                  atau aplikasi berbasis web/mobile yang dirancang khusus untuk
-                  memfasilitasi, mengelola, dan mengintegrasikan berbagai
-                  aktivitas, administrasi, dan informasi yang terkait dengan
-                  Organisasi Mahasiswa (ORMAWA) di lingkungan perguruan tinggi.
-                </p>
-                <p class="content-paragraph-detail">
-                  Tujuan utama dari SIM ORMAWA adalah untuk meningkatkan
-                  **efisiensi, transparansi, dan akuntabilitas** dalam
-                  pengelolaan kegiatan mahasiswa.
-                </p>
-              </div>
+            <Transition name="fade" mode="out-in">
+                <div class="content-grid" :key="activeTab">
+                    <div class="content-text">
+                        <div v-if="activeTab === 'apa-itu'">
+                            <p class="content-paragraph">
+                                SIM ORMAWA adalah singkatan dari <strong>Sistem Informasi Manajemen
+                                Organisasi Mahasiswa</strong>. Ini merupakan sebuah platform digital
+                                atau aplikasi berbasis web/mobile yang dirancang khusus untuk
+                                memfasilitasi, mengelola, dan mengintegrasikan berbagai
+                                aktivitas, administrasi, dan informasi yang terkait dengan
+                                Organisasi Mahasiswa (ORMAWA) di lingkungan perguruan tinggi.
+                            </p>
+                            <p class="content-paragraph-detail">
+                                Tujuan utama dari SIM ORMAWA adalah untuk meningkatkan
+                                <strong>efisiensi, transparansi, dan akuntabilitas</strong> dalam
+                                pengelolaan kegiatan mahasiswa.
+                            </p>
+                        </div>
 
-              <div v-if="activeTab === 'fungsi'">
-                <p class="content-paragraph">
-                  Fungsi-fungsi kunci SIM ORMAWA meliputi:
-                </p>
-                <ul class="ormawa-functions-list-tab">
-                  <li>
-                    **Administrasi Keanggotaan:** Pendataan, pendaftaran, dan
-                    pengelolaan status anggota ORMAWA secara terpusat.
-                  </li>
-                  <li>
-                    **Manajemen Kegiatan/Proyek:** Pengajuan, perencanaan,
-                    pelaksanaan, monitoring, dan pelaporan program kerja.
-                  </li>
-                  <li>
-                    **Pengelolaan Anggaran:** Pengajuan dan pelaporan penggunaan
-                    dana kegiatan yang terintegrasi dengan sistem keuangan
-                    universitas.
-                  </li>
-                  <li>
-                    **Dokumentasi dan Arsip:** Tempat penyimpanan terpusat untuk
-                    surat, laporan akhir, sertifikat, dan dokumen penting
-                    lainnya.
-                  </li>
-                  <li>
-                    **Sistem Komunikasi:** Menyediakan platform untuk pengumuman
-                    resmi, koordinasi, dan penyebaran informasi.
-                  </li>
-                  <li>
-                    **Evaluasi Kinerja:** Alat bantu bagi pihak kemahasiswaan
-                    untuk memantau dan mengevaluasi kinerja setiap ORMAWA.
-                  </li>
-                </ul>
-              </div>
+                        <div v-else-if="activeTab === 'fungsi'">
+                            <p class="content-paragraph">
+                                Fungsi-fungsi kunci SIM ORMAWA meliputi:
+                            </p>
+                            <ul class="ormawa-functions-list-tab">
+                                <li>
+                                    <strong>Administrasi Keanggotaan:</strong> Pendataan, pendaftaran, dan
+                                    pengelolaan status anggota ORMAWA secara terpusat.
+                                </li>
+                                <li>
+                                    <strong>Manajemen Kegiatan/Proyek:</strong> Pengajuan, perencanaan,
+                                    pelaksanaan, monitoring, dan pelaporan program kerja.
+                                </li>
+                                <li>
+                                    <strong>Pengelolaan Anggaran:</strong> Pengajuan dan pelaporan penggunaan
+                                    dana kegiatan yang terintegrasi dengan sistem keuangan
+                                    universitas.
+                                </li>
+                                <li>
+                                    <strong>Dokumentasi dan Arsip:</strong> Tempat penyimpanan terpusat untuk
+                                    surat, laporan akhir, sertifikat, dan dokumen penting
+                                    lainnya.
+                                </li>
+                                <li>
+                                    <strong>Sistem Komunikasi:</strong> Menyediakan platform untuk pengumuman
+                                    resmi, koordinasi, dan penyebaran informasi.
+                                </li>
+                                <li>
+                                    <strong>Evaluasi Kinerja:</strong> Alat bantu bagi pihak kemahasiswaan
+                                    untuk memantau dan mengevaluasi kinerja setiap ORMAWA.
+                                </li>
+                            </ul>
+                        </div>
 
-              <div v-if="activeTab === 'manfaat'">
-                <p class="content-paragraph">
-                  SIM ORMAWA memberikan manfaat besar bagi seluruh ekosistem
-                  kemahasiswaan:
-                </p>
-                <ul class="ormawa-functions-list-tab">
-                  <li>
-                    **Bagi Mahasiswa/ORMAWA:** Proses administrasi lebih cepat,
-                    akses informasi terpusat, dan kemudahan kolaborasi.
-                  </li>
-                  <li>
-                    **Bagi Pimpinan/Universitas:** Peningkatan transparansi
-                    anggaran, kemudahan monitoring aktivitas, dan data akurat
-                    untuk pengambilan keputusan.
-                  </li>
-                  <li>
-                    **Akurasi Data:** Mengurangi kesalahan data manual dan
-                    memastikan semua data kegiatan tersimpan dengan aman.
-                  </li>
-                  <li>
-                    **Efisiensi Waktu:** Mempersingkat waktu pengajuan proposal,
-                    laporan, dan persetujuan.
-                  </li>
-                </ul>
-              </div>
-            </div>
+                        <div v-else-if="activeTab === 'manfaat'">
+                            <p class="content-paragraph">
+                                SIM ORMAWA memberikan manfaat besar bagi seluruh ekosistem
+                            kemahasiswaan:
+                            </p>
+                            <ul class="ormawa-functions-list-tab">
+                                <li>
+                                    **Bagi Mahasiswa/ORMAWA:** Proses administrasi lebih cepat,
+                                    akses informasi terpusat, dan kemudahan kolaborasi.
+                                </li>
+                                <li>
+                                    **Bagi Pimpinan/Universitas:** Peningkatan transparansi
+                                    anggaran, kemudahan monitoring aktivitas, dan data akurat
+                                    untuk pengambilan keputusan.
+                                </li>
+                                <li>
+                                    **Akurasi Data:** Mengurangi kesalahan data manual dan
+                                    memastikan semua data kegiatan tersimpan dengan aman.
+                                </li>
+                                <li>
+                                    **Efisiensi Waktu:** Mempersingkat waktu pengajuan proposal,
+                                    laporan, dan persetujuan.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-            <div class="content-picture">
-                <img 
-                    v-if="activeTab === 'apa-itu'" 
-                    src="/fitur/foto3.jpg" 
-                    class="sim-ormawa-img" 
-                    alt="Ilustrasi Aplikasi SIM ORMAWA"
-                />
-                
-                <div 
-                    v-else-if="activeTab === 'fungsi'" 
-                    class="content-picture-grid"
-                >
-                    <img src="/fitur/foto1.jpeg" class="grid-item" alt="Administrasi Keanggotaan" />
-                    <img src="/fitur/foto2.jpg" class="grid-item" alt="Manajemen Kegiatan" />
-                    <img src="/fitur/foto3.jpg" class="grid-item" alt="Pengelolaan Anggaran" />
-                    <img src="/fitur/foto4.jpg" class="grid-item" alt="Evaluasi Kinerja" />
+                    <div class="content-picture">
+                        <img 
+                            v-if="activeTab === 'apa-itu'" 
+                            src="/tentang/apaitu.jpg" 
+                            class="sim-ormawa-img" 
+                            alt="Ilustrasi Aplikasi SIM ORMAWA"
+                        />
+                        
+                        <div 
+                            v-else-if="activeTab === 'fungsi'" 
+                            class="content-picture-grid"
+                        >
+                            <img src="/fitur/foto1.jpeg" class="grid-item" alt="Administrasi Keanggotaan" />
+                            <img src="/fitur/foto2.jpg" class="grid-item" alt="Manajemen Kegiatan" />
+                            <img src="/fitur/foto3.jpg" class="grid-item" alt="Pengelolaan Anggaran" />
+                            <img src="/fitur/foto4.jpg" class="grid-item" alt="Evaluasi Kinerja" />
+                        </div>
+
+                        <img 
+                            v-else-if="activeTab === 'manfaat'" 
+                            src="/fitur/foto4.jpg" 
+                            class="sim-ormawa-img" 
+                            alt="Ilustrasi Manfaat dan Kolaborasi"
+                        />
+                    </div>
                 </div>
-
-                <img 
-                    v-else-if="activeTab === 'manfaat'" 
-                    src="/fitur/foto4.jpg" 
-                    class="sim-ormawa-img" 
-                    alt="Ilustrasi Manfaat dan Kolaborasi"
-                />
-            </div>
-            
-          </div>
+            </Transition>
         </div>
       </div>
     </section>
@@ -203,6 +207,20 @@ const activeTab = ref("apa-itu");
     transform: translateY(0);
   }
 }
+
+/* --- VUE TRANSITION (BARU DITAMBAHKAN) --- */
+/* Kelas transisi untuk konten tab */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+/* --- END VUE TRANSITION --- */
+
 
 /* ---------------------------------------------------- */
 /* SECTION 1: ADMINISTRATION (BAGIAN ASLI DENGAN ANIMASI) */
@@ -429,20 +447,21 @@ const activeTab = ref("apa-itu");
 /* Kanan: Kontainer Gambar */
 .content-picture {
   background-color: #e0e0e0;
-  height: 300px;
+  min-height: 300px;
+  height: auto;
   display: block;
   border-radius: 8px;
   overflow: hidden;
-  position: relative; /* Penting untuk mengelola gambar di dalamnya */
+  position: relative;
 }
 
 /* Styling Gambar Tunggal (Untuk 'Apa Itu' dan 'Manfaat') */
 .content-picture .sim-ormawa-img {
     width: 100%;
-    height: 100%;
+    height: 100%; 
     object-fit: cover;
     display: block;
-    transition: opacity 0.3s ease; /* Transisi saat berganti gambar */
+    transition: opacity 0.3s ease;
 }
 
 /* Styling Khusus untuk Kolase 2x2 (Untuk 'Fungsi') */
@@ -450,11 +469,11 @@ const activeTab = ref("apa-itu");
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    height: 100%;
+    height: 100%; 
     width: 100%;
-    gap: 5px; /* Jarak antar gambar kolase */
-    padding: 5px; /* Padding di sekitar grid */
-    background-color: #f0f0f0; /* Warna background kolase */
+    gap: 5px;
+    padding: 5px;
+    background-color: #f0f0f0;
 }
 
 .content-picture-grid .grid-item {
@@ -462,14 +481,8 @@ const activeTab = ref("apa-itu");
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 4px; /* Sudut sedikit melengkung untuk gambar di dalam kolase */
+    border-radius: 4px;
 }
-
-/* Hapus placeholder teks karena sudah ada gambar */
-.picture-placeholder {
-    display: none; 
-}
-
 
 /* --- LIST STYLING UNTUK TAB FUNGSI/MANFAAT --- */
 .ormawa-functions-list-tab {
@@ -494,11 +507,6 @@ const activeTab = ref("apa-itu");
   position: absolute;
   left: 0;
   top: 0;
-}
-
-/* Hapus styling lama yang tidak digunakan lagi */
-.separator-line, .sub-title-sim-ormawa, .learn-more-button, .cta-sim-ormawa, .cta-wrapper, .learn-more-text {
-  display: none;
 }
 
 /* Media query untuk tampilan mobile */
