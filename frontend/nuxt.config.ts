@@ -4,9 +4,16 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-11-26",
 
   runtimeConfig: {
-    public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api'
-    }
+    sanctum: {
+    baseUrl: 'http://localhost:8000', 
+
+    endpoint: {
+      csrf : '/sanctum/csrf-cookie',
+      login : '/api/login',
+      logout : '/api/logout',
+      register : '/api/register',
+    },
+  }
   },
 
   app: {
