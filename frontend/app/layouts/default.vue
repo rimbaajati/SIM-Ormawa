@@ -1,57 +1,65 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from "vue";
-import { useAuthStore } from "@/stores/auth";
+// Asumsi path store sudah benar
+import { useAuthStore } from "@/stores/auth"; 
 
 const authStore = useAuthStore();
 
-const menuOpen = ref(false);
-const isLoading = ref(true);
-const openSection = ref(null);
-const nav = ref(null);
-const isScrolled = ref(false);
+// --- STATE MANAGEMENT & REFS ---
 
-// 1. Ambil status dari Store menggunakan computed
-const isLoggedIn = computed(() => authStore.getIsLoggedIn);
-const userName = computed(() => authStore.userName);
+const menuOpen = ref(false); 
+const isLoading = ref(true); 
+const openSection = ref(''); 
+const isScrolled = ref(false); 
 
-// 2. Fungsi Logout yang memanggil aksi dari Store
-const logout = () => {
-  authStore.logout();
-  menuOpen.value = false;
-  alert("Anda telah berhasil logout."); // Atau gunakan notifikasi yang lebih baik
+// --- COMPUTED PROPERTIES (Data dari Store) ---
+
+const isLoggedIn = computed(() => authStore.isLoggedIn); 
+const userName = computed(() => authStore.user?.name || authStore.userName); 
+
+// --- METHODS ---
+
+const logout = async () => {
+    try {
+        await authStore.logout();
+        menuOpen.value = false;
+        console.log("Logout Berhasil."); 
+    } catch (error) {
+        console.error("Gagal Logout:", error);
+    }
 };
 
 // Fungsi untuk toggle submenu
 const toggleSection = (section) => {
-  openSection.value = openSection.value === section ? null : section;
+    // Jika section yang terbuka saat ini sama dengan section yang diklik, tutup (set ke '')
+    openSection.value = openSection.value === section ? '' : section; 
 };
 
 // Fungsi untuk handle scroll
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50; // Threshold scroll, bisa disesuaikan
+    isScrolled.value = window.scrollY > 50; 
 };
 
+// --- LIFECYCLE HOOKS ---
+
 onMounted(() => {
-  // Panggil aksi inisialisasi untuk mengecek status token saat mount
-  authStore.initializeAuth();
+    authStore.initializeAuth(); 
 
-  // Loading fade-out
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2000);
+    // Loading fade-out
+    setTimeout(() => {
+        isLoading.value = false;
+    }, 2000);
 
-  // Tambahkan event listener untuk scroll
-  window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 });
 
 onUnmounted(() => {
-  // Hapus event listener saat unmount
-  window.removeEventListener("scroll", handleScroll);
+    window.removeEventListener("scroll", handleScroll);
 });
 </script>
 
 <style scoped>
-@import url('~/assets/css/layouts/default.css');
+@import url("~/assets/css/layouts/default.css");
 </style>
 
 <template>
@@ -79,7 +87,7 @@ onUnmounted(() => {
       </div>
 
       <NuxtLink to="/" class="nav-center nav-center-link">
-        <span class="nav-subtitle">SISTEM INFORMASI ORMAWA</span>
+        <span class="nav-subtitle">SISTEM INFORMASI MANAJEMEN ORMAWA</span>
         <span class="nav-title">UMPKU SURAKARTA</span>
       </NuxtLink>
 
@@ -96,8 +104,15 @@ onUnmounted(() => {
       <div class="menu-section">
         <div class="menu-title" @click="toggleSection('berita')">BERITA</div>
 
-        <div class="submenu" v-if="openSection === 'berita'">
-          <NuxtLink to="/user/error" class="submenu-item" @click="menuOpen = false">
+        <div
+          class="submenu"
+          :class="{ open: openSection === 'berita' }"
+        >
+          <NuxtLink
+            to="/user/error"
+            class="submenu-item"
+            @click="menuOpen = false"
+          >
             SEMUA BERITA
           </NuxtLink>
           <NuxtLink
@@ -120,7 +135,7 @@ onUnmounted(() => {
       <div class="menu-section">
         <div class="menu-title" @click="toggleSection('fitur')">FITUR</div>
 
-        <div class="submenu" v-if="openSection === 'fitur'">
+        <div class="submenu" :class="{ open: openSection === 'fitur' }">
           <NuxtLink to="/fitur" class="submenu-item" @click="menuOpen = false">
             SEMUA FITUR
           </NuxtLink>
@@ -172,7 +187,7 @@ onUnmounted(() => {
       <div class="menu-section">
         <div class="menu-title" @click="toggleSection('kontak')">KONTAK</div>
 
-        <div class="submenu" v-if="openSection === 'kontak'">
+        <div class="submenu" :class="{ open: openSection === 'kontak' }">
           <NuxtLink to="/kontak" class="submenu-item" @click="menuOpen = false">
             HUBUNGI KAMI
           </NuxtLink>
