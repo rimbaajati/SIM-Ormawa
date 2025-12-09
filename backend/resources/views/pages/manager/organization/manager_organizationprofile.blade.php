@@ -502,7 +502,7 @@
                                     <div class="card-body">
                                         <div>
                                             <div class="pb-3">
-                                                <h5 class="font-size-15">Bio :</h5>
+                                                <h5 class="font-size-15">Deskripsi</h5>
                                                 <div class="text-muted">
                                                     <p class="mb-2">Hi I'm Phyllis Gatlin, Lorem Ipsum is simply dummy
                                                         text of the printing and typesetting industry. Lorem Ipsum has been
@@ -534,36 +534,6 @@
                                                     </ul>
                                                 </div>
                                             </div>
-
-                                            <div class="pt-3">
-                                                <h5 class="font-size-15">Experience :</h5>
-                                                <div class="text-muted">
-                                                    <p>If several languages coalesce, the grammar of the resulting language
-                                                        is more simple and regular than that of the individual languages.
-                                                        The new common language will be more simple and regular than the
-                                                        existing European languages. It will be as simple as Occidental; in
-                                                        fact, it will be Occidental. To an English person, it will seem like
-                                                        simplified English, as a skeptical Cambridge friend of mine told me
-                                                        what Occidental is. The European languages are members of the same
-                                                        family. Their separate existence is a myth. For science, music,
-                                                        sport, etc</p>
-
-                                                    <ul class="list-unstyled mb-0">
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Donec
-                                                            vitae sapien ut libero venenatis faucibus</li>
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Quisque
-                                                            rutrum aenean imperdiet</li>
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Integer
-                                                            ante a consectetuer eget</li>
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Phasellus
-                                                            nec sem in justo pellentesque</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <!-- end card body -->
@@ -575,7 +545,7 @@
                             <div class="tab-pane" id="post" role="tabpanel">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">Post</h5>
+                                        <h5 class="card-title mb-0">Program Kerja</h5>
                                     </div>
                                     <div class="card-body">
                                         <div>

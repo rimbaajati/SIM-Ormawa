@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth; // Penting untuk Auth::user()
+use Illuminate\Support\Facades\Auth; 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\UserDashboardController;
@@ -9,7 +9,7 @@ use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\PeriodController;
-use App\Models\Organization; // Penting agar tidak error class not found
+use App\Models\Organization; 
 use App\Models\Proposal;
 use App\Models\Period;
 
@@ -62,8 +62,11 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
     });
 
     Route::get('/proposal/{proposal}', [ProposalController::class, 'show'])
-        ->name('manager.proposal.detail');
+        ->name('manager.proposal.detail')->where('proposal', '.*');
 
+    Route::post('/proposal/{proposal}/simpan-anggaran', [ProposalController::class, 'updateBudget'])
+        ->name('manager.proposal.update_budget')
+        ->where('proposal', '.*');
 
     // --- Lain-lain (Schedules & Mail) ---
     Route::get('/manager/schedules/all', fn() => view('pages.manager.manager_allschedule'))->name('manager.schedules.all');

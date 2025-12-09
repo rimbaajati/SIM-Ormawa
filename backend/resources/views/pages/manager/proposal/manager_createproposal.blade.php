@@ -34,19 +34,19 @@
                         <div class="col-12 mb-3">
                             <label class="form-label fw-medium">Organisasi</label>
 
-                            <select name="organization_id"
-                                class="form-select @error('organization_id') is-invalid @enderror">
+                            <select name="id_organization"
+                                class="form-select @error('id_organization') is-invalid @enderror">
                                 <option value="">-- Pilih Organisasi --</option>
 
                                 @foreach ($organizations as $org)
                                     <option value="{{ $org->id }}"
-                                        {{ old('organization_id') == $org->id ? 'selected' : '' }}>
+                                        {{ old('id_organization') == $org->id ? 'selected' : '' }}>
                                         {{ $org->name }}
                                     </option>
                                 @endforeach
                             </select>
 
-                            @error('organization_id')
+                            @error('id_organization')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

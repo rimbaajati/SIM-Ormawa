@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-// Pastikan import ini benar
 use App\Models\Event;
 use App\Models\ManagementOrganization; 
 use App\Models\Period;
@@ -33,7 +32,6 @@ class Organization extends Model
         'is_active',
     ];
 
-    // Logika Otomatisasi ID (Sudah Benar)
     protected static function booted()
     {
         static::creating(function ($model) {
@@ -53,21 +51,20 @@ class Organization extends Model
 
     public function events()
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(Event::class, 'id_organization');
     }
 
     // 1. Relasi ke SEMUA riwayat kepengurusan
     public function managements()
     {
-        // Saya tambahkan 'organization_id' agar lebih pasti
-        return $this->hasMany(ManagementOrganization::class, 'organization_id');
+        return $this->hasMany(ManagementOrganization::class, 'id_organization');
     }
 
     // 2. Relasi KHUSUS kepengurusan yang sedang AKTIF sekarang
     public function currentManagement()
     {
-        // Saya tambahkan 'organization_id' agar lebih pasti
-        return $this->hasOne(ManagementOrganization::class, 'organization_id')->ofMany([
+        // Saya tambahkan 'id_organization' agar lebih pasti
+        return $this->hasOne(ManagementOrganization::class, 'id_organization')->ofMany([
             'id' => 'max',
         ], function ($query) {
             $query->whereHas('period', function ($q) {

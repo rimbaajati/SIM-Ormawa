@@ -22,8 +22,8 @@
                     {{-- Header Proposal: Judul & Status --}}
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <div>
-                            <h3 class="card-title text-primary mb-1">{{ $proposal->judul_kegiatan }}</h3>
-                            <p class="text-muted mb-0">ID Proposal: <strong>#{{ $proposal->id }}</strong></p>
+                            <h3 class="card-title text-primary mb-1">{{ $proposal->judul }}</h3>
+                            <p class="text-muted mb-0">ID Proposal: <strong>{{ $proposal->id_proposal }}</strong></p>
                         </div>
                         <div>
                             {{-- Logika Badge Status --}}
@@ -46,7 +46,7 @@
                             <table class="table table-borderless">
                                 <tr>
                                     <th width="30%">Organisasi</th>
-                                    <td>: {{ $proposal->organisasi }}</td>
+                                    <td>: {{ $proposal->organization->name ?? 'Organisasi Tidak Ditemukan' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Diajukan Oleh (User ID)</th>
@@ -129,14 +129,14 @@
                 </div>
                 <div class="card-body">
 
-                    <form action="" method="POST">
+                    <form action="{{ route('manager.proposal.update_budget', $proposal->id_proposal) }}" method="POST">
                         @csrf
 
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle" id="table-rincian">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="text-center" style="width: 50px">No</th> {{-- Kolom Nomor Baru --}}
+                                        <th class="text-center" style="width: 50px">No</th>
                                         <th style="width: 40%">Uraian / Nama Barang</th>
                                         <th style="width: 20%">Harga Satuan (Rp)</th>
                                         <th style="width: 10%">Jumlah (Qty)</th>
@@ -145,11 +145,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="rincian-container">
-                                    {{-- Baris Pertama (Default) --}}
                                     <tr>
-                                        <td class="text-center row-number">1</td> {{-- Angka 1 Statis --}}
+                                        <td class="text-center row-number">1</td>
                                         <td>
-                                            <input type="text" name="keterangan[]" class="form-control"
+                                            <input type="text" name="nama_barang[]" class="form-control"
                                                 placeholder="Contoh: Sewa Gedung" required>
                                         </td>
                                         <td>
@@ -157,7 +156,7 @@
                                                 placeholder="0" min="0" required>
                                         </td>
                                         <td>
-                                            <input type="number" name="qty[]" class="form-control input-qty"
+                                            <input type="number" name="jumlah[]" class="form-control input-qty"
                                                 placeholder="1" min="1" required>
                                         </td>
                                         <td>
@@ -201,91 +200,136 @@
     {{-- SCRIPT JAVASCRIPT --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 1. Definisi Elemen DOM
             const container = document.getElementById('rincian-container');
             const btnTambah = document.getElementById('btn-tambah-baris');
             const grandTotalDisplay = document.getElementById('grand_total_display');
             const grandTotalInput = document.getElementById('grand_total_input');
 
-            // Fungsi Format Rupiah
+            // 2. Fungsi Format Rupiah (IDR)
             const formatRupiah = (number) => {
                 return new Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
-                    minimumFractionDigits: 0
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
                 }).format(number);
             }
 
-            // Fungsi Hitung Total
+            // 3. Fungsi Hitung Total (Grand Total & Subtotal per baris)
             const calculateGrandTotal = () => {
                 let total = 0;
                 const rows = container.querySelectorAll('tr');
 
                 rows.forEach(row => {
-                    const harga = parseFloat(row.querySelector('.input-harga').value) || 0;
-                    const qty = parseFloat(row.querySelector('.input-qty').value) || 0;
+                    // Ambil elemen input
+                    const hargaInput = row.querySelector('.input-harga');
+                    const qtyInput = row.querySelector('.input-qty');
+                    const subtotalInput = row.querySelector('.input-subtotal');
+
+                    // Ambil nilai (jika kosong/NaN, anggap 0)
+                    const harga = parseFloat(hargaInput.value) || 0;
+                    const qty = parseFloat(qtyInput.value) || 0;
+
+                    // Hitung Subtotal
                     const subtotal = harga * qty;
 
-                    // Update kolom subtotal per baris
-                    row.querySelector('.input-subtotal').value = formatRupiah(subtotal);
+                    // Tampilkan Subtotal di input readonly (Format Rupiah)
+                    if (subtotalInput) {
+                        subtotalInput.value = formatRupiah(subtotal);
+                    }
 
+                    // Tambahkan ke Grand Total
                     total += subtotal;
                 });
 
-                // Update Grand Total di Footer
-                grandTotalDisplay.innerText = formatRupiah(total);
-                grandTotalInput.value = total;
+                // Update Tampilan Grand Total (Teks Rp ...)
+                if (grandTotalDisplay) {
+                    grandTotalDisplay.innerText = formatRupiah(total);
+                }
+
+                // Update Input Hidden Grand Total (Angka Murni untuk dikirim ke Controller)
+                if (grandTotalInput) {
+                    grandTotalInput.value = total;
+                }
             };
 
-            // Fungsi Update Nomor Urut (Re-indexing)
+            // 4. Fungsi Update Nomor Urut
             const updateRowNumbers = () => {
                 const rows = container.querySelectorAll('tr');
                 rows.forEach((row, index) => {
-                    // Mengupdate text di kolom nomor (index dimulai dari 0, jadi ditambah 1)
-                    row.querySelector('.row-number').innerText = index + 1;
+                    const numberCell = row.querySelector('.row-number');
+                    if (numberCell) {
+                        numberCell.innerText = index + 1;
+                    }
                 });
             };
 
-            // Event Listener: Input Harga/Qty berubah
+            // 5. Event Listener: Deteksi Perubahan Input (Harga / Qty)
+            // Menggunakan 'input' agar real-time saat diketik
             container.addEventListener('input', function(e) {
                 if (e.target.classList.contains('input-harga') || e.target.classList.contains(
-                        'input-qty')) {
+                    'input-qty')) {
                     calculateGrandTotal();
                 }
             });
 
-            // Event Listener: Tombol Tambah Baris
-            btnTambah.addEventListener('click', function() {
-                const newRow = document.createElement('tr');
-                // Kita kosongkan dulu nomornya, nanti diisi oleh updateRowNumbers()
-                newRow.innerHTML = `
-                <td class="text-center row-number"></td> 
-                <td><input type="text" name="keterangan[]" class="form-control" required></td>
-                <td><input type="number" name="harga[]" class="form-control input-harga" min="0" required></td>
-                <td><input type="number" name="qty[]" class="form-control input-qty" min="1" value="1" required></td>
-                <td><input type="text" class="form-control input-subtotal bg-light" readonly></td>
-                <td class="text-center">
-                    <button type="button" class="btn btn-danger btn-sm btn-hapus">
-                        <i class="bx bx-trash"></i>
-                    </button>
-                </td>
-            `;
-                container.appendChild(newRow);
-                updateRowNumbers(); // Update nomor setelah tambah
-            });
+            // 6. Event Listener: Tombol Tambah Baris
+            if (btnTambah) {
+                btnTambah.addEventListener('click', function() {
+                    const newRow = document.createElement('tr');
 
-            // Event Listener: Tombol Hapus Baris
+                    // --- PERUBAHAN PENTING DI SINI ---
+                    // name="keterangan[]" -> diganti jadi name="nama_barang[]"
+                    // name="qty[]"        -> diganti jadi name="jumlah[]"
+                    // Class "input-qty" tetap dibiarkan untuk selektor JavaScript
+                    newRow.innerHTML = `
+                    <td class="text-center row-number"></td> 
+                    <td>
+                        <input type="text" name="nama_barang[]" class="form-control" placeholder="Nama Barang..." required>
+                    </td>
+                    <td>
+                        <input type="number" name="harga[]" class="form-control input-harga" min="0" placeholder="0" required>
+                    </td>
+                    <td>
+                        <input type="number" name="jumlah[]" class="form-control input-qty" min="1" value="1" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control input-subtotal bg-light" readonly>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btn-sm btn-hapus">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    </td>
+                `;
+                    container.appendChild(newRow);
+                    updateRowNumbers(); // Update nomor urut
+                    calculateGrandTotal(); // Hitung ulang (opsional)
+                });
+            }
+
+            // 7. Event Listener: Tombol Hapus Baris
             container.addEventListener('click', function(e) {
+                // Cek apakah elemen yang diklik adalah tombol hapus atau icon di dalamnya
                 if (e.target.closest('.btn-hapus')) {
                     const row = e.target.closest('tr');
+
+                    // Cegah penghapusan jika hanya sisa 1 baris
                     if (container.querySelectorAll('tr').length > 1) {
                         row.remove();
-                        updateRowNumbers(); // Update nomor setelah hapus
+                        updateRowNumbers(); // Susun ulang nomor
                         calculateGrandTotal(); // Hitung ulang total
                     } else {
-                        alert("Minimal harus ada satu rincian.");
+                        alert("Minimal harus ada satu baris rincian.");
                     }
                 }
             });
+
+            // --- INISIALISASI ---
+            // Jalankan fungsi ini sekali saat halaman baru dibuka
+            updateRowNumbers();
+            calculateGrandTotal();
         });
     </script>
 @endsection

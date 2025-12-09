@@ -65,10 +65,10 @@
                     <tbody>
                         @forelse ($proposals as $proposal)
                             <tr>
-                                <td>{{ $proposal->id }}</td>
+                                <td>{{ $proposal->id_proposal }}</td>
                                 <td>{{ $proposal->judul }}</td>
                                 <td>{{ $proposal->organisasi }}</td>
-                                <td>{{ \Carbon\Carbon::parse($proposal->waktu)->format('d M Y H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($proposal->waktu)->format('d M Y ') }}</td>
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
                                 <td>
                                     <span
@@ -83,7 +83,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('manager.proposal.detail', $proposal->id) }}"
+                                    <a href="{{ route('manager.proposal.detail', $proposal->id_proposal) }}"
                                         class="btn btn-sm btn-info">
                                         Detail
                                     </a>

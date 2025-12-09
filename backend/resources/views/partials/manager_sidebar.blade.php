@@ -19,6 +19,20 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
+                        <i data-feather="users"></i>
+                        <span data-key="t-authentication">Organizations</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('manager.organization.all') }}">All Organizations</a></li>
+                        <li><a href="{{ route('manager.period.activate') }}" data-key="t-register">Kelola Periode</a>
+                        </li>
+                        <li><a href="auth-recoverpw.html" data-key="t-recover-password">Inactive Ormawa</a></li>
+                        <li><a href="auth-lock-screen.html" data-key="t-lock-screen">Activity History</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="grid"></i>
                         <span data-key="t-apps">Proposals</span>
                     </a>
@@ -52,20 +66,6 @@
                                 <li><a href="apps-blog-detail.html" data-key="t-blog-details">Blog Details</a></li>
                             </ul>
                         </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow">
-                        <i data-feather="users"></i>
-                        <span data-key="t-authentication">Organizations</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{ route('manager.organization.all') }}">All Organizations</a></li>
-                        <li><a href="{{ route('manager.period.activate') }}" data-key="t-register">Kelola Periode</a>
-                        </li>
-                        <li><a href="auth-recoverpw.html" data-key="t-recover-password">Inactive Ormawa</a></li>
-                        <li><a href="auth-lock-screen.html" data-key="t-lock-screen">Activity History</a></li>
                     </ul>
                 </li>
 

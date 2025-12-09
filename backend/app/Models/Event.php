@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['organization_id', 'nama', 'event_date', 'lokasi', 'deskripsi', 'foto'];
+    protected $fillable = ['id_organization', 'nama', 'event_date', 'lokasi', 'deskripsi', 'foto'];
 
     protected $casts = [
         'event_date' => 'date', // Agar bisa diformat tanggalnya nanti

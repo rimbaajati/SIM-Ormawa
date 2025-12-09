@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('management_organizations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
+            $table->foreignId('id_organization')->constrained('organizations')->onDelete('cascade');
             $table->foreignId('period_id')->constrained('periods')->onDelete('cascade');
             // Data yang berubah tiap tahun
             $table->string('ketua');
