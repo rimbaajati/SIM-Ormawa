@@ -72,7 +72,7 @@ const mitraLogos = [
 
       <div class="content-wrap container">
         <h1 class="animate-fade-in text-5xl font-extrabold tracking-tight">
-          Selamat Datang di Sistem Informasi <br />
+          Selamat Datang di Sistem Informasi Manajemen<br />
           Organisasi Mahasiswa
         </h1>
 
