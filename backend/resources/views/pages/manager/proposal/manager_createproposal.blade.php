@@ -39,8 +39,8 @@
                                 <option value="">-- Pilih Organisasi --</option>
 
                                 @foreach ($organizations as $org)
-                                    <option value="{{ $org->id }}"
-                                        {{ old('id_organization') == $org->id ? 'selected' : '' }}>
+                                    <option value="{{ $org->id_organization }}"
+                                        {{ old('id_organization') == $org->id_organization ? 'selected' : '' }}>
                                         {{ $org->name }}
                                     </option>
                                 @endforeach
@@ -64,10 +64,19 @@
 
                         <!--- WAKTU --->
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-medium">Waktu Pelaksanaan</label>
-                            <input type="date" class="form-control @error('waktu') is-invalid @enderror" name="waktu"
-                                value="{{ old('waktu') }}">
-                            @error('waktu')
+                            <label class="form-label fw-medium">Waktu Mulai</label>
+                            <input type="datetime-local" class="form-control @error('waktu_mulai') is-invalid @enderror"
+                                name="waktu_mulai" value="{{ old('waktu_mulai') }}">
+                            @error('waktu_mulai')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium">Waktu Selesai</label>
+                            <input type="datetime-local" class="form-control @error('waktu_selesai') is-invalid @enderror"
+                                name="waktu_selesai" value="{{ old('waktu_selesai') }}">
+                            @error('waktu_selesai')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

@@ -6,28 +6,44 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+   public function up(): void
     {
         Schema::create('proposals', function (Blueprint $table) {
-            $table->string('id_proposal', 50)->primary(); // Misal: PROP-001
-            // 2. Relasi ke Tabel Organizations 
-            $table->unsignedBigInteger('id_organization');
-            $table->unsignedBigInteger('id_user');   
+            // 1. Primary Key
+            $table->string('id_proposal', 50)->primary(); 
+            // 2. Relasi ke Tabel Organizations (PERBAIKAN UTAMA)
+            $table->string('id_organization', 20); 
+            $table->foreign('id_organization')
+                  ->references('id_organization') // Merujuk ke kolom id_organization
+                  ->on('organizations')           // Di tabel organizations
+                  ->onDelete('cascade');          // Hapus proposal jika organisasi dihapus
+
+            // 3. Relasi ke User (Pembuat Proposal)
+            // Kita gunakan cara singkat foreignId agar lebih rapi
+            $table->foreignId('id_user')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+
             // 4. Data Utama
             $table->string('judul');
             $table->text('deskripsi');
-            $table->dateTime('waktu');
+            $table->dateTime('waktu_mulai'); 
+            $table->dateTime('waktu_selesai'); 
             $table->string('tempat');
             $table->decimal('anggaran', 15, 2)->nullable();
-            $table->string('file_proposal'); // Path file PDF
+            $table->string('file_proposal'); 
             
             $table->enum('status', ['pending', 'approved', 'rejected', 'revision'])
                   ->default('pending');
-            $table->text('catatan_revisi')->nullable(); // Alasan jika ditolak/revisi
-            $table->foreignId('approved_by') // Siapa admin yang menyetujui?
+            
+            $table->text('catatan_revisi')->nullable(); 
+
+            // 5. Relasi ke Admin/User yang menyetujui
+            $table->foreignId('approved_by')
                   ->nullable()
                   ->constrained('users')
-                  ->onDelete('set null'); // Jika admin dihapus, data proposal tetap ada
+                  ->onDelete('set null'); 
+
             $table->timestamps();
         });
     }

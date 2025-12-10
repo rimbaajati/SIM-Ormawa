@@ -34,19 +34,20 @@ class ProposalController extends Controller
         // 1. Validasi Input
         $request->validate([
             'judul'           => 'required|string|max:255',
-            'id_organization' => 'required|exists:organizations,id',
+            'id_organization' => 'required|exists:organizations,id_organization',
             'deskripsi'       => 'required',
-            'waktu'           => 'required|date',
+            'waktu_mulai' => 'required|date', 
+            'waktu_selesai' => 'required|date|after_or_equal:waktu_mulai',
             'tempat'          => 'required',
             'anggaran'        => 'nullable|numeric',
-            'file_proposal'   => 'required|file|mimes:pdf|max:2048',
+            'file_proposal'   => 'required|mimes:pdf|max:2048',
         ]);
 
         // 2. Ambil Data Organisasi
         $organization = Organization::findOrFail($request->id_organization);
         
         // Ambil kode string (misal: UKM-001) dari kolom id_organization
-        $orgCode = $organization->id_organization;
+        $orgCode = $organization->code ?? $organization->id_organization;
 
         // 3. Generate Variabel untuk Nomor Proposal
         $now = Carbon::now();
@@ -61,7 +62,10 @@ class ProposalController extends Controller
         $nomorProposalJadi = "PROP/{$orgCode}/{$bulanRomawi}/{$tahun}/{$noUrut}";
 
         // 5. Upload File
-        $filePath = $request->file('file_proposal')->store('proposals', 'public');
+      $filePath = null; 
+        if ($request->hasFile('file_proposal')) {
+            $filePath = $request->file('file_proposal')->store('proposals', 'public');
+        }
 
         // 6. Simpan ke Database
         Proposal::create([
@@ -69,7 +73,8 @@ class ProposalController extends Controller
             'judul'           => $request->judul,
             'id_organization' => $request->id_organization,
             'deskripsi'       => $request->deskripsi,
-            'waktu'           => $request->waktu,
+            'waktu_mulai'     => $request->waktu_mulai,
+            'waktu_selesai'   => $request->waktu_selesai,
             'tempat'          => $request->tempat,
             'anggaran'        => $request->anggaran,
             'file_proposal'   => $filePath,
@@ -187,53 +192,57 @@ class ProposalController extends Controller
         }
     }
 
-    // --- FITUR UPDATE ANGGARAN (FIXED) ---
-    public function updateBudget(Request $request, Proposal $proposal)
+    // --- FITUR UPDATE ANGGARAN ---
+   public function updateBudget(Request $request, Proposal $proposal)
     {
-        // 1. Validasi (Harus sesuai nama di form HTML: keterangan, harga, qty)
+        // 1. Validasi Input
         $request->validate([
-            'keterangan.*' => 'required|string', 
-            'harga.*'      => 'required|numeric|min:0',
-            'qty.*'        => 'required|numeric|min:1',
+            'nama_barang.*' => 'required|string',
+            'harga.*'       => 'required|numeric|min:0',
+            'jumlah.*'      => 'required|numeric|min:1',
         ]);
 
-        // 2. Hapus Rincian Lama (Reset)
-        ProposalBudget::where('id_proposal', $proposal->id_proposal)->delete();
+        // 2. Reset Data Rincian Lama (Hapus dulu biar bersih)
+        \App\Models\ProposalBudget::where('id_proposal', $proposal->id_proposal)->delete();
 
+        // Siapkan variabel penampung total = 0
         $grandTotal = 0; 
 
-        // 3. Simpan Rincian Baru & Hitung Total
-        if ($request->has('keterangan')) {
-            foreach ($request->keterangan as $index => $itemKeterangan) {
+        // 3. Simpan Rincian Baru & Hitung Ulang Total
+        if ($request->has('nama_barang')) {
+            foreach ($request->nama_barang as $index => $itemNamaBarang) {
                 
-                if (!empty($itemKeterangan)) {
+                if (!empty($itemNamaBarang)) {
                     
-                    // Ambil nilai input
-                    $hargaInput  = $request->harga[$index];
-                    $qtyInput    = $request->qty[$index];
-                    $subtotal    = $hargaInput * $qtyInput;
+                    // Ambil angka dari input form
+                    $hargaInput = $request->harga[$index];
+                    $qtyInput   = $request->jumlah[$index];
+                    
+                    // Hitung Subtotal per baris (PHP yang menghitung, bukan JS)
+                    $subtotal   = $hargaInput * $qtyInput;
 
-                    // Simpan ke Database
-                    // Mapping: Form (keterangan) -> DB (nama_barang)
-                    // Mapping: Form (qty)        -> DB (jumlah)
-                    ProposalBudget::create([
+                    // Simpan ke Tabel Rincian (proposal_budgets)
+                    \App\Models\ProposalBudget::create([
                         'id_proposal' => $proposal->id_proposal,
-                        'nama_barang' => $itemKeterangan, 
+                        'nama_barang' => $itemNamaBarang,
                         'harga'       => $hargaInput,
                         'jumlah'      => $qtyInput,
                         'subtotal'    => $subtotal,
                     ]);
 
-                    $grandTotal += $subtotal;
+                    // --- INI BAGIAN PENTINGNYA ---
+                    // Setiap baris disimpan, tambahkan subtotalnya ke Grand Total
+                    $grandTotal += $subtotal; 
                 }
             }
         }
 
-        // 4. Update Anggaran Utama
+        // 4. UPDATE TABEL PROPOSAL UTAMA
+        // Masukkan hasil penjumlahan ($grandTotal) ke kolom 'anggaran'
         $proposal->update([
             'anggaran' => $grandTotal
         ]);
 
-        return redirect()->back()->with('success', 'Rincian berhasil disimpan & Total Anggaran diperbarui!');
+        return redirect()->back()->with('success', 'Rincian disimpan & Total Anggaran (Rp ' . number_format($grandTotal, 0, ',', '.') . ') berhasil diupdate!');
     }
 }

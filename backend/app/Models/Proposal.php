@@ -19,7 +19,8 @@ class Proposal extends Model
         'id_user',
         'judul',
         'deskripsi',
-        'waktu',
+        'waktu_mulai',  
+        'waktu_selesai',
         'tempat',
         'anggaran',
         'file_proposal',
@@ -29,7 +30,8 @@ class Proposal extends Model
     ];
 
     protected $casts = [
-        'waktu' => 'datetime',
+        'waktu_mulai' => 'datetime',
+        'waktu_selesai' => 'datetime',
         'anggaran' => 'decimal:2',
     ];
 
@@ -45,7 +47,7 @@ class Proposal extends Model
     public function organization()
     {
         // 'id_organization' adalah foreign key di tabel proposals
-        return $this->belongsTo(Organization::class, 'id_organization');
+        return $this->belongsTo(Organization::class, 'id_organization', 'id_organization');
     }
 
     public function budgets()

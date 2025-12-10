@@ -50,14 +50,14 @@
             <!-- TABLE -->
             <div class="table-responsive">
                 <table class="table table-bordered align-middle">
-                    <thead class="table-light">
+                    <thead class="table-light text-center">
                         <tr>
-                            <th>ID</th>
+                            <th>Nomor Proposal</th>
                             <th>Kegiatan</th>
                             <th>Organisasi</th>
                             <th>Waktu</th>
                             <th>Anggaran</th>
-                            <th>Status</th>
+                            <th>Status Pengajuan</th>
                             <th width="220">Action</th>
                         </tr>
                     </thead>
@@ -67,8 +67,16 @@
                             <tr>
                                 <td>{{ $proposal->id_proposal }}</td>
                                 <td>{{ $proposal->judul }}</td>
-                                <td>{{ $proposal->organisasi }}</td>
-                                <td>{{ \Carbon\Carbon::parse($proposal->waktu)->format('d M Y ') }}</td>
+                                <td>{{ $proposal->organization->name ?? 'Organisasi Tidak Ditemukan' }}</td>
+                                <td>
+                                    <div>
+                                        {{ \Carbon\Carbon::parse($proposal->waktu_mulai)->format('d M Y, H:i') }} WIB
+                                    </div>
+                                    <div class="text-muted small">s/d</div>
+                                    <div>
+                                        {{ \Carbon\Carbon::parse($proposal->waktu_selesai)->format('d M Y, H:i') }} WIB
+                                    </div>
+                                </td>
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
                                 <td>
                                     <span

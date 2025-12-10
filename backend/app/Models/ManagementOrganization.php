@@ -20,6 +20,6 @@ class ManagementOrganization extends Model
 
     public function period()
     {
-        return $this->belongsTo(Period::class, 'id_period');
+        return $this->belongsTo(Period::class, 'id_period', 'id_period');
     }
 }

@@ -504,34 +504,7 @@
                                             <div class="pb-3">
                                                 <h5 class="font-size-15">Deskripsi</h5>
                                                 <div class="text-muted">
-                                                    <p class="mb-2">Hi I'm Phyllis Gatlin, Lorem Ipsum is simply dummy
-                                                        text of the printing and typesetting industry. Lorem Ipsum has been
-                                                        the industry's standard dummy text ever since the 1500s, when an
-                                                        unknown printer took a galley of type and scrambled it to make a
-                                                        type specimen book. It has survived not only five centuries, but
-                                                        also the leap into electronic typesetting, remaining essentially
-                                                        unchanged. It was popularised in the 1960s with the release of
-                                                        Letraset sheets containing Lorem Ipsum passages</p>
-                                                    <p class="mb-2">It is a long established fact that a reader will be
-                                                        distracted by the readable content of a page when looking at it has
-                                                        a more-or-less normal distribution of letters</p>
-                                                    <p>It will be as simple as Occidental; in fact, it will be Occidental.
-                                                        To an English person, it will seem like simplified English, as a
-                                                        skeptical Cambridge friend of mine told me what Occidental is. The
-                                                        European languages are members of the same family. Their separate
-                                                        existence is a myth.</p>
-
-                                                    <ul class="list-unstyled mb-0">
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Donec
-                                                            vitae sapien ut libero venenatis faucibus</li>
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Quisque
-                                                            rutrum aenean imperdiet</li>
-                                                        <li class="py-1"><i
-                                                                class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Integer
-                                                            ante a consectetuer eget</li>
-                                                    </ul>
+                                                    <p class="mb-2">{{ $organization->deskripsi }}</p>
                                                 </div>
                                             </div>
                                         </div>

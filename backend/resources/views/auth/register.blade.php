@@ -96,7 +96,7 @@
                                         </div>
 
                                         <button class="btn btn-primary w-100 waves-effect waves-light"
-                                            type="submit">Register</button>
+                                            style="background-color: #ff6600; border-color: #ff6600; color: white;"type="submit">Register</button>
 
                                         @if ($errors->any())
                                             <div class="alert alert-danger mt-3">
@@ -112,7 +112,7 @@
                                     <div class="mt-3
                                      text-center">
                                         <p class="text-muted mb-0">Sudah punya akun? <a href="{{ route('login') }}"
-                                                class="text-primary fw-semibold"> Login
+                                                class="text-primary fw-semibold style="> Login
                                             </a> </p>
                                     </div>
                                 </div>
@@ -124,7 +124,7 @@
                 <!-- end col -->
                 <div class="col-xxl-9 col-lg-8 col-md-7">
                     <div class="auth-bg pt-md-5 p-4 d-flex">
-                        <div class="bg-overlay bg-primary"></div>
+                        <div class="bg-overlay" style="background-color: #ff6600; opacity:60%"></div>
                         <ul class="bg-bubbles">
                             <li></li>
                             <li></li>

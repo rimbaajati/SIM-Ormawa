@@ -29,7 +29,7 @@
                             <div class="col-7">
                                 <span class="text-muted mb-2 d-block">Total Pengajuan</span>
                                 <h4 class="mb-0">
-                                    <span class="counter-value" data-target="120">0</span>
+                                    <span class="counter-value" data-target="120">{{ $totalProposals }}</span>
                                 </h4>
                             </div>
 
@@ -51,7 +51,7 @@
                             <div class="col-7">
                                 <span class="text-muted mb-2 d-block">Menunggu Verifikasi</span>
                                 <h4 class="mb-0">
-                                    <span class="counter-value" data-target="32">0</span>
+                                    <span class="counter-value" data-target="32">{{ $pendingProposals }}</span>
                                 </h4>
                             </div>
                             <div class="col-5">
@@ -72,7 +72,7 @@
                             <div class="col-7">
                                 <span class="text-muted mb-2 d-block">Disetujui</span>
                                 <h4 class="mb-0">
-                                    <span class="counter-value" data-target="76">0</span>
+                                    <span class="counter-value" data-target="76">{{ $approvedProposals }}</span>
                                 </h4>
                             </div>
                             <div class="col-5">
@@ -108,13 +108,10 @@
 
         </div>
 
-
     </div>
 
     <!-- ===== GRAFIK ===== -->
-
     <div class="row mt-4">
-
         <!-- ===== CHART STATISTIK ===== -->
         <div class="col-md-8">
             <div class="card shadow-sm border-0 h-100">

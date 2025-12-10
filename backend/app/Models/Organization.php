@@ -14,6 +14,13 @@ class Organization extends Model
 
     protected $table = 'organizations';
 
+    // --- PERBAIKAN 1: KONFIGURASI PRIMARY KEY ---
+    // Karena kita pakai 'id_organization' (String), bukan 'id' (Integer)
+    protected $primaryKey = 'id_organization';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    // --------------------------------------------
+
     protected $fillable = [
         'id_organization', 
         'name',
@@ -36,12 +43,16 @@ class Organization extends Model
     {
         static::creating(function ($model) {
             $prefix = 'UKM-';
-            $latestOrg = static::orderBy('id', 'desc')->first();
+            
+            // --- PERBAIKAN 2: LOGIKA GENERATE ID ---
+            // Error sebelumnya terjadi di sini karena mencari 'id'. 
+            // Kita ubah menjadi urutkan berdasarkan 'id_organization'.
+            $latestOrg = static::orderBy('id_organization', 'desc')->first();
             
             if (!$latestOrg) {
                 $model->id_organization = $prefix . '001';
             } else {
-                // Ambil 3 digit terakhir
+                // Ambil 3 digit terakhir dari id_organization (bukan id)
                 $lastNumber = (int) substr($latestOrg->id_organization, -3);
                 $newNumber = $lastNumber + 1;
                 $model->id_organization = $prefix . sprintf('%03d', $newNumber);
@@ -51,6 +62,7 @@ class Organization extends Model
 
     public function events()
     {
+        // Pastikan relasi merujuk ke id_organization
         return $this->hasMany(Event::class, 'id_organization');
     }
 
@@ -63,9 +75,8 @@ class Organization extends Model
     // 2. Relasi KHUSUS kepengurusan yang sedang AKTIF sekarang
     public function currentManagement()
     {
-        // Saya tambahkan 'id_organization' agar lebih pasti
         return $this->hasOne(ManagementOrganization::class, 'id_organization')->ofMany([
-            'id' => 'max',
+            'id' => 'max', // Ini OK pakai 'id' tabel management (karena tabel management masih punya id auto increment)
         ], function ($query) {
             $query->whereHas('period', function ($q) {
                 $q->where('is_active', true);

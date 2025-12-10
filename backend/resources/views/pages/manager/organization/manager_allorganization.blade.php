@@ -83,21 +83,21 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     {{-- Tombol Edit --}}
                                                     <a class="dropdown-item"
-                                                        href="{{ route('manager.organization.edit', $org->id) }}">
+                                                        href="{{ route('manager.organization.edit', $org->id_organization) }}">
                                                         <i class="bx bx-edit font-size-16 align-middle me-1"></i> Edit
                                                     </a>
 
                                                     {{-- Tombol Remove (Pemicu) --}}
                                                     {{-- Kita beri warna merah (text-danger) sebagai penanda bahaya --}}
                                                     <a class="dropdown-item text-danger" href="javascript:void(0);"
-                                                        onclick="confirmDelete({{ $org->id }})">
+                                                        onclick="confirmDelete({{ $org->id_organization }})">
                                                         <i class="bx bx-trash font-size-16 align-middle me-1"></i> Remove
                                                     </a>
 
                                                     {{-- Form Delete Tersembunyi --}}
                                                     {{-- Form ini tidak terlihat, tapi akan disubmit oleh Javascript saat user klik "Ya" --}}
-                                                    <form id="delete-form-{{ $org->id }}"
-                                                        action="{{ route('manager.organization.destroy', $org->id) }}"
+                                                    <form id="delete-form-{{ $org->id_organization }}"
+                                                        action="{{ route('manager.organization.destroy', $org->id_organization) }}"
                                                         method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')

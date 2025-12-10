@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            
-            // === BARIS INI YANG HILANG DI DATABASE ANDA ===
-            $table->foreignId('id_organization')->constrained('organizations')->onDelete('cascade');
-            // ==============================================
-
+            $table->string('id_organization', 20);
+            $table->foreign('id_organization')
+                  ->references('id_organization') // Tunjuk ke kolom PK baru
+                  ->on('organizations')
+                  ->onDelete('cascade');
             $table->string('name');
-            $table->date('event_date');
-            $table->string('location')->nullable();
-            $table->text('description')->nullable();
-            $table->string('poster')->nullable();
+            $table->text('description');
+            $table->string('poster')->nullable(); // Jika ada upload poster
+            $table->dateTime('event_date');
+            $table->string('location');
             $table->timestamps();
         });
     }

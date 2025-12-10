@@ -56,4 +56,4 @@ Route::middleware('auth:sanctum')->group(function () {
     // Jika Anda masih membutuhkan fitur produk dari request sebelumnya
     Route::resource('products', ProductController::class);
 
-});
+});`
