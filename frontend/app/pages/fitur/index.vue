@@ -6,8 +6,8 @@ const features = [
   { slug: "formdetail", icon: "📋", title: "Form Detail Lengkap" },
   { slug: "uploaddokumen", icon: "📤", title: "Upload Dokumen" },
   { slug: "notifikasi", icon: "🔔", title: "Notifikasi Revisi" },
-  { slug: "tracking/[id]", icon: "📊", title: "Tracking Real-time" },
-  { slug: "download", icon: "⬇️", title: "Download Izin" },
+  { slug: "tracking", icon: "📊", title: "Tracking Real-time" },
+  { slug: "download", icon: "⬇️", title: "Download Dokument" },
 ];
 
 const stats = ref([
