@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ProposalController extends Controller
 {
@@ -31,52 +35,41 @@ class ProposalController extends Controller
     // STORE 
     public function store(Request $request): RedirectResponse 
     {
-        // 1. Validasi Input
-        $request->validate([
+        $request->validate([ // 1. Validasi Input
             'judul'           => 'required|string|max:255',
-            'id_organization' => 'required|exists:organizations,id_organization',
+            'id_organization' => 'required|exists:organizations,id', 
             'deskripsi'       => 'required',
-            'waktu_mulai' => 'required|date', 
-            'waktu_selesai' => 'required|date|after_or_equal:waktu_mulai',
+            'waktu_mulai'     => 'required|date', 
+            'waktu_selesai'   => 'required|date|after_or_equal:waktu_mulai',
             'tempat'          => 'required',
             'anggaran'        => 'nullable|numeric',
             'file_proposal'   => 'required|mimes:pdf|max:2048',
         ]);
 
-        // 2. Ambil Data Organisasi
-        $organization = Organization::findOrFail($request->id_organization);
-        
-        // Ambil kode string (misal: UKM-001) dari kolom id_organization
-        $orgCode = $organization->code ?? $organization->id_organization;
+        $organization = Organization::findOrFail($request->id_organization); // 2. Ambil Data Organisasi (Berdasarkan ID Angka)
+        $orgCode = $organization->id_organization; 
 
-        // 3. Generate Variabel untuk Nomor Proposal
-        $now = Carbon::now();
+        $now = Carbon::now(); // 3. Generate Variabel untuk Nomor Proposal
         $bulanRomawi = $this->getRomanMonth($now->month);
         $tahun = $now->year;
         
-        // Panggil fungsi sequence
         $noUrut = $this->getLatestSequence($request->id_organization, $tahun);
+        $nomorProposalJadi = "PROP/{$orgCode}/{$bulanRomawi}/{$tahun}/{$noUrut}"; // 4. Rakit Nomor Proposal (PROP/UKM-001/XII/2025/001)
 
-        // 4. Rakit Nomor Proposal
-        // Format: PROP/UKM-001/II/2026/001
-        $nomorProposalJadi = "PROP/{$orgCode}/{$bulanRomawi}/{$tahun}/{$noUrut}";
-
-        // 5. Upload File
-      $filePath = null; 
+        $filePath = null;  // 5. Upload File
         if ($request->hasFile('file_proposal')) {
             $filePath = $request->file('file_proposal')->store('proposals', 'public');
         }
 
-        // 6. Simpan ke Database
-        Proposal::create([
-            'id_proposal'     => $nomorProposalJadi,
+        Proposal::create([ // 6. Simpan ke Database
+            'id_proposal'     => $nomorProposalJadi, 
             'judul'           => $request->judul,
-            'id_organization' => $request->id_organization,
+            'id_organization' => $request->id_organization, 
             'deskripsi'       => $request->deskripsi,
             'waktu_mulai'     => $request->waktu_mulai,
             'waktu_selesai'   => $request->waktu_selesai,
             'tempat'          => $request->tempat,
-            'anggaran'        => $request->anggaran,
+            'anggaran'        => $request->anggaran ?? 0,
             'file_proposal'   => $filePath,
             'status'          => 'pending',
             'id_user'         => Auth::id(),
@@ -86,9 +79,7 @@ class ProposalController extends Controller
             ->with('success', 'Proposal berhasil diajukan dengan nomor: ' . $nomorProposalJadi);
     }
 
-    // --- FUNGSI TAMBAHAN ---
-
-    // 1. Fungsi ubah angka bulan ke Romawi
+    // FUNGSI BANTUAN
     private function getRomanMonth($month)
     {
         $map = [
@@ -98,7 +89,6 @@ class ProposalController extends Controller
         return $map[$month] ?? 'I';
     }
 
-    // 2. Fungsi cari nomor urut terakhir per organisasi & tahun
     private function getLatestSequence($orgId, $year)
     {
         $lastProposal = Proposal::where('id_organization', $orgId)
@@ -108,7 +98,7 @@ class ProposalController extends Controller
 
         if ($lastProposal && $lastProposal->id_proposal) {
             $parts = explode('/', $lastProposal->id_proposal);
-            $lastNumber = end($parts);
+            $lastNumber = end($parts); 
             $newNumber = (int)$lastNumber + 1;
         } else {
             $newNumber = 1;
@@ -139,7 +129,8 @@ class ProposalController extends Controller
             'judul'           => 'required|string|max:255',
             'id_organization' => 'required|exists:organizations,id',
             'deskripsi'       => 'required',
-            'waktu'           => 'required|date',
+            'waktu_mulai'     => 'required|date',
+            'waktu_selesai'   => 'required|date|after_or_equal:waktu_mulai',
             'tempat'          => 'required',
             'anggaran'        => 'required|numeric',
             'file_proposal'   => 'nullable|file|mimes:pdf|max:2048',
@@ -147,10 +138,10 @@ class ProposalController extends Controller
 
         $data = [
             'judul'           => $request->judul,
-            'id_organization' => $request->id_organization, // Update ID Organisasi
-            // 'organisasi'   => ... HAPUS INI KARENA KOLOM SUDAH DIHAPUS
+            'id_organization' => $request->id_organization, 
             'deskripsi'       => $request->deskripsi,
-            'waktu'           => $request->waktu,
+            'waktu_mulai'     => $request->waktu_mulai,
+            'waktu_selesai'   => $request->waktu_selesai,
             'tempat'          => $request->tempat,
             'anggaran'        => $request->anggaran,
         ];
@@ -177,7 +168,7 @@ class ProposalController extends Controller
              Storage::disk('public')->delete($proposal->file_proposal);
         }
         
-        $proposal->delete();
+        $proposal->delete(); 
 
         return redirect()->route('manager.proposal.all')
             ->with('success', 'Proposal berhasil dihapus.');
@@ -186,14 +177,13 @@ class ProposalController extends Controller
     // Authorize
     private function authorizeAccess(Proposal $proposal)
     {
-        // Ubah user_id jadi id_user sesuai database Anda
         if ($proposal->id_user !== Auth::id()) {
             abort(403, 'Akses ditolak.');
         }
     }
 
-    // --- FITUR UPDATE ANGGARAN ---
-   public function updateBudget(Request $request, Proposal $proposal)
+    // --- FITUR UPDATE ANGGARAN (MANUAL) ---
+    public function updateBudget(Request $request, Proposal $proposal)
     {
         // 1. Validasi Input
         $request->validate([
@@ -202,10 +192,10 @@ class ProposalController extends Controller
             'jumlah.*'      => 'required|numeric|min:1',
         ]);
 
-        // 2. Reset Data Rincian Lama (Hapus dulu biar bersih)
-        \App\Models\ProposalBudget::where('id_proposal', $proposal->id_proposal)->delete();
+        // 2. Reset Data Rincian Lama
+        // PENTING: Gunakan 'proposal_id' dan $proposal->id (Integer)
+        ProposalBudget::where('proposal_id', $proposal->id)->delete();
 
-        // Siapkan variabel penampung total = 0
         $grandTotal = 0; 
 
         // 3. Simpan Rincian Baru & Hitung Ulang Total
@@ -214,35 +204,111 @@ class ProposalController extends Controller
                 
                 if (!empty($itemNamaBarang)) {
                     
-                    // Ambil angka dari input form
                     $hargaInput = $request->harga[$index];
                     $qtyInput   = $request->jumlah[$index];
-                    
-                    // Hitung Subtotal per baris (PHP yang menghitung, bukan JS)
                     $subtotal   = $hargaInput * $qtyInput;
 
                     // Simpan ke Tabel Rincian (proposal_budgets)
-                    \App\Models\ProposalBudget::create([
-                        'id_proposal' => $proposal->id_proposal,
-                        'nama_barang' => $itemNamaBarang,
-                        'harga'       => $hargaInput,
-                        'jumlah'      => $qtyInput,
-                        'subtotal'    => $subtotal,
+                    ProposalBudget::create([
+                        // Pakai proposal_id (sesuai migrasi proposal_budgets) merujuk ke ID Angka
+                        'proposal_id'  => $proposal->id, 
+                        'nama_barang'  => $itemNamaBarang,
+                        'harga_satuan' => $hargaInput, // Sesuaikan nama kolom DB (harga_satuan/harga)
+                        'jumlah'       => $qtyInput,
+                        'subtotal'     => $subtotal,
                     ]);
 
-                    // --- INI BAGIAN PENTINGNYA ---
-                    // Setiap baris disimpan, tambahkan subtotalnya ke Grand Total
                     $grandTotal += $subtotal; 
                 }
             }
         }
 
-        // 4. UPDATE TABEL PROPOSAL UTAMA
-        // Masukkan hasil penjumlahan ($grandTotal) ke kolom 'anggaran'
+        // Update Total Anggaran di Tabel Utama
         $proposal->update([
             'anggaran' => $grandTotal
         ]);
 
-        return redirect()->back()->with('success', 'Rincian disimpan & Total Anggaran (Rp ' . number_format($grandTotal, 0, ',', '.') . ') berhasil diupdate!');
+        return redirect()->back()->with('success', 'Rincian disimpan & Total Anggaran diperbarui!');
+    }
+
+    // --- FITUR IMPORT EXCEL ---
+    public function importBudget(Request $request, Proposal $proposal)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls|max:2048'
+        ]);
+
+        try {
+            $file = $request->file('file_excel');
+            $spreadsheet = IOFactory::load($file->getPathname());
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray();
+
+            DB::beginTransaction();
+
+            // Hapus data lama berdasarkan ID Proposal (Integer)
+            ProposalBudget::where('proposal_id', $proposal->id)->delete();
+
+            $grandTotal = 0;
+            $countItem = 0;
+
+            foreach ($rows as $key => $row) {
+                if ($key == 0) continue; // Skip Header
+
+                $nama_barang  = $row[0]; 
+                $jumlah       = (int) $row[1];
+                $harga_satuan = (float) $row[2];
+
+                if (!empty($nama_barang) && $jumlah > 0) {
+                    
+                    $subtotal = $jumlah * $harga_satuan;
+
+                    ProposalBudget::create([
+                        'proposal_id'  => $proposal->id, // Pakai ID Angka
+                        'nama_barang'  => $nama_barang,
+                        'jumlah'       => $jumlah,
+                        'harga_satuan' => $harga_satuan,
+                        'subtotal'     => $subtotal,
+                    ]);
+
+                    $grandTotal += $subtotal;
+                    $countItem++;
+                }
+            }
+
+            $proposal->update([
+                'anggaran' => $grandTotal
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', "Berhasil import {$countItem} item. Total: Rp " . number_format($grandTotal));
+
+        } catch (\Exception $e) {
+            DB::rollBack(); 
+            return redirect()->back()->with('error', 'Gagal import Excel: ' . $e->getMessage());
+        }
+    }
+
+    // --- DOWNLOAD TEMPLATE ---
+    public function downloadTemplate()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Nama Barang');
+        $sheet->setCellValue('B1', 'Jumlah');
+        $sheet->setCellValue('C1', 'Harga Satuan');
+
+        $sheet->setCellValue('A2', 'Contoh: Sewa Tenda');
+        $sheet->setCellValue('B2', 2);
+        $sheet->setCellValue('C2', 500000);
+
+        $writer = new Xlsx($spreadsheet);
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="template_rab.xlsx"');
+        $writer->save('php://output');
+        exit;
     }
 }

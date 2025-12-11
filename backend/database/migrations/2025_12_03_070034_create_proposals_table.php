@@ -6,51 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-   public function up(): void
+    public function up(): void
     {
         Schema::create('proposals', function (Blueprint $table) {
-            // 1. Primary Key
-            $table->string('id_proposal', 50)->primary(); 
-            // 2. Relasi ke Tabel Organizations (PERBAIKAN UTAMA)
-            $table->string('id_organization', 20); 
-            $table->foreign('id_organization')
-                  ->references('id_organization') // Merujuk ke kolom id_organization
-                  ->on('organizations')           // Di tabel organizations
-                  ->onDelete('cascade');          // Hapus proposal jika organisasi dihapus
-
-            // 3. Relasi ke User (Pembuat Proposal)
-            // Kita gunakan cara singkat foreignId agar lebih rapi
-            $table->foreignId('id_user')
+            $table->id(); // 1. PRIMARY KEY UTAMA (Angka Auto Increment)
+            $table->string('id_proposal', 50)->unique(); // 2. ID PROPOSAL (String PROP/...)
+            $table->foreignId('id_organization') // 3. RELASI ORGANISASI
+                  ->constrained('organizations') // Otomatis cari id di tabel organizations
+                  ->onDelete('cascade');
+            $table->foreignId('id_user') // 4. RELASI USER
                   ->constrained('users')
                   ->onDelete('cascade');
-
-            // 4. Data Utama
-            $table->string('judul');
+            $table->string('judul'); // 5. DATA LAINNYA
             $table->text('deskripsi');
             $table->dateTime('waktu_mulai'); 
             $table->dateTime('waktu_selesai'); 
             $table->string('tempat');
-            $table->decimal('anggaran', 15, 2)->nullable();
+            $table->decimal('anggaran', 15, 2)->default(0);
             $table->string('file_proposal'); 
-            
             $table->enum('status', ['pending', 'approved', 'rejected', 'revision'])
                   ->default('pending');
-            
             $table->text('catatan_revisi')->nullable(); 
-
-            // 5. Relasi ke Admin/User yang menyetujui
-            $table->foreignId('approved_by')
+            $table->foreignId('approved_by') // 6. APPROVER
                   ->nullable()
                   ->constrained('users')
                   ->onDelete('set null'); 
-
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('proposals');

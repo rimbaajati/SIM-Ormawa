@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             // Relasi ke ID Proposal
             $table->string('id_proposal'); 
-            $table->foreign('id_proposal')
-                ->references('id_proposal')->on('proposals')
-                ->onDelete('cascade');
-
+            $table->foreignId('proposal_id')
+                  ->constrained('proposals') 
+                  ->onDelete('cascade');
             $table->string('nama_barang'); 
             $table->decimal('harga', 15, 2); // Harga Satuan
             $table->integer('jumlah'); 
@@ -27,9 +26,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('proposal_budgets');

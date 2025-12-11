@@ -59,7 +59,6 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 
         Route::post('/store', [ProposalController::class, 'store'])
             ->name('manager.proposal.store');
-    });
 
     Route::get('/proposal/{proposal}', [ProposalController::class, 'show'])
         ->name('manager.proposal.detail')->where('proposal', '.*');
@@ -67,6 +66,14 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::post('/proposal/{proposal}/simpan-anggaran', [ProposalController::class, 'updateBudget'])
         ->name('manager.proposal.update_budget')
         ->where('proposal', '.*');
+    
+    Route::post('/manager/proposal/{proposal}/import-budget', [ProposalController::class, 'importBudget'])
+        ->name('manager.proposal.import_budget'); //ROUTE IMPORT EXCEL
+
+    Route::get('/manager/download-template-budget', [ProposalController::class, 'downloadTemplate'])
+        ->name('manager.proposal.download_template'); //ROUTE DOWNLOAD TEMPLATE
+
+    });
 
     // --- Lain-lain (Schedules & Mail) ---
     Route::get('/manager/schedules/all', fn() => view('pages.manager.manager_allschedule'))->name('manager.schedules.all');

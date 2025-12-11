@@ -9,10 +9,16 @@ class ProposalBudget extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
-    
+    protected $fillable = [
+        'proposal_id', 
+        'nama_barang',
+        'jumlah',
+        'harga_satuan',
+        'subtotal',
+    ];
+
     public function proposal()
     {
-        return $this->belongsTo(Proposal::class, 'id_proposal', 'id_proposal');
+        return $this->belongsTo(Proposal::class, 'proposal_id', 'id');
     }
 }

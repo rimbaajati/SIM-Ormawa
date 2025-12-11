@@ -52,12 +52,13 @@
                 <table class="table table-bordered align-middle">
                     <thead class="table-light text-center">
                         <tr>
+                            <th width="50">No</th>
                             <th>Nomor Proposal</th>
                             <th>Kegiatan</th>
                             <th>Organisasi</th>
                             <th>Waktu</th>
                             <th>Anggaran</th>
-                            <th>Status Pengajuan</th>
+                            <th>Status</th>
                             <th width="220">Action</th>
                         </tr>
                     </thead>
@@ -65,16 +66,17 @@
                     <tbody>
                         @forelse ($proposals as $proposal)
                             <tr>
+                                <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $proposal->id_proposal }}</td>
                                 <td>{{ $proposal->judul }}</td>
                                 <td>{{ $proposal->organization->name ?? 'Organisasi Tidak Ditemukan' }}</td>
                                 <td>
                                     <div>
-                                        {{ \Carbon\Carbon::parse($proposal->waktu_mulai)->format('d M Y, H:i') }} WIB
+                                        {{ \Carbon\Carbon::parse($proposal->waktu_mulai)->format('d M Y') }}
                                     </div>
                                     <div class="text-muted small">s/d</div>
                                     <div>
-                                        {{ \Carbon\Carbon::parse($proposal->waktu_selesai)->format('d M Y, H:i') }} WIB
+                                        {{ \Carbon\Carbon::parse($proposal->waktu_selesai)->format('d M Y') }}
                                     </div>
                                 </td>
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
@@ -91,7 +93,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('manager.proposal.detail', $proposal->id_proposal) }}"
+                                    <a href="{{ route('manager.proposal.detail', $proposal->id) }}"
                                         class="btn btn-sm btn-info">
                                         Detail
                                     </a>

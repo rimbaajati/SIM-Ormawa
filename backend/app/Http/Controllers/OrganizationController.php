@@ -19,11 +19,13 @@ class OrganizationController extends Controller
 
     public function show(Organization $organization): View
     {
-        $organization->load('currentManagement'); //1. Panggil relasi 'currentManagement' agar data kepengurusan aktif ikut terambil
-        $pastEvents = $organization->events() // 2. Ambil data Event (Kode lama Anda tetap dipertahankan)
+        $organization->load('currentManagement'); 
+        
+        $pastEvents = $organization->events()
                         ->where('event_date', '<', now()) 
                         ->orderBy('event_date', 'desc')
                         ->get();
+                        
         return view('pages.manager.organization.manager_organizationprofile', compact('organization')); 
     }
 
@@ -32,7 +34,7 @@ class OrganizationController extends Controller
         return view('pages.manager.organization.manager_createorganization');
     }
 
-    // STORE (DATA BARU)
+    // STORE 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -41,7 +43,7 @@ class OrganizationController extends Controller
             'ketua'       => 'required|string|max:255',
             'pembimbing'  => 'nullable|string|max:255', 
             'kontak'      => 'required|string|max:50',
-            'email'       => 'nullable|email|max:255',
+            'email'       => 'nullable|email|max:255', 
             'instagram'   => 'nullable|string|max:255',
             'deskripsi'   => 'nullable|string', 
             'visi'        => 'nullable|string', 
@@ -49,19 +51,25 @@ class OrganizationController extends Controller
             'logo'        => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $validated['name'] = Str::upper($request->name);
-        
-        if($request->filled('full_name')) {
-            $validated['full_name'] = Str::title($request->full_name);
-        }
-
+        $logoPath = null;
         if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('logos', 'public');
+            $logoPath = $request->file('logo')->store('logos', 'public');
         }
 
-        $validated['is_active'] = $request->has('is_active'); 
-        
-        Organization::create($validated);
+        Organization::create([
+            'name'          => Str::upper($request->name),
+            'full_name'     => $request->full_name ? Str::title($request->full_name) : null,
+            'logo'          => $logoPath,
+            'email'         => $request->email,
+            'deskripsi'     => $request->deskripsi,
+            'is_active'     => $request->has('is_active'),
+            'ketua'         => $request->ketua,      
+            'pembimbing'    => $request->pembimbing,
+            'kontak'        => $request->kontak,     
+            'instagram'     => $request->instagram, 
+            'visi'          => $request->visi, 
+            'misi'          => $request->misi,
+        ]);
 
         return redirect()->route('manager.organization.all')
             ->with('success', 'Organisasi berhasil didaftarkan!');
@@ -88,23 +96,30 @@ class OrganizationController extends Controller
             'logo'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
         ]);
 
-        $validated['name'] = Str::upper($request->name);
-        if($request->filled('full_name')) {
-            $validated['full_name'] = Str::title($request->full_name);
-        }
+
+        $dataUpdate = [
+            'name'          => Str::upper($request->name),
+            'full_name'     => $request->full_name ? Str::title($request->full_name) : null,
+            'email'         => $request->email,
+            'deskripsi'     => $request->deskripsi,
+            'is_active'     => $request->has('is_active'),
+            'ketua'         => $request->ketua,
+            'pembimbing'    => $request->pembimbing,
+            'kontak'        => $request->kontak,
+            'instagram'     => $request->instagram,
+            'visi'          => $request->visi,
+            'misi'          => $request->misi,
+        ];
 
         if ($request->hasFile('logo')) {
             if ($organization->logo) {
                 Storage::disk('public')->delete($organization->logo);
             }
-         
-            $validated['logo'] = $request->file('logo')->store('logos', 'public');
-        } else {
-            unset($validated['logo']);
+            $dataUpdate['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
-        $validated['is_active'] = $request->has('is_active');
-        $organization->update($validated);
+        $organization->update($dataUpdate);
+
         return redirect()->route('manager.organization.all')
             ->with('success', 'Data organisasi berhasil diperbarui');
     }
@@ -116,7 +131,6 @@ class OrganizationController extends Controller
         }
 
         $organization->delete();
-
         return redirect()->route('manager.organization.all')
             ->with('success', 'Organisasi berhasil dihapus');
     }

@@ -39,7 +39,7 @@
 
                     <hr>
 
-                    {{-- Detail Informasi (Grid Layout) --}}
+                    {{-- Detail Informasi --}}
                     <div class="row">
                         {{-- Kolom Kiri --}}
                         <div class="col-md-6">
@@ -86,16 +86,14 @@
                                     <td>
                                         @if ($proposal->file_proposal)
                                             :
-                                            {{-- Wrapper supaya tombol berdampingan rapi --}}
                                             <div class="d-inline-flex">
-
                                                 {{-- TOMBOL 1: LIHAT (Preview di Tab Baru) --}}
                                                 <a href="{{ asset('storage/' . $proposal->file_proposal) }}" target="_blank"
                                                     class="btn btn-sm btn-info text-white mr-1 me-1"> {{-- mr-1/me-1 untuk jarak --}}
                                                     <i class="bx bx-show"></i> Lihat
                                                 </a>
 
-                                                {{-- TOMBOL 2: DOWNLOAD (Paksa Unduh) --}}
+                                                {{-- TOMBOL 2: DOWNLOAD --}}
                                                 <a href="{{ asset('storage/' . $proposal->file_proposal) }}" download
                                                     class="btn btn-sm btn-primary">
                                                     <i class="bx bx-download"></i> Download
@@ -121,7 +119,7 @@
                         </p>
                     </div>
 
-                    {{-- Tombol Aksi (Back) --}}
+                    {{-- Tombol Back --}}
                     <div class="mt-4 text-end">
                         <a href="{{ url()->previous() }}" class="btn btn-secondary">
                             <i class="bx bx-arrow-back"></i> Kembali
@@ -200,7 +198,6 @@
                                             </tr>
                                         @endforeach
                                     @else
-                                        {{-- JIKA TIDAK ADA DATA (KOSONG): Tampilkan 1 baris kosong default --}}
                                         <tr>
                                             <td class="text-center row-number">1</td>
                                             <td>
@@ -220,7 +217,6 @@
                                                     placeholder="0" readonly>
                                             </td>
                                             <td class="text-center">
-                                                {{-- Disabled karena ini baris satu-satunya --}}
                                                 <button type="button" class="btn btn-danger btn-sm btn-hapus" disabled>
                                                     <i class="bx bx-trash"></i>
                                                 </button>
@@ -249,6 +245,36 @@
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="bx bx-save"></i> Simpan & Update Anggaran
                             </button>
+                        </div>
+                        {{-- Card Import Excel --}}
+                        <div class="card border-primary border mb-4">
+                            <div class="card-body bg-soft-primary">
+                                <h5 class="card-title text-primary"><i class="mdi mdi-microsoft-excel"></i> Import
+                                    Anggaran via Excel</h5>
+                                <p class="card-text text-muted mb-3">
+                                    Gunakan fitur ini untuk upload banyak data sekaligus.
+                                    <a href="{{ route('manager.proposal.download_template') }}"
+                                        class="fw-bold text-decoration-underline">Download Template Disini</a>.
+                                </p>
+
+                                <form action="{{ route('manager.proposal.import_budget', $proposal->id) }}"
+                                    method="POST" enctype="multipart/form-data" class="row align-items-end">
+                                    @csrf
+
+                                    <div class="col-md-8">
+                                        <label for="file_excel" class="form-label fw-bold">Pilih File (.xlsx /
+                                            .xls)</label>
+                                        <input type="file" class="form-control" name="file_excel" id="file_excel"
+                                            required>
+                                    </div>
+
+                                    <div class="col-md-4 mt-2 mt-md-0">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bx bx-upload"></i> Upload & Proses
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </form>
 

@@ -9,14 +9,10 @@ class Proposal extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id_proposal';
-    public $incrementing = false;
-    protected $keyType = 'string';
-
     protected $fillable = [
-        'id_proposal',
-        'id_organization',
-        'id_user',
+        'id_proposal',      
+        'id_organization',  
+        'id_user',        
         'judul',
         'deskripsi',
         'waktu_mulai',  
@@ -35,23 +31,20 @@ class Proposal extends Model
         'anggaran' => 'decimal:2',
     ];
 
-    // ================= RELASI =================
+    // ================= RELASI ================
     
-   public function user()
+    public function user()
     {
-        // 'id_user' adalah foreign key di tabel proposals
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
-    // Relasi ke Organization
     public function organization()
     {
-        // 'id_organization' adalah foreign key di tabel proposals
-        return $this->belongsTo(Organization::class, 'id_organization', 'id_organization');
+        return $this->belongsTo(Organization::class, 'id_organization', 'id');
     }
 
     public function budgets()
     {
-        return $this->hasMany(ProposalBudget::class, 'id_proposal', 'id_proposal');
+        return $this->hasMany(ProposalBudget::class, 'proposal_id', 'id');
     }
 }

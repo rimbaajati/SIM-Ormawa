@@ -20,11 +20,10 @@
 
                     {{-- Form Start --}}
                     {{-- Perhatikan route mengarah ke UPDATE dan mengirim ID Organization --}}
-                    <form action="{{ route('manager.organization.update', $organization->id_organization) }}" method="POST"
+                    <form action="{{ route('manager.organization.update', $organization->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        @method('PUT') {{-- Wajib ada untuk proses Update --}}
-
+                        @method('PUT')
                         {{-- BAGIAN 1: IDENTITAS ORGANISASI --}}
                         <div class="row">
                             {{-- Kolom Kiri: Nama Singkatan --}}
