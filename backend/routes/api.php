@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProposalApiController;
+use App\Http\Controllers\Api\SuratApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Auth: Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Module: Proposal
-    Route::get('/proposals', [ProposalApiController::class, 'index']); // List semua
-    Route::get('/proposals/{id}', [ProposalApiController::class, 'show']); // Detail satu
+    // --- MODULE PROPOSAL ---
+    Route::get('/proposals', [ProposalApiController::class, 'index']); 
+    Route::get('/proposals/{id}', [ProposalApiController::class, 'show']); 
+    Route::post('/proposals', [ProposalApiController::class, 'store']);
+
+    // --- MODULE SURAT ---
+    Route::get('/jenis-surat', [SuratApiController::class, 'getJenisSurat']);
+    Route::get('/surat-masuk', [SuratApiController::class, 'indexMasuk']);
+    Route::post('/surat-masuk', [SuratApiController::class, 'storeMasuk']);
+    Route::get('/surat-keluar', [SuratApiController::class, 'indexKeluar']);
+    Route::post('/surat-keluar', [SuratApiController::class, 'storeKeluar']);
 });
