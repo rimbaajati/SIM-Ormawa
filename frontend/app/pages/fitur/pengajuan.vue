@@ -159,9 +159,6 @@
                 class="input-with-icon-right"
                 required
               />
-              <span class="input-icon-right" @click="openMapSelection">
-                <i class="fas fa-map-marker-alt"></i> Maps Location
-              </span>
             </div>
 
             <label>Deskripsi Singkat Kegiatan</label>
@@ -228,10 +225,6 @@ const submitPengajuan = () => {
   );
 };
 
-const openMapSelection = () => {
-  // Di sini Anda dapat mengganti alert dengan logika modal peta sesungguhnya
-  alert("Fungsi memilih lokasi/Maps dipicu! (Sekarang sudah dapat diklik)");
-};
 
 // --- HELPER FUNCTIONS BARU UNTUK SIDEBAR LAMA ---
 const getEmoji = (slug) => {
@@ -610,10 +603,6 @@ textarea:focus {
   color: #4a4a4a;
   font-size: 12px;
   font-weight: 500;
-  /* Ubah pointer-events menjadi auto agar bisa diklik/interaksi (Maps Location) */
-  cursor: pointer;
-  /* PERBAIKAN: Pastikan selalu di atas input dengan Z-INDEX */
-  z-index: 10;
 }
 
 .input-icon-right .fas {
