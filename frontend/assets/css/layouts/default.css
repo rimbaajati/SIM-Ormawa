@@ -408,3 +408,24 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Styling tambahan untuk tombol bahasa */
+.language-selector {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.submenu-item-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    text-align: center;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.submenu-item-btn.is-active {
+    background-color: #1a56db; /* Sesuaikan dengan warna tema */
+    color: white;
+    border-color: #1a56db;
+}

@@ -38,14 +38,14 @@ export default defineNuxtConfig({
 
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
 
+  
+
   alias: {
     "@": appDir,
     "~": appDir,
   },
 
-  plugins: [
-    "~/plugins/axios.js",
-  ],
+  plugins: ["~/plugins/axios.js"],
 
   vite: {
     optimizeDeps: {
