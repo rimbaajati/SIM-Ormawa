@@ -98,6 +98,9 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: "empty",
+});
 import { ref, computed } from 'vue';
 
 // --- Data Mockup ---
