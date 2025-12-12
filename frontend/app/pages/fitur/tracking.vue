@@ -1,99 +1,146 @@
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-    <div class="w-64 p-4 bg-white shadow-lg">
-      <header class="flex items-center mb-6">
-        <span class="text-3xl font-extrabold text-red-600 mr-1">u</span>
-        <h2 class="text-xl font-semibold text-gray-800">mpku</h2>
-      </header>
-      <nav class="space-y-2">
-        <button 
-          v-for="(item, index) in navItems" 
-          :key="index"
-          :class="['flex items-center w-full p-3 rounded-xl transition-colors', item.active ? 'bg-red-600 text-white shadow-md' : 'hover:bg-gray-100 text-gray-700']"
-        >
-          <span class="mr-3 text-xl">{{ item.icon }}</span>
-          <span class="font-medium">{{ item.label }}</span>
-        </button>
-      </nav>
+  <div class="tracking-layout">
+    <header class="top-header">
+      <router-link to="/fitur" class="back-link">
+        <span class="arrow">〈</span> Kembali Beranda Fitur
+      </router-link>
+    </header>
+
+    <div class="header-logo-container">
+      <img src="/logo-atas.png" alt="Logo UMPKU" class="logo-img" />
     </div>
 
-    <div class="flex-1 p-8">
-      <header class="flex justify-between items-center mb-10">
-        <div class="flex items-center">
-            <button class="text-gray-500 hover:text-red-600 mr-4">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            <span class="text-gray-500 mr-2">Kembali Beranda Fitur</span>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-800">Tracking Real Time</h1>
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Search Id Kegiatan"
-            class="py-2 pl-4 pr-10 border border-gray-300 rounded-lg w-64 focus:ring-red-500 focus:border-red-500"
-          />
-          <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-      </header>
+    <aside class="sidebar-old-style">
+      <div class="menu-fitur-old">
+        <router-link
+          v-for="(item, index) in features"
+          :key="index"
+          :to="getFeatureRoute(item.slug)"
+          @click="setActive(item.slug)"
+          class="menu-item-link"
+        >
+          <div
+            :class="{
+              'div-old': item.slug === currentFeature,
+              'div-2-old': item.slug !== currentFeature,
+            }"
+            class="menu-item-wrapper-old"
+          >
+            <template v-if="item.slug === currentFeature">
+              <div class="rectangle-2-old" />
+              <div class="rectangle-3-old" />
+              <div class="text-wrapper-2-old">{{ item.title }}</div>
+              <div class="text-wrapper-3-old">{{ getEmoji(item.slug) }}</div>
+            </template>
+            <template v-else>
+              <div class="rectangle-4-old" />
+              <div :class="getTextWrapperClass(item.slug)">
+                {{ item.title }}
+              </div>
+              <div :class="getTextWrapperEmojiClass(item.slug)">
+                {{ getEmoji(item.slug) }}
+              </div>
+            </template>
+          </div>
+        </router-link>
+      </div>
+    </aside>
+
+    <div class="liquid-container">
+      <ClientOnly>
+        <LiquidEther
+          :colors="['#CC561E', '#FF6D1F', '#FF9013']"
+          :mouse-force="20"
+          :cursor-size="100"
+          :is-viscous="false"
+          :viscous="30"
+          :iterations-viscous="32"
+          :iterations-poisson="32"
+          :resolution="0.5"
+          :is-bounce="false"
+          :auto-demo="true"
+          :auto-speed="0.5"
+          :auto-intensity="2.2"
+          :takeover-duration="0.25"
+          :auto-resume-delay="3000"
+          :auto-ramp-duration="0.6"
+        />
+        <template #fallback>
+          <div class="fallback-bg">Memuat efek fluid...</div>
+        </template>
+      </ClientOnly>
+    </div>
+
+    <section class="main-section">
+      <h2 class="page-title">Tracking Real-Time</h2>
       
-      <div class="bg-white p-8 rounded-xl shadow-2xl max-w-4xl mx-auto">
+      <div class="search-container">
+        <input 
+          type="text" 
+          placeholder="Cari ID Kegiatan / Nomor Proposal..." 
+          class="search-input"
+        />
+        <button class="search-btn">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <div class="tracking-card">
         
-        <div class="status-header">
-          <div class="grid grid-cols-4 gap-4 text-center">
-            <div class="py-2">
-              <span class="text-xs text-gray-500">Nomor</span>
-              <p class="font-semibold text-gray-800">{{ ticketData.nomor }}</p>
+        <div class="ticket-header">
+          <div class="ticket-info-grid">
+            <div class="info-item">
+              <span class="label">Nomor</span>
+              <p class="value">{{ ticketData.nomor }}</p>
             </div>
-            <div class="col-span-2 py-2">
-              <span class="text-xs text-gray-500">Judul</span>
-              <p class="font-semibold text-gray-800">{{ ticketData.judul }}</p>
+            <div class="info-item wide">
+              <span class="label">Judul Kegiatan</span>
+              <p class="value">{{ ticketData.judul }}</p>
             </div>
-            <div class="py-2">
-              <span class="text-xs text-gray-500">Status</span>
-              <p class="font-bold text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block text-xs">
-                {{ ticketData.status }}
-              </p>
+            <div class="info-item">
+              <span class="label">Status</span>
+              <span class="status-badge">{{ ticketData.status }}</span>
             </div>
           </div>
-          
-          <div class="mt-4">
-            <span class="text-sm font-medium text-orange-600 block mb-1">Proses {{ ticketData.progress }}%</span>
-            <div class="progress-bar-container">
-              <div 
-                class="progress-bar-fill" 
-                :style="{ width: ticketData.progress + '%' }"
-              ></div>
-            </div>
+
+          <div class="progress-wrapper">
+             <div class="progress-label">
+               <span>Progress Keseluruhan</span>
+               <span class="percentage">{{ ticketData.progress }}%</span>
+             </div>
+             <div class="progress-track">
+               <div 
+                 class="progress-fill" 
+                 :style="{ width: ticketData.progress + '%' }"
+               ></div>
+             </div>
           </div>
         </div>
-        
-        <div class="timeline-steps">
+
+        <div class="timeline-container">
           <div 
             v-for="(step, index) in steps" 
             :key="index"
-            class="timeline-item"
+            class="timeline-step"
           >
-            <div class="timeline-marker-wrapper">
-              <div :class="['timeline-marker', getIconClasses(step.status)]">
-                <svg v-if="step.status === 'Completed'" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                <svg v-else-if="step.status === 'In Progress'" class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 4m0 8h.01"></path></svg>
-                <span v-else class="text-white text-xl leading-none">•</span>
+            <div class="marker-col">
+              <div :class="['marker-circle', getMarkerClass(step.status)]">
+                 <i v-if="step.status === 'Completed'" class="fas fa-check"></i>
+                 <i v-else-if="step.status === 'In Progress'" class="fas fa-sync fa-spin"></i>
+                 <span v-else class="dot"></span>
               </div>
-              <div v-if="index < steps.length - 1" :class="['timeline-line', getLineClasses(step.status, steps[index + 1].status)]"></div>
+              <div v-if="index < steps.length - 1" :class="['line-connector', getLineClass(step.status)]"></div>
             </div>
 
-            <div class="timeline-content">
-              <div :class="['timeline-label', getLabelClasses(step.status)]">{{ step.label }}</div>
+            <div class="content-col">
+              <h4 :class="['step-label', getTextClass(step.status)]">{{ step.label }}</h4>
+              <p class="step-date">{{ step.date }}</p>
             </div>
-
-            <div class="timeline-date">
-              <div :class="['text-sm', getDateClasses(step.status)]">{{ step.date }}</div>
-            </div>
-
           </div>
         </div>
+
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -101,171 +148,434 @@
 definePageMeta({
   layout: "empty",
 });
-import { ref, computed } from 'vue';
 
-// --- Data Mockup ---
-const navItems = ref([
-  { icon: '📝', label: 'Pengajuan Online', active: false },
-  { icon: '📋', label: 'Form Detail Lengkap', active: false },
-  { icon: '📁', label: 'Upload Dokumen', active: false },
-  { icon: '🔔', label: 'Notifikasi Revisi', active: false },
-  { icon: '📊', label: 'Tracking Real-Time', active: true },
-  { icon: '⬇️', label: 'Download Izin', active: false },
-]);
+import { ref } from "vue";
+
+const features = [
+  { slug: "pengajuan", title: "Pengajuan Online" },
+  { slug: "formdetail", title: "Form Detail Lengkap" },
+  { slug: "uploaddokumen", title: "Upload Dokumen" },
+  { slug: "notifikasi", title: "Notifikasi Revisi" },
+  { slug: "tracking", title: "Tracking Real-Time" },
+  { slug: "download", title: "Download Izin" },
+];
+
+// STATE: Set feature aktif ke 'tracking'
+const currentFeature = ref("tracking");
 
 const ticketData = ref({
-  nomor: '01/UKM/002/2026',
-  judul: 'Proposal Kegiatan Seminar',
-  status: 'Dalam Pengecekan',
+  nomor: "01/UKM/002/2026",
+  judul: "Proposal Kegiatan Seminar Nasional Teknologi",
+  status: "Dalam Proses",
   progress: 40,
 });
 
 const steps = ref([
-  { label: 'Proposal Telah Dikirim Ke Admin', date: 'Dibuat Tanggal 28 Desember 2025', status: 'Completed' },
-  { label: 'Proposal Dialihkan Ke Bidang Kemahasiswaan', date: 'Disetujui Tanggal 30 Desember 2025', status: 'Completed' },
-  { label: 'Proposal Dialihkan Ke Wakil Rektor III', date: 'Dalam Proses', status: 'In Progress' },
-  { label: 'Persetujuan Wakil Rektor III', date: 'Menunggu', status: 'Pending' },
-  { label: 'Persetujuan Akhir & Penerbitan Izin', date: 'Menunggu', status: 'Pending' },
+  { label: "Proposal Dikirim ke Admin", date: "28 Des 2025 - 09:00", status: "Completed" },
+  { label: "Verifikasi Kemahasiswaan", date: "30 Des 2025 - 14:20", status: "Completed" },
+  { label: "Review Wakil Rektor III", date: "Sedang Berlangsung", status: "In Progress" },
+  { label: "Persetujuan Akhir", date: "Menunggu", status: "Pending" },
+  { label: "Penerbitan Surat Izin", date: "Menunggu", status: "Pending" },
 ]);
 
-
-// --- Logika Kelas Dinamis Timeline (Mempertahankan Warna Tailwind untuk kemudahan) ---
-
-const getIconClasses = (status) => {
-  if (status === 'Completed') {
-    return 'marker-completed';
-  } else if (status === 'In Progress') {
-    return 'marker-in-progress';
-  }
-  return 'marker-pending';
+// --- HELPER LOGIC ---
+const getMarkerClass = (status) => {
+  if (status === "Completed") return "marker-completed";
+  if (status === "In Progress") return "marker-progress";
+  return "marker-pending";
 };
 
-const getLineClasses = (currentStatus, nextStatus) => {
-  if (currentStatus === 'Completed' || nextStatus === 'In Progress') {
-    return 'line-active';
-  }
-  return 'line-pending';
+const getLineClass = (status) => {
+  if (status === "Completed") return "line-solid";
+  return "line-dashed";
 };
 
-const getLabelClasses = (status) => {
-  if (status === 'Completed') {
-    return 'text-red-700';
-  } else if (status === 'In Progress') {
-    return 'text-orange-600 font-bold';
-  }
-  return 'text-gray-700';
+const getTextClass = (status) => {
+  if (status === "In Progress") return "text-highlight";
+  if (status === "Pending") return "text-muted";
+  return "text-normal";
 };
 
-const getDateClasses = (status) => {
-  if (status === 'Completed') {
-    return 'text-green-500 font-medium';
-  } else if (status === 'In Progress') {
-    return 'text-orange-500 italic';
-  }
-  return 'text-gray-400';
+// --- HELPER SIDEBAR & ROUTING ---
+const setActive = (slug) => {
+  currentFeature.value = slug;
+};
+
+const getFeatureRoute = (slug) => {
+  if (slug === "pengajuan") return "/fitur/pengajuan";
+  return `/fitur/${slug.replace("-", "")}`;
+};
+
+const getEmoji = (slug) => {
+  if (slug === "pengajuan") return "📝";
+  if (slug === "formdetail") return "📋";
+  if (slug === "uploaddokumen") return "📤";
+  if (slug === "notifikasi") return "🔔";
+  if (slug === "tracking") return "📊";
+  if (slug === "download") return "⬇️";
+  return "";
+};
+
+const getTextWrapperClass = (slug) => {
+  if (slug === "formdetail") return "text-wrapper-4-old";
+  if (slug === "uploaddokumen") return "text-wrapper-6-old";
+  if (slug === "notifikasi") return "text-wrapper-7-old";
+  if (slug === "tracking") return "text-wrapper-9-old";
+  if (slug === "download") return "text-wrapper-9-old";
+  return "text-wrapper-4-old"; 
+};
+
+const getTextWrapperEmojiClass = (slug) => {
+  if (slug === "formdetail") return "text-wrapper-5-old";
+  if (slug === "uploaddokumen") return "text-wrapper-5-old";
+  if (slug === "notifikasi") return "text-wrapper-8-old";
+  if (slug === "tracking") return "text-wrapper-10-old";
+  if (slug === "download") return "text-wrapper-10-old";
+  return "text-wrapper-5-old"; 
 };
 </script>
 
 <style scoped>
-/* ====================================
-   CSS KHUSUS UNTUK KOMPONEN INI
-   ==================================== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
-/* --- Status Header --- */
-.status-header {
-    background-color: #fff8f5; /* Light orange */
-    border: 1px solid #ffedd5;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+/* ================================================= */
+/* GLOBAL LAYOUT (GRID) */
+/* ================================================= */
+
+.tracking-layout {
+  display: grid;
+  grid-template-areas:
+    "headerL headerL logo"
+    "sidebar main main";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 220px 1fr minmax(100px, 150px);
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: #fcfcfc;
+  color: #111;
+  position: relative;
+  overflow-x: hidden;
 }
 
-.progress-bar-container {
-    height: 6px;
-    background-color: #e5e7eb;
-    border-radius: 9999px;
-    overflow: hidden;
+.liquid-container {
+  grid-area: 1 / 1 / -1 / -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
-.progress-bar-fill {
-    height: 100%;
-    background-color: #f97316; /* Orange-500 */
-    transition: width 0.7s ease-in-out;
-    border-radius: 9999px;
+.fallback-bg {
+  height: 100%;
+  background: #333;
+  color: white;
+  text-align: center;
+  padding-top: 300px;
 }
 
-/* --- Timeline Structure --- */
-.timeline-steps {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    /* Optional: border-top: 1px solid #f3f4f6; */
+/* Header & Logo */
+.top-header {
+  grid-area: headerL;
+  padding: 30px 0 30px 50px;
+  z-index: 2;
 }
 
-.timeline-item {
-    display: flex;
-    align-items: flex-start;
-    padding-bottom: 1rem;
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: #555;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.timeline-marker-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 1.5rem;
+.arrow { font-size: 20px; font-weight: 300; line-height: 1; }
+
+.header-logo-container {
+  grid-area: logo;
+  padding: 30px 50px 30px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 2;
 }
 
-.timeline-content {
-    flex: 1;
-    min-width: 0;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+.logo-img { height: 35px; width: auto; object-fit: contain; }
+
+/* ================================================= */
+/* SIDEBAR STYLE */
+/* ================================================= */
+.sidebar-old-style {
+  grid-area: sidebar;
+  position: relative;
+  padding-left: 10px;
+  z-index: 2;
 }
 
-.timeline-date {
-    margin-left: 1rem;
-    text-align: right;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+.menu-fitur-old {
+  margin-top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 280px;
 }
 
-/* --- Marker Styles --- */
-.timeline-marker {
-    width: 2rem; /* w-8 */
-    height: 2rem; /* h-8 */
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+.menu-item-link { text-decoration: none; color: inherit; }
+.menu-item-wrapper-old { cursor: pointer; }
+
+.div-old { height: 70px; position: relative; width: 310px; }
+.rectangle-2-old { background-color: #000000; border-radius: 14px; height: 70px; left: 50px; position: absolute; top: 0; width: 230px; box-shadow: 0px 4px 4px #00000040; }
+.rectangle-3-old { background-color: #000000; border-radius: 14px; height: 15px; left: -15px; position: absolute; top: 30px; width: 50px; box-shadow: 0px 4px 4px #00000040; }
+.text-wrapper-2-old { color: #ffffff; font-size: 15px; font-weight: 700; left: 115px; position: absolute; top: 25px; width: 170px; }
+.text-wrapper-3-old { color: #000000; font-size: 32px; font-weight: 700; left: 65px; position: absolute; top: 10px; white-space: nowrap; }
+
+.div-2-old { height: 70px; margin-left: 50px; position: relative; width: 240px; }
+.rectangle-4-old { background-color: #00000040; border-radius: 14px; height: 70px; left: 0; position: absolute; top: 0; width: 210px; box-shadow: 0px 4px 4px #00000040; }
+
+.text-wrapper-4-old, .text-wrapper-6-old, .text-wrapper-7-old, .text-wrapper-9-old {
+  color: #ffffff; font-size: 15px; font-weight: 700; left: 45px; position: absolute; text-shadow: 0px 2px 4px #00000040; width: 160px;
+}
+.text-wrapper-4-old, .text-wrapper-6-old, .text-wrapper-7-old { top: 25px; }
+.text-wrapper-9-old { top: 24px; }
+
+.text-wrapper-5-old, .text-wrapper-8-old, .text-wrapper-10-old {
+  color: #000000; font-size: 25px; font-weight: 700; left: 8px; position: absolute; text-align: center; text-shadow: 0px 2px 4px #00000040; white-space: nowrap;
+}
+.text-wrapper-5-old, .text-wrapper-8-old { top: 15px; }
+.text-wrapper-10-old { top: 16px; }
+
+/* ================================================= */
+/* TRACKING CONTENT */
+/* ================================================= */
+
+.main-section {
+  grid-area: main;
+  padding: 0 50px 50px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
 }
 
+.page-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 0 30px 0;
+  color: #0f172a;
+}
+
+/* Search Bar */
+.search-container {
+  display: flex;
+  background: #fff;
+  padding: 8px;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid #eee;
+}
+
+.search-input {
+  flex-grow: 1;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+.search-btn {
+  background: #FF6D1F;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-btn:hover { background: #e05a15; }
+
+/* Card Utama */
+.tracking-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  max-width: 800px;
+  width: 100%;
+}
+
+/* Header Tiket */
+.ticket-header {
+  background: #fff8f5; /* Orange muda sekali */
+  border: 1px solid #ffe5d0;
+  border-radius: 12px;
+  padding: 20px 25px;
+  margin-bottom: 40px;
+}
+
+.ticket-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.info-item .label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.info-item .value {
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  background: #FF6D1F;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* Progress Bar */
+.progress-wrapper {
+  margin-top: 15px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FF6D1F;
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  height: 8px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #FF6D1F;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+/* Timeline */
+.timeline-container {
+  padding: 0 10px;
+}
+
+.timeline-step {
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 0;
+  min-height: 80px; /* Jarak antar step */
+}
+
+.timeline-step:last-child {
+  min-height: auto;
+}
+
+/* Kolom Marker (Kiri) */
+.marker-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  width: 30px;
+}
+
+.marker-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  z-index: 2;
+  transition: all 0.3s;
+}
+
+/* Style Marker */
 .marker-completed {
-    background-color: #dc2626; /* Red-600 */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  background: #00c853; /* Hijau Sukses */
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3);
 }
 
-.marker-in-progress {
-    background-color: #f97316; /* Orange-500 */
-    box-shadow: 0 20px 25px -5px rgba(249, 115, 22, 0.3), 0 8px 10px -6px rgba(249, 115, 22, 0.2);
-    /* Ring effect implemented using Tailwind classes in template (ring-4 ring-orange-200) */
+.marker-progress {
+  background: #FF6D1F; /* Orange Tema */
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 109, 31, 0.3);
 }
 
 .marker-pending {
-    background-color: #9ca3af; /* Gray-400 */
+  background: #e0e0e0;
+  width: 16px;
+  height: 16px;
+  margin-top: 7px; /* Align center manual karena size beda */
 }
 
-/* --- Line Styles --- */
-.timeline-line {
-    width: 2px; /* w-0.5 */
-    flex-grow: 1;
-    margin-top: 0.5rem; /* mt-2 */
+.dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
 }
 
-.line-active {
-    background-color: #ef4444; /* Red-500 */
+/* Garis */
+.line-connector {
+  width: 2px;
+  flex-grow: 1;
+  background: #e0e0e0;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-.line-pending {
-    background-color: #d1d5db; /* Gray-300 */
+.line-solid { background: #00c853; } /* Garis hijau jika sudah lewat */
+
+/* Kolom Konten (Kanan) */
+.content-col {
+  padding-top: 4px;
 }
+
+.step-label {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.step-date {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* Text Colors */
+.text-highlight { color: #FF6D1F; }
+.text-muted { color: #aaa; font-weight: 400; }
+.text-normal { color: #333; }
 </style>
