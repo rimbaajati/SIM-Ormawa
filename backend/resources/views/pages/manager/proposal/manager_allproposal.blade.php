@@ -80,9 +80,11 @@
                                     </div>
                                 </td>
                                 <td>Rp {{ number_format($proposal->anggaran, 0, ',', '.') }}</td>
-                                <td>
+
+                                {{-- KOLOM STATUS (Diperbesar) --}}
+                                <td class="text-center">
                                     <span
-                                        class="badge bg-{{ $proposal->status == 'approved'
+                                        class="badge fs-6 py-2 w-100 bg-{{ $proposal->status == 'approved'
                                             ? 'success'
                                             : ($proposal->status == 'pending'
                                                 ? 'warning'
@@ -92,26 +94,35 @@
                                         {{ ucfirst($proposal->status) }}
                                     </span>
                                 </td>
+
+                                {{-- - KOLOM ACTION - --}}
                                 <td>
-                                    <a href="{{ route('manager.proposal.detail', $proposal->id) }}"
-                                        class="btn btn-sm btn-info">
-                                        Detail
-                                    </a>
+                                    <div class="d-flex gap-1 justify-content-center">
 
-                                    @if ($proposal->status == 'pending')
-                                        <a href="" class="btn btn-sm btn-success">
-                                            Approve
+                                        <a href="{{ route('manager.proposal.detail', $proposal->id) }}"
+                                            class="btn btn-sm btn-info text-white" title="Detail">
+                                            <i class="bx bx-file"></i> Detail
                                         </a>
 
-                                        <a href="" class="btn btn-sm btn-danger">
-                                            Reject
+                                        <a href="{{ route('manager.proposal.edit', $proposal->id) }}"
+                                            class="btn btn-sm btn-warning text-white" title="Edit">
+                                            <i class="bx bx-edit"></i> Edit
                                         </a>
-                                    @endif
+
+                                        <form action="{{ route('manager.proposal.delete', $proposal->id) }}" method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus proposal ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                <i class="bx bx-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">No proposals found</td>
+                                <td colspan="8" class="text-center">No proposals found</td>
                             </tr>
                         @endforelse
                     </tbody>

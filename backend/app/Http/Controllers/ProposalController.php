@@ -107,8 +107,9 @@ class ProposalController extends Controller
     }
 
     // SHOW
-    public function show(Proposal $proposal): View
+    public function show($id): View
     {
+        $proposal = \App\Models\Proposal::findOrFail($id);
         return view('pages.manager.proposal.manager_detailproposal', compact('proposal'));
     }
 
@@ -310,5 +311,36 @@ class ProposalController extends Controller
         header('Content-Disposition: attachment; filename="template_rab.xlsx"');
         $writer->save('php://output');
         exit;
+    }
+
+    public function updateAction(Request $request, $id)
+    {
+        $proposal = Proposal::findOrFail($id);
+
+        // A. Validasi Input
+        $request->validate([
+            'action'  => 'required|in:approved,rejected,revision', 
+            'catatan' => 'nullable|string', 
+        ]);
+
+        // B. Cek: Kalau Reject/Revisi, catatan WAJIB diisi
+        if (in_array($request->action, ['rejected', 'revision']) && empty($request->catatan)) {
+            return back()->with('error', 'Mohon isi catatan alasan penolakan/revisi.');
+        }
+
+        // C. Update Database
+        $proposal->update([
+            'status'         => $request->action,
+            'catatan_revisi' => $request->catatan,
+            'approved_by'    => Auth::id(),
+        ]);
+
+        // D. Siapkan Pesan Sukses
+        $message = '';
+        if ($request->action == 'approved') $message = 'Proposal berhasil disetujui!';
+        elseif ($request->action == 'rejected') $message = 'Proposal ditolak.';
+        else $message = 'Proposal diminta untuk direvisi.';
+
+        return back()->with('success', $message);
     }
 }

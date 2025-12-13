@@ -10,23 +10,20 @@ return new class extends Migration
     {
         Schema::create('surat_keluars', function (Blueprint $table) {
             $table->id(); 
-            
-            // 1. Relasi ke Organisasi (Pemilik Surat)
             $table->foreignId('id_organization')
                   ->constrained('organizations')
                   ->onDelete('cascade');
-
-            // 2. Relasi ke Jenis Surat
             $table->foreignId('id_jenis_surat')
                   ->constrained('jenis_surats')
                   ->onDelete('cascade');
-
-            // 3. Data Surat Keluar
-            $table->string('kepada');  // Penerima Surat (Penting!)
-            $table->date('tanggal');   // Tanggal Surat
-            $table->string('perihal'); // Isi Ringkas
-            $table->string('file');    // Path File PDF
-            
+            $table->foreignId('tujuan_organization_id')
+                  ->nullable() 
+                  ->constrained('organizations')
+                  ->onDelete('set null');
+            $table->string('kepada')->nullable();  
+            $table->date('tanggal');  
+            $table->string('perihal'); 
+            $table->string('file');   
             $table->timestamps();
         });
     }

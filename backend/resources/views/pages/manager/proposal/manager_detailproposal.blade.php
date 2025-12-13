@@ -20,19 +20,28 @@
                 <div class="card-body">
 
                     {{-- Header Proposal: Judul & Status --}}
+                    {{-- Header Proposal: Judul & Status & Tombol Edit --}}
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <div>
                             <h3 class="card-title text-primary mb-1">{{ $proposal->judul }}</h3>
                             <p class="text-muted mb-0">ID Proposal: <strong>{{ $proposal->id_proposal }}</strong></p>
                         </div>
-                        <div>
-                            {{-- Logika Badge Status --}}
-                            @if ($proposal->status == 'approved' || $proposal->status == 'disetujui')
-                                <span class="badge bg-success fs-6">Disetujui</span>
-                            @elseif($proposal->status == 'rejected' || $proposal->status == 'ditolak')
-                                <span class="badge bg-danger fs-6">Ditolak</span>
+                        <div class="d-flex gap-2">
+                            {{-- TOMBOL EDIT DATA (Hanya muncul jika proposal BELUM disetujui/ditolak, atau tergantung kebijakan) --}}
+                            <button type="button" class="btn btn-warning text-white" data-bs-toggle="modal"
+                                data-bs-target="#modalEditData">
+                                <i class="bx bx-edit"></i> Edit Data
+                            </button>
+
+                            {{-- Badge Status --}}
+                            @if ($proposal->status == 'approved')
+                                <span class="badge bg-success fs-6 py-2">Disetujui</span>
+                            @elseif($proposal->status == 'rejected')
+                                <span class="badge bg-danger fs-6 py-2">Ditolak</span>
+                            @elseif($proposal->status == 'revision')
+                                <span class="badge bg-info fs-6 py-2">Revisi</span>
                             @else
-                                <span class="badge bg-warning fs-6">Menunggu</span>
+                                <span class="badge bg-warning fs-6 py-2">Menunggu</span>
                             @endif
                         </div>
                     </div>
@@ -142,8 +151,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-
-                    <form action="{{ route('manager.proposal.update_budget', $proposal->id_proposal) }}" method="POST">
+                    <form action="{{ route('manager.proposal.update_budget', $proposal->id) }}" method="POST">
                         @csrf
 
                         <div class="table-responsive">
@@ -247,7 +255,7 @@
                             </button>
                         </div>
                         {{-- Card Import Excel --}}
-                        <div class="card border-primary border mb-4">
+                        <div class="card mt-4 mb-3">
                             <div class="card-body bg-soft-primary">
                                 <h5 class="card-title text-primary"><i class="mdi mdi-microsoft-excel"></i> Import
                                     Anggaran via Excel</h5>
@@ -282,6 +290,162 @@
             </div>
         </div>
     </div>
+
+    {{-- CONTAINER AKSI REAKSI ! --}}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="bx bx-cog"></i> Update Status Pengajuan</h5>
+
+                    @if ($proposal->status == 'pending')
+                        <p class="text-muted mb-3">Tentukan keputusan untuk proposal ini:</p>
+                        <div class="d-flex gap-2 flex-wrap">
+
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#modalApprove">
+                                <i class="bx bx-check-circle me-1"></i> Setujui
+                            </button>
+
+                            <button type="button" class="btn btn-warning text-white" data-bs-toggle="modal"
+                                data-bs-target="#modalRevision">
+                                <i class="bx bx-edit me-1"></i> Minta Revisi
+                            </button>
+
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#modalReject">
+                                <i class="bx bx-x-circle me-1"></i> Tolak
+                            </button>
+                        </div>
+                    @else
+                        <div
+                            class="alert alert-{{ $proposal->status == 'approved' ? 'success' : ($proposal->status == 'revision' ? 'warning' : 'danger') }} mb-0">
+                            <div class="d-flex align-items-center">
+                                <i class="bx bx-info-circle me-2 fs-4"></i>
+                                <div>
+                                    <strong>Status Proposal:</strong> {{ strtoupper($proposal->status) }}
+                                    @if ($proposal->catatan_revisi)
+                                        <div class="mt-2 p-2 bg-white bg-opacity-50 rounded">
+                                            <strong>Catatan Manager:</strong><br>
+                                            {{ $proposal->catatan_revisi }}
+                                        </div>
+                                    @endif
+                                    <div class="mt-1 small opacity-75">
+                                        Diproses pada: {{ $proposal->updated_at->format('d M Y, H:i') }} WIB
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- 1. MODAL APPROVE --}}
+    <div class="modal fade" id="modalApprove" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                {{-- Form mengarah ke Route manager.proposal.action --}}
+                <form action="{{ route('manager.proposal.action', $proposal->id) }}" method="POST">
+                    @csrf
+                    @method('PUT') {{-- Method PUT untuk Update --}}
+                    <input type="hidden" name="action" value="approved">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Persetujuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center py-4">
+                        <i class="bx bx-check-circle text-success display-1 mb-3"></i>
+                        <p class="mb-1">Apakah Anda yakin ingin menyetujui proposal ini?</p>
+                        <h5 class="text-primary">{{ $proposal->judul }}</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Ya, Setujui</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- 2. MODAL REVISION --}}
+    <div class="modal fade" id="modalRevision" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('manager.proposal.action', $proposal->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="action" value="revision">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title text-warning">Permintaan Revisi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <i class="bx bx-info-circle me-1"></i> Status proposal akan berubah menjadi Revisi.
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Catatan Revisi (Wajib Diisi)</label>
+                            <textarea name="catatan" class="form-control" rows="5" required
+                                placeholder="Tuliskan bagian mana yang perlu diperbaiki..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning text-white">Kirim Revisi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- 3. MODAL REJECT --}}
+    <div class="modal fade" id="modalReject" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('manager.proposal.action', $proposal->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="action" value="rejected">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger">Tolak Proposal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger">
+                            <i class="bx bx-error me-1"></i> Proposal akan ditolak permanen.
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Alasan Penolakan (Wajib Diisi)</label>
+                            <textarea name="catatan" class="form-control" rows="5" required
+                                placeholder="Jelaskan alasan kenapa proposal ini ditolak..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Tolak Proposal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4 d-flex justify-content-end">
+        <a href="{{ route('manager.proposal.all') }}" class="btn btn-secondary">
+            <i class="bx bx-arrow-back me-1"></i> Kembali
+        </a>
+    </div>
+
+    </div> {{-- End card-body --}}
+    </div> {{-- End card --}}
+    </div>
+    </div>
+
+    {{-- JANGAN LUPA: KODE MODAL (Approve, Revisi, Reject) HARUS TETAP ADA DI BAWAH SINI --}}
 
     {{-- SCRIPT JAVASCRIPT --}}
     <script>
